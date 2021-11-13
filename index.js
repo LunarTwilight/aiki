@@ -2,7 +2,10 @@ const { Client, Intents } = require('discord.js');
 const { token, devId } = require('./config.json');
 
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES
+    ]
 });
 
 client.once('ready', () => {
@@ -13,12 +16,23 @@ client.on('messageCreate', message => {
     if (message.author.bot || !message.content.startsWith('a!')) {
         return;
     }
-    const msg = message.content.substring(2);
+    const bareContent = message.content.substring(2);
+    const cmd = bareContent.match(/(\w+) ?/)[1];
+    const msg = / /.test(bareContent) ? bareContent.match(/\w+ (.*)/)[1] : null;
+    const isDev = devId === message.author.id;
 
-    if (msg === 'test') {
+    if (cmd === 'test') {
         message.channel.send('hi');
     }
+    if (cmd === 'eval' && isDev) {
+        eval(msg);
+    }
+    if (cmd === 'die' && isDev) {
+        message.channel.send('bye.');
+        process.exit();
+    }
 });
+
 client.on('interactionCreate', interaction => {
     if (!interaction.isCommand()) {
         return;
