@@ -5,12 +5,19 @@ const { clientId, guildId, token } = require('./config.json');
 
 const commands = [
     new SlashCommandBuilder()
-        .setName('echo')
-        .setDescription('Replies with your input!')
+        .setName('mute')
+        .setDescription('Mutes a user')
+        .addUserOption(option =>
+            option.setName('user')
+                .setDescription('User to mute')
+                .setRequired(true))
         .addStringOption(option =>
-            option.setName('input')
-                .setDescription('The input to echo back')
-                .setRequired(true)),
+            option.setName('duration')
+                .setDescription('Duration of the mute')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('reason')
+                .setDescription('Reason for the mute')),
     new SlashCommandBuilder()
         .setName('eval')
         .setDescription('Eval')

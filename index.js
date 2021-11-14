@@ -1,6 +1,6 @@
-const { Client, Intents, Permissions } = require('discord.js'); // eslint-disable-line no-redeclare
+const { Client, Intents, Permissions, MessageEmbed } = require('discord.js'); // eslint-disable-line no-redeclare
+const { parseDuration } = require('parse-duration');
 const { token, devId } = require('./config.json');
-
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -40,9 +40,6 @@ client.on('interactionCreate', async interaction => {
         return;
     }
 
-    if (interaction.commandName === 'echo') {
-        interaction.reply(interaction.options.getString('input'));
-    }
     if (interaction.commandName === 'meme') {
         interaction.reply('https://i.kym-cdn.com/photos/images/newsfeed/001/311/521/6be.gif');
     }
@@ -64,6 +61,37 @@ client.on('interactionCreate', async interaction => {
             })
         }
         interaction.reply('The mods request that you move this convo to <#563024520101888010>.');
+    }
+    if (interaction.commandName === 'mute') {
+        const member = interaction.options.getMember('user');
+        if (member.roles.cache.has('909403377056751676')) {
+            return interaction.reply({
+                content: 'This user is already muted.',
+                ephemeral: true
+            });
+        }
+        await member.roles.add('909403377056751676');
+        const muteEmbed = new MessageEmbed()
+            .setTitle('User muted')
+            .addFields({
+                name: 'User',
+                value: '<@' + member.id + '>',
+                inline: true
+            }, {
+                name: 'Duration',
+                value: interaction.options.getString('duration'),
+                inline: true
+            }, {
+                name: 'Reason',
+                value: interaction.options.getString('reason') ? interaction.options.getString('reason') : 'N/A',
+                inline: true
+            });
+        await interaction.reply('User has been muted');
+        await client.channels.cache.get('908998769926873099').send({
+            embeds: [
+                muteEmbed
+            ]
+        });
     }
     if (interaction.commandName === 'eval') {
         if (interaction.user.id !== devId) {
