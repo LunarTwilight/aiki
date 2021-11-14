@@ -1,4 +1,4 @@
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, Permissions } = require('discord.js'); // eslint-disable-line no-redeclare
 const { token, devId } = require('./config.json');
 
 const client = new Client({
@@ -10,9 +10,10 @@ const client = new Client({
 
 client.once('ready', () => {
     console.log('Ready!');
+    process.send('ready');
 });
 
-client.on('messageCreate', message => {
+client.on('messageCreate', async message => {
     if (message.author.bot || !message.content.startsWith('a!')) {
         return;
     }
@@ -25,21 +26,44 @@ client.on('messageCreate', message => {
         message.channel.send('hi');
     }
     if (cmd === 'eval' && isDev) {
+        await message.channel.send('Something happened.');
         eval(msg);
     }
     if (cmd === 'die' && isDev) {
-        message.channel.send('bye.');
+        await message.channel.send('bye.');
         process.exit();
     }
 });
 
-client.on('interactionCreate', interaction => {
+client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) {
         return;
     }
 
     if (interaction.commandName === 'echo') {
         interaction.reply(interaction.options.getString('input'));
+    }
+    if (interaction.commandName === 'meme') {
+        interaction.reply('https://i.kym-cdn.com/photos/images/newsfeed/001/311/521/6be.gif');
+    }
+    if (interaction.commandName === 'ping') {
+        const sent = await interaction.reply({
+            content: 'Pinging...',
+            fetchReply: true
+        });
+        interaction.editReply(`:heartbeat: ${client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
+    }
+    if (interaction.commandName === 'staff') {
+        interaction.reply('https://fandom.zendesk.com/hc/requests/new');
+    }
+    if (interaction.commandName === 'random') {
+        if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+            return interaction.reply({
+                content: 'No.',
+                ephemeral: true
+            })
+        }
+        interaction.reply('The mods request that you move this convo to <#563024520101888010>.');
     }
     if (interaction.commandName === 'eval') {
         if (interaction.user.id !== devId) {
@@ -49,11 +73,11 @@ client.on('interactionCreate', interaction => {
         eval(interaction.options.getString('input'));
         return;
     }
-    if (interaction.commandName === 'eval') {
+    if (interaction.commandName === 'die') {
         if (interaction.user.id !== devId) {
             return interaction.reply('no');
         }
-        interaction.reply('bye');
+        await interaction.reply('bye');
         return process.exit();
     }
 });

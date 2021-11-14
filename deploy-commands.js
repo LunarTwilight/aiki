@@ -20,7 +20,19 @@ const commands = [
                 .setRequired(true)),
     new SlashCommandBuilder()
         .setName('die')
-        .setDescription('die')
+        .setDescription('die'),
+    new SlashCommandBuilder()
+        .setName('meme')
+        .setDescription('meme'),
+    new SlashCommandBuilder()
+        .setName('staff')
+        .setDescription('posts a link to zendesk'),
+    new SlashCommandBuilder()
+        .setName('random')
+        .setDescription('tells users to go to random'),
+    new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('ping')
 ]
     .map(command => command.toJSON());
 
