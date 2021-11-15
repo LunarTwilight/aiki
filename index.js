@@ -1,12 +1,20 @@
-const { Client, Intents, Permissions, MessageEmbed } = require('discord.js'); // eslint-disable-line no-redeclare
+const { Client, Intents, Collection } = require('discord.js');
 const { parseDuration } = require('parse-duration');
 const { token, devId } = require('./config.json');
+const fs = require('fs');
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES
     ]
 });
+
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
+}
 
 client.once('ready', () => {
     console.log('Ready!');
@@ -40,74 +48,19 @@ client.on('interactionCreate', async interaction => {
         return;
     }
 
-    if (interaction.commandName === 'meme') {
-        interaction.reply('https://i.kym-cdn.com/photos/images/newsfeed/001/311/521/6be.gif');
-    }
-    if (interaction.commandName === 'ping') {
-        const sent = await interaction.reply({
-            content: 'Pinging...',
-            fetchReply: true
+    const command = client.commands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({
+            content: 'There was an error while executing this command!',
+            ephemeral: true
         });
-        interaction.editReply(`:heartbeat: ${client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
-    }
-    if (interaction.commandName === 'staff') {
-        interaction.reply('https://fandom.zendesk.com/hc/requests/new');
-    }
-    if (interaction.commandName === 'random') {
-        if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            return interaction.reply({
-                content: 'No.',
-                ephemeral: true
-            })
-        }
-        interaction.reply('The mods request that you move this convo to <#563024520101888010>.');
-    }
-    if (interaction.commandName === 'mute') {
-        const member = interaction.options.getMember('user');
-        if (member.roles.cache.has('909403377056751676')) {
-            return interaction.reply({
-                content: 'This user is already muted.',
-                ephemeral: true
-            });
-        }
-        await member.roles.add('909403377056751676');
-        const muteEmbed = new MessageEmbed()
-            .setTitle('User muted')
-            .addFields({
-                name: 'User',
-                value: '<@' + member.id + '>',
-                inline: true
-            }, {
-                name: 'Duration',
-                value: interaction.options.getString('duration'),
-                inline: true
-            }, {
-                name: 'Reason',
-                value: interaction.options.getString('reason') ? interaction.options.getString('reason') : 'N/A',
-                inline: true
-            });
-        await interaction.reply('User has been muted');
-        await client.channels.cache.get('908998769926873099').send({
-            embeds: [
-                muteEmbed
-            ]
-        });
-    }
-    if (interaction.commandName === 'eval') {
-        if (interaction.user.id !== devId) {
-            return interaction.reply('no');
-        }
-        interaction.reply('something happened ig');
-        eval(interaction.options.getString('input'));
-        return;
-    }
-    if (interaction.commandName === 'die') {
-        if (interaction.user.id !== devId) {
-            return interaction.reply('no');
-        }
-        await interaction.reply('bye');
-        return process.exit();
-    }
+	}
 });
 
 client.login(token);
