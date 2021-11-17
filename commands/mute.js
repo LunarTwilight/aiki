@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { parseDuration } = require('parse-duration');
+const { muteRole, modChanel } = require('./config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,13 +20,13 @@ module.exports = {
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
         const member = interaction.options.getMember('user');
-        if (member.roles.cache.has('909403377056751676')) {
+        if (member.roles.cache.has(muteRole)) {
             return interaction.reply({
                 content: 'This user is already muted.',
                 ephemeral: true
             });
         }
-        await member.roles.add('909403377056751676');
+        await member.roles.add(muteRole);
         const muteEmbed = new MessageEmbed()
             .setTitle('User muted')
             .addFields({
@@ -42,7 +43,7 @@ module.exports = {
                 inline: true
             });
         await interaction.reply('User has been muted');
-        await interaction.client.channels.cache.get('908998769926873099').send({
+        await interaction.client.channels.cache.get(modChanel).send({
             embeds: [
                 muteEmbed
             ]
