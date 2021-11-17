@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const { parseDuration } = require('parse-duration');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+    data: new SlashCommandBuilder()
         .setName('mute')
         .setDescription('Mutes a user')
         .addUserOption(option =>
@@ -17,7 +17,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('reason')
                 .setDescription('Reason for the mute')),
-	async execute(interaction) {
+    async execute (interaction) {
         const member = interaction.options.getMember('user');
         if (member.roles.cache.has('909403377056751676')) {
             return interaction.reply({
@@ -47,5 +47,5 @@ module.exports = {
                 muteEmbed
             ]
         });
-	}
+    }
 }
