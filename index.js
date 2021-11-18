@@ -1,5 +1,5 @@
 const { Client, Intents, Collection } = require('discord.js');
-const { token, devId } = require('./config.json');
+const { token, devId } = require('../aiki-config/config.json');
 const fs = require('fs');
 const client = new Client({
     intents: [
