@@ -35,6 +35,19 @@ cron.schedule('0 * * * *', () => {
         });
 });
 
+const getRenames = db.prepare('SELECT userid, willChangeTo FROM renames WHERE willChangeAt < ?');
+const removeRenameRow = db.prepare('DELETE FROM renames WHERE userid = ?');
+cron.schedule('*/10 * * * *', () => {
+    const renamesToDo = getRenames.all(Date.now());
+    renamesToDo.forEach(async (userid, newNick) => {
+        const server = client.guides.cache.get(guildId);
+        const user = await server.members.fetch(userid);
+        user.setNickname(newNick);
+        server.channels.cache.get(modChanel).send('<@' + userid + '>\'s nick has been changed to `' + newNick + '`');
+        removeRenameRow.run(userid);
+    });
+});
+
 const getMutes = db.prepare('SELECT userid FROM mutes WHERE expiry < ?');
 const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
 cron.schedule('0/15 * * * *', () => {
