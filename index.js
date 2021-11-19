@@ -1,5 +1,5 @@
 const { Client, Intents, Collection } = require('discord.js');
-const { token, devId, guildId, muteRole, modChanel, renameLogChannel } = require('./config.json');
+const { token, guildId, muteRole, modChanel, renameLogChannel } = require('./config.json');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 const cron = require('node-cron');
@@ -55,24 +55,8 @@ client.on('userUpdate', async (oldUser, newUser) => {
 });
 
 client.on('messageCreate', async message => {
-    if (message.author.bot || !message.content.startsWith('a!')) {
+    if (message.author.bot) {
         return;
-    }
-    const bareContent = message.content.substring(2);
-    const cmd = bareContent.match(/(\w+) ?/)[1];
-    const msg = / /.test(bareContent) ? bareContent.match(/\w+ (.*)/)[1] : null;
-    const isDev = devId === message.author.id;
-
-    if (cmd === 'test') {
-        message.channel.send('hi');
-    }
-    if (cmd === 'eval' && isDev) {
-        await message.channel.send('Something happened.');
-        eval(msg);
-    }
-    if (cmd === 'die' && isDev) {
-        await message.channel.send('bye.');
-        process.exit();
     }
 });
 
