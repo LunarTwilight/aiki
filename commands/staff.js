@@ -5,6 +5,6 @@ module.exports = {
         .setName('staff')
         .setDescription('posts a link to zendesk'),
     async execute (interaction) {
-        interaction.reply('https://support.fandom.com/hc/requests/new');
+        interaction.reply('Fandom: https://support.fandom.com\nGamepedia: https://support.gamepedia.com');
     }
 }
