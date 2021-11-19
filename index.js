@@ -1,8 +1,9 @@
 const { Client, Intents, Collection } = require('discord.js');
-const { token, devId, guildId, muteRole, modChanel } = require('./config.json');
+const { token, devId, guildId, muteRole, modChanel, renameLogChannel } = require('./config.json');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 const cron = require('node-cron');
+const stringSimilarity = require('string-similarity');
 const db = new Database('db.sqlite', {
     fileMustExist: true
 });
@@ -36,29 +37,16 @@ cron.schedule('0 * * * *', () => {
         });
 });
 
-const getRenames = db.prepare('SELECT userid, willChangeTo FROM renames WHERE willChangeAt < ?');
-const removeRenameRow = db.prepare('DELETE FROM renames WHERE userid = ?');
-cron.schedule('*/10 * * * *', () => {
-    const renamesToDo = getRenames.all(Date.now());
-    renamesToDo.forEach(async (userid, newNick) => {
-        const server = client.guides.cache.get(guildId);
-        const user = await server.members.fetch(userid);
-        user.setNickname(newNick);
-        server.channels.cache.get(modChanel).send('<@' + userid + '>\'s nick has been changed to `' + newNick + '`');
-        removeRenameRow.run(userid);
-    });
-});
-
 const getMutes = db.prepare('SELECT userid FROM mutes WHERE expiry < ?');
 const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
 cron.schedule('0/15 * * * *', () => {
     const expiredMutes = getMutes.all(Date.now());
-    expiredMutes.forEach(async userid => {
+    expiredMutes.forEach(async row => {
         const server = client.guides.cache.get(guildId);
-        const user = await server.members.fetch(userid);
+        const user = await server.members.fetch(row.userid);
         user.roles.remove(muteRole);
-        server.channels.cache.get(modChanel).send('<@' + userid + '> has been unmuted.');
-        removeMuteRow.run(userid);
+        server.channels.cache.get(modChanel).send('<@' + row.userid + '> has been unmuted.');
+        removeMuteRow.run(row.userid);
     });
 });
 
