@@ -18,7 +18,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('reason')
                 .setDescription('Reason for the mute')),
-    async execute (interaction) {
+    async execute (interaction, db) {
         const member = interaction.options.getMember('user');
         if (member.roles.cache.has(muteRole)) {
             return interaction.reply({
@@ -27,6 +27,7 @@ module.exports = {
             });
         }
         await member.roles.add(muteRole);
+        const expiry = Date.now() + parseDuration(interaction.options.getString('duration'), 'ms');
         const muteEmbed = new MessageEmbed()
             .setTitle('User muted')
             .addFields({
@@ -36,6 +37,10 @@ module.exports = {
             }, {
                 name: 'Duration',
                 value: interaction.options.getString('duration'),
+                inline: true
+            }, {
+                name: 'Expiry',
+                value: '<t:' + expiry + '>',
                 inline: true
             }, {
                 name: 'Reason',
@@ -48,5 +53,7 @@ module.exports = {
                 muteEmbed
             ]
         });
+        const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
+        addMuteToDB.run(member.id, expiry);
     }
 }

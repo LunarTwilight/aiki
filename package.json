@@ -5,8 +5,10 @@
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.1.0-canary.0",
+    "better-sqlite3": "^7.4.4",
     "discord-api-types": "^0.24.0",
     "discord.js": "^13.3.1",
+    "node-cron": "^3.0.0",
     "parse-duration": "^1.0.2"
   }
 }

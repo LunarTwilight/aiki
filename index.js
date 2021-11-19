@@ -1,6 +1,11 @@
 const { Client, Intents, Collection } = require('discord.js');
-const { token, devId } = require('../aiki-config/config.json');
+const { token, devId, guildId, muteRole, modChanel } = require('./config.json');
 const fs = require('fs');
+const Database = require('better-sqlite3');
+const cron = require('node-cron');
+const db = new Database('db.sqlite', {
+    fileMustExist: true
+});
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -18,6 +23,29 @@ for (const file of commandFiles) {
 client.once('ready', () => {
     console.log('Ready!');
     process.send('ready');
+});
+
+cron.schedule('0 * * * *', () => {
+    db.backup(`/backups/backup-${Date.now()}.sqlite`)
+        .then(() => {
+            console.log('backup complete!');
+        })
+        .catch((err) => {
+            console.log('backup failed:', err);
+        });
+});
+
+const getMutes = db.prepare('SELECT userid FROM mutes WHERE expiry < ?');
+const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
+cron.schedule('0/15 * * * *', () => {
+    const expiredMutes = getMutes.all(Date.now());
+    expiredMutes.forEach(async userid => {
+        const server = client.guides.cache.get(guildId);
+        const user = await server.members.fetch(userid);
+        user.roles.remove(muteRole);
+        server.channels.cache.get(modChanel).send('<@' + userid + '> has been unmuted.');
+        removeMuteRow.run(userid);
+    });
 });
 
 client.on('messageCreate', async message => {
@@ -54,7 +82,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     try {
-        await command.execute(interaction);
+        await command.execute(interaction, db);
     } catch (error) {
         console.error(error);
         await interaction.reply({
