@@ -9,7 +9,8 @@ const db = new Database('db.sqlite', {
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MEMBERS
     ]
 });
 
@@ -59,6 +60,10 @@ cron.schedule('0/15 * * * *', () => {
         server.channels.cache.get(modChanel).send('<@' + userid + '> has been unmuted.');
         removeMuteRow.run(userid);
     });
+});
+
+client.on('userUpdate', async (oldUser, newUser) => {
+    console.log(oldUser, newUser);
 });
 
 client.on('messageCreate', async message => {
