@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { parseDuration } = require('parse-duration');
-const { muteRole, modChanel } = require('../aiki-config/config.json');
+const { muteRole, modChanel } = require('../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
