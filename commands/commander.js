@@ -28,7 +28,7 @@ module.exports = {
         ),
     async execute (interaction) {
         await interaction.deferReply();
-        const command = interaction.options.getSubcommand() === 'exec' ? 'exec ' + interaction.options.getString('command') : interaction.options.getSubcommand()
+        const command = interaction.options.getSubcommand() === 'exec' ? 'exec ' + interaction.options.getString('command') : interaction.options.getSubcommand();
         shell.exec('pm2 deploy aiki ' + command, function (code, stdout, stderr) {
             interaction.reply('Exit code: ', code);
             interaction.followUp('Program output: ', stdout);
