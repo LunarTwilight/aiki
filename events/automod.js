@@ -69,7 +69,9 @@ module.exports = {
             ]
         });
         const action = highest.level === 2 ? levels[highest.level] + 'for ' + highest.duration : levels[highest.level];
-        message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+        if (highest.level !== 1) {
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+        }
         switch (highest.level) {
             case 1:
                 //do nothing
