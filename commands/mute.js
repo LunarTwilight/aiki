@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { parseDuration } = require('parse-duration');
-const { muteRole, modChanel } = require('../config.json');
+const { muteRole, modChanel, modRole } = require('../config.json');
 const db = require('../database.js');
 const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
 
@@ -21,6 +21,9 @@ module.exports = {
             option.setName('reason')
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
+        if (!interaction.roles.cache.has(modRole)) {
+            return interaction.reply('You are not a mod, I\'d suggest you become one.');
+        }
         const member = interaction.options.getMember('user');
         if (member.roles.cache.has(muteRole)) {
             return interaction.reply({

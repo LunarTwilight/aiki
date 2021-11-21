@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const shell = require('shelljs');
+const { devId } = require('../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,6 +28,9 @@ module.exports = {
                 )
         ),
     async execute (interaction) {
+        if (interaction.user.id !== devId) {
+            return interaction.reply('https://i.gifer.com/BpGi.gif');
+        }
         await interaction.deferReply();
         const command = interaction.options.getSubcommand() === 'exec' ? 'exec ' + interaction.options.getString('command') : interaction.options.getSubcommand();
         shell.exec('pm2 deploy aiki ' + command, function (code, stdout, stderr) {
