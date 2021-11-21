@@ -1,6 +1,6 @@
 const { parseDuration } = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
-const { muteRole, modChanel, modLogChannel } = require('../config.json');
+const { muteRole, modChannel, modLogChannel } = require('../config.json');
 const db = require('../database.js');
 const filters = db.prepare('SELECT * FROM filters').all();
 const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
@@ -63,13 +63,13 @@ module.exports = {
             logEmbed.addField('Duration', highest.duration);
         }
         logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
-        message.client.channels.cache.get(modLogChannel).send({
+        message.guild.channels.cache.get(modLogChannel).send({
             embeds: [
                 logEmbed
             ]
         });
         const action = highest.level === 2 ? levels[highest.level] + 'for ' + highest.duration : levels[highest.level];
-        message.client.channels.cache.get(modChanel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+        message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
         switch (highest.level) {
             case 1:
                 //do nothing
