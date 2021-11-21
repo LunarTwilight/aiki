@@ -21,7 +21,7 @@ module.exports = {
             option.setName('reason')
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
-        if (!interaction.roles.cache.has(modRole)) {
+        if (!interaction.member.roles.cache.has(modRole)) {
             return interaction.reply('You are not a mod, I\'d suggest you become one.');
         }
         const member = interaction.options.getMember('user');
