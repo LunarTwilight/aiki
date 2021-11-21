@@ -1,10 +1,6 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
-const Database = require('better-sqlite3');
-const db = new Database('db.sqlite', {
-    fileMustExist: true
-});
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -13,8 +9,8 @@ const client = new Client({
     ]
 });
 
-require('./backupDB.js').execute(db);
-require('./expireMutes.js').execute(db, client);
+require('./backupDB.js').execute();
+require('./expireMutes.js').execute(client);
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));

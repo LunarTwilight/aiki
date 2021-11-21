@@ -1,6 +1,9 @@
 const { parseDuration } = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
 const { muteRole, modChanel, modLogChannel } = require('../config.json');
+const db = require('../database.js');
+const filters = db.prepare('SELECT * FROM filters').all();
+const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
 
 const levels = {
     alert: '1',
@@ -15,14 +18,12 @@ const levels = {
 
 module.exports = {
     name: 'messageCreate',
-    async execute (message, db) {
+    async execute (message) {
         if (message.author.bot) {
             return;
         }
 
         const matches = [];
-        const filters = db.prepare('SELECT * FROM filters').all();
-        const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
         for (var filter in filters) {
             const regexp = new RegExp(filter.regex, 'igm');
             if (regexp.test(message.content)) {

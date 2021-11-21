@@ -1,16 +1,16 @@
 const { verificationChannel, verifiedRole } = require('../config.json');
+const db = require('../database.js');
+const checkForIgnore = db.prepare('SELECT ignored FROM verificationIgnore WHERE userid = ?');
+const checkForWillIgnore = db.prepare('SELECT willIgnore FROM verificationIgnore WHERE userid = ?');
+const addIgnore = db.prepare('UPDATE verificationIgnore SET ignored = 1 WHERE userid = ?');
+const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userid, ignored, willIgnore) VALUES (?, 0, 1)');
 
 module.exports = {
     name: 'messageCreate',
-    execute (message, db) {
+    execute (message) {
         if (message.channelId !== verificationChannel || message.member.roles.cache.has(verifiedRole)) {
             return;
         }
-
-        const checkForIgnore = db.prepare('SELECT ignored FROM verificationIgnore WHERE userid = ?');
-        const checkForWillIgnore = db.prepare('SELECT willIgnore FROM verificationIgnore WHERE userid = ?');
-        const addIgnore = db.prepare('UPDATE verificationIgnore SET ignored = 1 WHERE userid = ?');
-        const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userid, ignored, willIgnore) VALUES (?, 0, 1)');
 
         if (checkForIgnore.get(message.author.id)) {
             return;

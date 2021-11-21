@@ -1,7 +1,8 @@
 const cron = require('node-cron');
+const db = require('./database.js');
 
 module.exports = {
-    execute (db) {
+    execute () {
         cron.schedule('0 * * * *', () => {
             db.backup(`/backups/backup-${Date.now()}.sqlite`)
                 .then(() => {

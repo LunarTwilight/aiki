@@ -1,8 +1,9 @@
 const cron = require('node-cron');
 const { guildId, muteRole, modChanel } = require('./config.json');
+const db = require('./database.js');
 
 module.exports = {
-    execute (db, client) {
+    execute (client) {
         const getMutes = db.prepare('SELECT userid FROM mutes WHERE expiry < ?');
         const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
         cron.schedule('0/15 * * * *', () => {
