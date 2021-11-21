@@ -8,7 +8,7 @@ module.exports = {
             fs.mkdirSync('./backups');
         }
         cron.schedule('0 * * * *', () => {
-            db.backup(`/backups/backup-${Date.now()}.sqlite`)
+            db.backup(`./backups/backup-${Date.now()}.sqlite`)
                 .then(() => {
                     console.log('backup complete!');
                 })
