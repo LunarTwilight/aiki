@@ -6,10 +6,10 @@ const filters = db.prepare('SELECT * FROM filters').all();
 const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
 
 const levels = {
-    alert: '1',
-    mute: '2',
-    kick: '3',
-    ban: '4',
+    alert: 1,
+    mute: 2,
+    kick: 3,
+    ban: 4,
     1: 'alert',
     2: 'mute',
     3: 'kick',
@@ -24,9 +24,10 @@ module.exports = {
         }
 
         const matches = [];
-        for (var filter in filters) {
+        for (var filter of filters) {
             const regexp = new RegExp(filter.regex, 'igm');
             if (regexp.test(message.content)) {
+                filter.regex = regexp.toString();
                 matches.push(filter);
             }
         }
@@ -34,13 +35,13 @@ module.exports = {
             return;
         }
         const highest = {
-            level: '',
+            level: undefined,
             duration: ''
         };
         const regexes = [];
-        for (var match in matches) {
+        for (var match of matches) {
             const level = levels[match.action];
-            if (highest) {
+            if (highest.level) {
                 if (level > highest) {
                     highest.level = level;
                     highest.duration = match.duration;
@@ -51,7 +52,7 @@ module.exports = {
                 highest.level = level;
                 highest.duration = match.duration;
             }
-            regexes.push(match.regex);
+            regexes.push('`' + match.regex + '`');
         }
         const url = `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`
         const logEmbed = new MessageEmbed()
@@ -70,7 +71,7 @@ module.exports = {
         });
         const action = highest.level === 2 ? levels[highest.level] + 'for ' + highest.duration : levels[highest.level];
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}ed because of <${url}>.`);
         }
         switch (highest.level) {
             case 1:
