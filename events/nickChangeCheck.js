@@ -4,6 +4,9 @@ const { renameLogChannel, randomChannel } = require('../config.json');
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
+        if (oldUser.nickname === newUser.nickname) {
+            return;
+        }
         const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newUser.nickname);
         if (diff < 0.3) {
             newUser.guild.channels.cache.get(randomChannel).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
