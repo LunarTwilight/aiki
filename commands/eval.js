@@ -11,6 +11,5 @@ module.exports = {
     async execute (interaction) {
         interaction.reply('something happened ig');
         eval(interaction.options.getString('input'));
-        return;
     }
 }
