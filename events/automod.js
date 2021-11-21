@@ -42,7 +42,7 @@ module.exports = {
         for (var match of matches) {
             const level = levels[match.action];
             if (highest.level) {
-                if (level > highest) {
+                if (level > highest.level) {
                     highest.level = level;
                     highest.duration = match.duration;
                 } else {
