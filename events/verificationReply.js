@@ -8,7 +8,7 @@ const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userid, ignore
 module.exports = {
     name: 'messageCreate',
     execute (message) {
-        if (message.channelId !== verificationChannel || message.member.roles.cache.has(verifiedRole)) {
+        if (message.channelId !== verificationChannel || message.author.bot || message.member.roles.cache.has(verifiedRole)) {
             return;
         }
 
