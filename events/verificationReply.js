@@ -1,9 +1,9 @@
-const { verificationChannel } = require('../config.json');
+const { verificationChannel, verifiedRole } = require('../config.json');
 
 module.exports = {
     name: 'messageCreate',
     execute (message, db) {
-        if (message.channelId !== verificationChannel) {
+        if (message.channelId !== verificationChannel || message.member.roles.cache.has(verifiedRole)) {
             return;
         }
 
