@@ -6,17 +6,17 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('commander')
         .setDescription('Controls the bot')
-        .addSubCommand(subcommand =>
+        .addSubcommand(subcommand =>
             subcommand
                 .setName('update')
                 .setDescription('Updates the bot')
         )
-        .addSubCommand(subcommand =>
+        .addSubcommand(subcommand =>
             subcommand
                 .setName('revert')
                 .setDescription('Reverts last update')
         )
-        .addSubCommand(subcommand =>
+        .addSubcommand(subcommand =>
             subcommand
                 .setName('exec')
                 .setDescription('Executes a command')
