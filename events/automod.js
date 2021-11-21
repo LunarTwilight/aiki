@@ -40,16 +40,16 @@ module.exports = {
         const regexes = [];
         for (var match in matches) {
             const level = levels[match.action];
-            if (!highest) {
-                highest.level = level;
-                highest.duration = match.duration;
-            } else {
+            if (highest) {
                 if (level > highest) {
                     highest.level = level;
                     highest.duration = match.duration;
                 } else {
                     //do nothing
                 }
+            } else {
+                highest.level = level;
+                highest.duration = match.duration;
             }
             regexes.push(match.regex);
         }

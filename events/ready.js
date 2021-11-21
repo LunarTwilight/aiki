@@ -1,7 +1,7 @@
 module.exports = {
     name: 'ready',
     once: true,
-    execute (client) {
+    execute () {
         console.log('Ready!');
         process.send('ready');
     }
