@@ -12,11 +12,11 @@ module.exports = {
             return;
         }
 
-        if (checkForIgnore.get(message.author.id)) {
+        if (checkForIgnore.get(message.author.id).ignored) {
             return;
         }
 
-        if (checkForWillIgnore.get(message.author.id)) {
+        if (checkForWillIgnore.get(message.author.id).willIgnore) {
             message.reply('It looks like you\'re having trouble verifying, please contact a moderator.');
             addIgnore.run(message.author.id);
             return;
