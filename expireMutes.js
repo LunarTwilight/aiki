@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { guildId, muteRole, modChanel } = require('./config.json');
+const { muteRole, modChanel } = require('./config.json');
 const db = require('./database.js');
 
 module.exports = {
@@ -9,10 +9,8 @@ module.exports = {
         cron.schedule('0/15 * * * *', () => {
             const expiredMutes = getMutes.all(Date.now());
             expiredMutes.forEach(async row => {
-                const server = client.guilds.cache.get(guildId);
-                const user = await server.members.fetch(row.userid);
-                user.roles.remove(muteRole);
-                server.channels.cache.get(modChanel).send('<@' + row.userid + '> has been unmuted.');
+                client.users.fetch(row.userid).roles.remove(muteRole);
+                client.channels.fetch(modChanel).send('<@' + row.userid + '> has been unmuted.');
                 removeMuteRow.run(row.userid);
             });
         });
