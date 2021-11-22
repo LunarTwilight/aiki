@@ -4,7 +4,7 @@ const { renameLogChannel, randomChannel } = require('../config.json');
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
-        if (oldUser.nickname === newUser.nickname) {
+        if (!oldUser.nickname || !newUser.nickname || oldUser.nickname === newUser.nickname) {
             return;
         }
         const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newUser.nickname);
