@@ -45,7 +45,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Expiry',
-                value: '<t:' + expiry + '>',
+                value: '<t:' + 	Math.floor(expiry / 1000) + '>',
                 inline: true
             }, {
                 name: 'Reason',
