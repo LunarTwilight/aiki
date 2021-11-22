@@ -9,7 +9,7 @@ module.exports = {
         cron.schedule('0/15 * * * *', () => {
             const expiredMutes = getMutes.all(Date.now());
             expiredMutes.forEach(async row => {
-                const server = client.guides.cache.get(guildId);
+                const server = client.guilds.cache.get(guildId);
                 const user = await server.members.fetch(row.userid);
                 user.roles.remove(muteRole);
                 server.channels.cache.get(modChanel).send('<@' + row.userid + '> has been unmuted.');
