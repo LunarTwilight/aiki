@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const { parseDuration } = require('parse-duration');
+const parseDuration = require('parse-duration');
 const { muteRole, modChanel, modRole } = require('../config.json');
 const db = require('../database.js');
 const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');

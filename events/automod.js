@@ -1,4 +1,4 @@
-const { parseDuration } = require('parse-duration');
+const parseDuration = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
 const { muteRole, modChannel, modLogChannel } = require('../config.json');
 const db = require('../database.js');
@@ -36,7 +36,7 @@ module.exports = {
         }
         const highest = {
             level: undefined,
-            duration: ''
+            duration: undefined
         };
         const regexes = [];
         for (var match of matches) {
@@ -54,6 +54,9 @@ module.exports = {
             }
             regexes.push('`' + match.regex + '`');
         }
+        if (highest.level === 2 && !highest.duration) {
+            highest.duration = 'infinite';
+        }
         const url = `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`
         const logEmbed = new MessageEmbed()
             .setTitle('Automatic ' + levels[highest.level])
@@ -69,16 +72,16 @@ module.exports = {
                 logEmbed
             ]
         });
-        const action = highest.level === 2 ? levels[highest.level] + 'for ' + highest.duration : levels[highest.level];
+        const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}ed because of <${url}>.`);
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
         }
         switch (highest.level) {
             case 1:
                 //do nothing
                 break;
             case 2: {
-                const user = await message.guide.members.fetch(message.author.id);
+                const user = await message.guild.members.fetch(message.author.id);
                 user.roles.add(muteRole);
                 const expiry = Date.now() + parseDuration(highest.duration, 'ms');
                 addMuteToDB.run(message.author.id, expiry);
