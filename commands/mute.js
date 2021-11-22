@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const parseDuration = require('parse-duration');
-const { muteRole, modChanel, modRole } = require('../config.json');
+const { muteRole, modChannel, modRole } = require('../config.json');
 const db = require('../database.js');
 const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
 
@@ -53,7 +53,7 @@ module.exports = {
                 inline: true
             });
         await interaction.reply('User has been muted');
-        await interaction.client.channels.cache.get(modChanel).send({
+        await interaction.client.channels.cache.get(modChannel).send({
             embeds: [
                 muteEmbed
             ]
