@@ -7,11 +7,12 @@ module.exports = {
         .setDescription('posts a link to zendesk')
         .addStringOption(option =>
             option.setName('category')
-                .setDescription('Optional category')
+                .setDescription('Optional category (for Fandom\'s Zendesk instance only)')
                 .addChoice('Account Help', 'account_help')
                 .addChoice('Wiki Changes', 'wiki_changes')
                 .addChoice('Problem', 'problem')
                 .addChoice('Protection', 'protection')
+                .addChoice('Other', 'other')
         ),
     async execute (interaction) {
         const cat = interaction.options.getString('category');
@@ -30,6 +31,9 @@ module.exports = {
                 break;
             case 'protection':
                 interaction.reply(baseUrl + '360000948854');
+                break;
+            case 'other':
+                interaction.reply(baseUrl + '360000956114');
                 break;
         }
     }
