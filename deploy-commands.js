@@ -12,7 +12,8 @@ for (const file of commandFiles) {
 }
 
 const rest = new REST({ version: '9' }).setToken(token);
+const type = process.argv.slice(2)[0] === 'global' ? Routes.applicationCommands(clientId) : Routes.applicationGuildCommands(clientId, guildId);
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+rest.put(type, { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
