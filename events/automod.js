@@ -50,7 +50,7 @@ module.exports = {
                 highest.level = level;
                 highest.duration = match.duration;
             }
-            regexes.push('`' + new RegExp(filter.regex, 'igm').toString() + '`');
+            regexes.push('`' + new RegExp(match.regex, 'igm').toString() + '`');
         }
         if (highest.level === 2 && !highest.duration) {
             highest.duration = 'infinite';
