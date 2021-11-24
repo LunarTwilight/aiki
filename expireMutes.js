@@ -6,7 +6,7 @@ const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
 
 module.exports = {
     execute (client) {
-        cron.schedule('* * * * *', () => { //0/15 * * * *
+        cron.schedule('0/15 * * * *', () => {
             const expiredMutes = getMutes.all(Date.now());
             expiredMutes.forEach(async row => {
                 const user = await client.guilds.cache.get(guildId).members.fetch(row.userid.toString());
