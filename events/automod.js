@@ -83,8 +83,10 @@ module.exports = {
             case 2: {
                 const user = await message.guild.members.fetch(message.author.id);
                 user.roles.add(muteRole);
-                const expiry = Date.now() + parseDuration(highest.duration, 'ms');
-                addMuteToDB.run(message.author.id, expiry);
+                if (highest.duration !== 'infinite') {
+                    const expiry = Date.now() + parseDuration(highest.duration, 'ms');
+                    addMuteToDB.run(message.author.id, expiry);
+                }
                 break;
             }
             case 3:
