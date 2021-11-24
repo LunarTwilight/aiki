@@ -7,12 +7,14 @@ module.exports = {
         .setDescription('posts a link to zendesk')
         .addStringOption(option =>
             option.setName('category')
-                .setDescription('Optional category (for Fandom\'s Zendesk instance only)')
+                .setDescription('Optional category')
                 .addChoice('Account Help', 'account_help')
                 .addChoice('Wiki Changes', 'wiki_changes')
                 .addChoice('Problem', 'problem')
                 .addChoice('Protection', 'protection')
                 .addChoice('Other', 'other')
+                .addChoice('Bad Ad', 'bad_ad')
+                .addChoice('Spam/Vandal', 'spam_vandal')
         ),
     async execute (interaction) {
         const cat = interaction.options.getString('category');
@@ -34,6 +36,12 @@ module.exports = {
                 break;
             case 'other':
                 interaction.reply(baseUrl + '360000956114');
+                break;
+            case 'bad_ad':
+                interaction.reply('https://community.fandom.com/wiki/Help:Bad_advertisements');
+                break;
+            case 'spam_vandal':
+                interaction.reply('Fandom: <#600818678682091562>\nGamepedia: <#573641974276423702>\nWiki: https://soap.fandom.com');
                 break;
         }
     }
