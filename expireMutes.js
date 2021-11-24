@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { muteRole, modChanel, guildId } = require('./config.json');
+const { muteRole, modChannel, guildId } = require('./config.json');
 const db = require('./database.js');
 const getMutes = db.prepare('SELECT userid FROM mutes WHERE expiry < ?');
 const removeMuteRow = db.prepare('DELETE FROM mutes WHERE userid = ?');
@@ -13,7 +13,7 @@ module.exports = {
                 if (user.roles.cache.has(muteRole)) {
                     user.roles.remove(muteRole);
                 }
-                await client.channels.cache.get(modChanel).send('<@' + row.userid + '> has been unmuted.');
+                await client.channels.cache.get(modChannel).send('<@' + row.userid + '> has been unmuted.');
                 removeMuteRow.run(row.userid);
             });
         });
