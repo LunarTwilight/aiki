@@ -6,11 +6,11 @@ const removeIgnoreUserRow = db.prepare('DELETE FROM verificationIgnore WHERE use
 
 module.exports = {
     execute (client) {
-        cron.schedule('* * * * *', () => { //0/30 * * * *
+        cron.schedule('0/30 * * * *', () => {
             const ignoredUsers = getIgnoredUsers.all();
             ignoredUsers.forEach(async row => {
                 const user = await client.guilds.cache.get(guildId).members.fetch(row.userid.toString());
-                if (!user || user.roles.has(verifiedRole)) {
+                if (!user || user.roles.cache.has(verifiedRole)) {
                     removeIgnoreUserRow.run(row.userid);
                 }
             });
