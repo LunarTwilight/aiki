@@ -9,11 +9,11 @@ module.exports = {
         cron.schedule('* * * * *', () => { //0/15 * * * *
             const expiredMutes = getMutes.all(Date.now());
             expiredMutes.forEach(async row => {
-                const roles = await client.guilds.cache.get(guildId).members.fetch(row.userid.toString()).roles;
-                if (roles.has(muteRole)) {
-                    roles.remove(muteRole);
+                const user = await client.guilds.cache.get(guildId).members.fetch(row.userid.toString());
+                if (user.roles.cache.has(muteRole)) {
+                    user.roles.remove(muteRole);
                 }
-                await client.channels.fetch(modChanel).send('<@' + row.userid + '> has been unmuted.');
+                await client.channels.cache.get(modChanel).send('<@' + row.userid + '> has been unmuted.');
                 removeMuteRow.run(row.userid);
             });
         });
