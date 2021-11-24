@@ -11,6 +11,7 @@ const client = new Client({
 
 require('./backupDB.js').execute();
 require('./expireMutes.js').execute(client);
+require('./pruneDB.js').execute(client);
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
