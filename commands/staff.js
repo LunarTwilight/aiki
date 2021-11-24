@@ -38,10 +38,10 @@ module.exports = {
                 interaction.reply(baseUrl + '360000956114');
                 break;
             case 'bad_ad':
-                interaction.reply('https://community.fandom.com/wiki/Help:Bad_advertisements');
+                interaction.reply('<https://community.fandom.com/wiki/Help:Bad_advertisements>');
                 break;
             case 'spam_vandal':
-                interaction.reply('Fandom: <#600818678682091562>\nGamepedia: <#573641974276423702>\nWiki: https://soap.fandom.com');
+                interaction.reply('Fandom: <#600818678682091562>\nGamepedia: <#573641974276423702>\nWiki: <https://soap.fandom.com>');
                 break;
         }
     }
