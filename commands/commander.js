@@ -32,8 +32,19 @@ module.exports = {
             return interaction.reply('https://i.gifer.com/BpGi.gif');
         }
         await interaction.deferReply();
-        const command = interaction.options.getSubcommand() === 'exec' ? 'exec ' + interaction.options.getString('command') : interaction.options.getSubcommand();
-        shell.exec('pm2 deploy aiki ' + command, function (code, stdout, stderr) {
+        let command;
+        switch (interaction.options.getSubcommand()) {
+            case 'update':
+                command = 'cd ~/aiki && git pull';
+                break;
+            case 'revert':
+                command = 'git reset --hard ORIG_HEAD';
+                break;
+            case 'exec':
+                command = interaction.options.getString('command');
+                break;
+        }
+        shell.exec(command, function (code, stdout, stderr) {
             interaction.reply('Exit code: ', code);
             interaction.followUp('Program output: ', stdout);
             interaction.followUp('Program stderr: ', stderr);
