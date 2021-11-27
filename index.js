@@ -1,12 +1,17 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
+const promClient = require('prom-client');
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MEMBERS
     ]
+});
+
+promClient.collectDefaultMetrics({
+    prefix: 'aiki'
 });
 
 require('./backupDB.js').execute();
