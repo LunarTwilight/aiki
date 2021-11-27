@@ -1,7 +1,8 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
-const promClient = require('prom-client');
+import { collectDefaultMetrics, register } from 'prom-client';
+const http = require('http');
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -10,9 +11,18 @@ const client = new Client({
     ]
 });
 
-promClient.collectDefaultMetrics({
+collectDefaultMetrics({
     prefix: 'aiki'
 });
+http.createServer((req, res) => {
+    try {
+        res.setHeader('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    } catch (err) {
+        res.writeHead(500)
+        res.end(err);
+    }
+}).listen(22022);
 
 require('./backupDB.js').execute();
 require('./expireMutes.js').execute(client);
