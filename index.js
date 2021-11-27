@@ -14,7 +14,7 @@ const client = new Client({
 collectDefaultMetrics({
     prefix: 'aiki'
 });
-http.createServer((req, res) => {
+http.createServer(async (req, res) => {
     try {
         res.setHeader('Content-Type', register.contentType);
         res.end(await register.metrics());
