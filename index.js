@@ -1,7 +1,7 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
-import { collectDefaultMetrics, register } from 'prom-client';
+const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
 const client = new Client({
     intents: [
