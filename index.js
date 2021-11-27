@@ -12,7 +12,9 @@ const client = new Client({
 });
 
 collectDefaultMetrics({
-    prefix: 'aiki'
+    label: {
+        name: 'aiki'
+    }
 });
 http.createServer(async (req, res) => {
     try {
