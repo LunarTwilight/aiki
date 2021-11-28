@@ -3,7 +3,7 @@ const db = require('../database.js');
 const checkForIgnore = db.prepare('SELECT ignored FROM verificationIgnore WHERE userid = ?');
 const checkForWillIgnore = db.prepare('SELECT willIgnore FROM verificationIgnore WHERE userid = ?');
 const addIgnore = db.prepare('UPDATE verificationIgnore SET ignored = 1 WHERE userid = ?');
-const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userid, ignored, willIgnore) VALUES (?, 0, 1)');
+const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userId, guildId, ignored, willIgnore) VALUES (?, ?, 0, 1)');
 
 module.exports = {
     name: 'messageCreate',
@@ -25,7 +25,7 @@ module.exports = {
 
         if (/^hi|^hello|^yo/i.test(message.content)) {
             message.reply('Hi, please read the channel topic to see how to verify and access the rest of the server.');
-            addWillIgnore.run(message.author.id);
+            addWillIgnore.run(message.author.id, message.guild.id);
         }
     }
 };
