@@ -1,9 +1,9 @@
 const parseDuration = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
-const { muteRole, modChannel, modLogChannel } = require('../config.json');
+const config = require('../config.js');
 const db = require('../database.js');
 const filters = db.prepare('SELECT * FROM filters').all();
-const addMuteToDB = db.prepare('INSERT INTO mutes (userid, expiry) VALUES (?, ?)');
+const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
 
 const levels = {
     alert: 1,
@@ -65,14 +65,15 @@ module.exports = {
             logEmbed.addField('Duration', highest.duration);
         }
         logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
-        message.guild.channels.cache.get(modLogChannel).send({
+        const guildConfig = config.find(item => item.guildId === BigInt(message.guild.id));
+        message.guild.channels.cache.get(guildConfig.modLogChannel.toString()).send({
             embeds: [
                 logEmbed
             ]
         });
         const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+            message.guild.channels.cache.get(guildConfig.modChannel.toString()).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
         }
         switch (highest.level) {
             case 1:
@@ -80,10 +81,10 @@ module.exports = {
                 break;
             case 2: {
                 const user = await message.guild.members.fetch(message.author.id);
-                user.roles.add(muteRole);
+                user.roles.add(guildConfig.muteRole.toString());
                 if (highest.duration !== 'infinite') {
                     const expiry = Date.now() + parseDuration(highest.duration, 'ms');
-                    addMuteToDB.run(message.author.id, expiry);
+                    addMuteToDB.run(message.author.id, message.guild.id, expiry);
                 }
                 break;
             }
