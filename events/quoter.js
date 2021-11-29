@@ -187,20 +187,7 @@ module.exports = {
                     message.channel
                         .send({
                             content: deleteMessage ? `<${quote.url}>` : null,
-                            embeds,
-                            reply: {
-                                messageReference:
-                                    (deleteMessage &&
-                                        message.reference?.messageId) ||
-                                    (message.channelId === quote.channelId
-                                        ? quote.id
-                                        : null),
-                                failIfNotExists: false
-                            },
-                            allowedMentions: {
-                                parse: [],
-                                repliedUser: false
-                            }
+                            embeds
                         })
                         .then(
                             () => {
