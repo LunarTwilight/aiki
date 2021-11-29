@@ -1,5 +1,6 @@
 const stringSimilarity = require('string-similarity');
-const { renameLogChannel, randomChannel } = require('../config.json');
+const db = require('../database.js');
+const config = db.prepare('SELECT renameLogChannel, randomChannel FROM config WHERE guildId = ?');
 
 module.exports = {
     name: 'guildMemberUpdate',
@@ -8,6 +9,7 @@ module.exports = {
             return;
         }
         const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newUser.nickname);
+        const { renameLogChannel, randomChannel } = config.all(BigInt(newUser.guild.id))[0];
         if (diff < 0.3) {
             newUser.guild.channels.cache.get(randomChannel).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
             newUser.setNickname(oldUser.nickname, 'Reverting nick change back to Fandom username');

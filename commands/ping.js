@@ -1,11 +1,13 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { verifiedRole } = require('../config.json');
+const db = require('../database.js');
+const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('ping'),
     async execute (interaction) {
+        const { verifiedRole } = config.get(BigInt(interaction.guildId));
         if (!interaction.member.roles.cache.has(verifiedRole)) {
             return interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',

@@ -1,7 +1,7 @@
 const parseDuration = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
-const config = require('../config.js');
 const db = require('../database.js');
+const config = db.prepare('SELECT modLogChannel, modChannel, muteRole FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
 const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
 
@@ -65,15 +65,15 @@ module.exports = {
             logEmbed.addField('Duration', highest.duration);
         }
         logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
-        const guildConfig = config.find(item => item.guildId === BigInt(message.guild.id));
-        message.guild.channels.cache.get(guildConfig.modLogChannel.toString()).send({
+        const { modLogChannel, modChannel, muteRole } = config.all(BigInt(message.guild.id))[0];
+        message.guild.channels.cache.get(modLogChannel.toString()).send({
             embeds: [
                 logEmbed
             ]
         });
         const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(guildConfig.modChannel.toString()).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+            message.guild.channels.cache.get(modChannel.toString()).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
         }
         switch (highest.level) {
             case 1:
@@ -81,7 +81,7 @@ module.exports = {
                 break;
             case 2: {
                 const user = await message.guild.members.fetch(message.author.id);
-                user.roles.add(guildConfig.muteRole.toString());
+                user.roles.add(muteRole.toString());
                 if (highest.duration !== 'infinite') {
                     const expiry = Date.now() + parseDuration(highest.duration, 'ms');
                     addMuteToDB.run(message.author.id, message.guild.id, expiry);

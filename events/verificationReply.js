@@ -1,5 +1,5 @@
-const config = require('../config.js');
 const db = require('../database.js');
+const config = db.prepare('SELECT verificationChannel, verifiedRole FROM config WHERE guildId = ?');
 const checkForIgnore = db.prepare('SELECT ignored FROM verificationIgnore WHERE userid = ?');
 const checkForWillIgnore = db.prepare('SELECT willIgnore FROM verificationIgnore WHERE userid = ?');
 const addIgnore = db.prepare('UPDATE verificationIgnore SET ignored = 1 WHERE userid = ?');
@@ -8,8 +8,8 @@ const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userId, guildI
 module.exports = {
     name: 'messageCreate',
     execute (message) {
-        const guildConfig = config.find(item => item.guildId === BigInt(message.guild.id));
-        if (message.channelId !== guildConfig.verificationChannel.toString() || message.author.bot || message.member.roles.cache.has(guildConfig.verifiedRole.toString())) {
+        const { verificationChannel, verifiedRole } = config.all(BigInt(message.guild.id))[0];
+        if (message.channelId !== verificationChannel.toString() || message.author.bot || message.member.roles.cache.has(verifiedRole.toString())) {
             return;
         }
 

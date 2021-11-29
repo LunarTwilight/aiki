@@ -1,13 +1,14 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const config = require('../config.js');
+const db = require('../database.js');
+const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('meme')
         .setDescription('meme'),
     async execute (interaction) {
-        const role = config.find(item => item.guildId === BigInt(interaction.guildId)).verifiedRole.toString()
-        if (!interaction.member.roles.cache.has(role)) {
+        const { verifiedRole } = config.get(BigInt(interaction.guildId));
+        if (!interaction.member.roles.cache.has(verifiedRole.toString())) {
             return interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
