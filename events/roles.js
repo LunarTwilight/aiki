@@ -7,20 +7,6 @@ module.exports = {
             return;
         }
 
-        console.log('Received rroles');
-        function end (member, action, actionn, role) {
-            console.log('End function');
-            interaction.reply({
-                content: `You have been successfully ${actionn} the <@&${role}> role.`,
-                ephemeral: true
-            });
-            if (action === 'add') {
-                return member.roles.add(role).catch(console.error);
-            } else if (action === 'remove') {
-                return member.roles.remove(role).catch(console.error);
-            }
-        }
-
         if (interaction.customId.match(/roles-addllanguages/)) {
             const rowLanguageA = new MessageActionRow().addComponents(
                 new MessageButton().setCustomId('roles-597697665618149377').setLabel('Korean').setStyle('SECONDARY'),
@@ -60,22 +46,17 @@ module.exports = {
             });
         }
 
-        let action = 'add';
-
-        const member = await interaction.message.guild.members.cache.find(
-            (member) => member.id === interaction.member.user.id
-        );
-        console.log(member);
-        const int = interaction.customId.replace(/^roles-/, '');
-
-        if (member.roles.cache.has(int)) action = 'remove';
-
-        if (action === 'add') {
-            console.log('Add');
-            return end(await member, action, 'added to', int);
-        } else if (action === 'remove') {
-            console.log('Remove');
-            return end(await member, action, 'removed from', int);
+        const roleId = interaction.customId.replace(/^roles-/, '');
+        const roles = interaction.member.roles;
+        const hasRole = roles.cache.has(roleId);
+        interaction.reply({
+            content: `You have been successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`,
+            ephemeral: true
+        });
+        if (hasRole) {
+            roles.remove(roleId).catch(console.error);
+        } else {
+            roles.add(roleId).catch(console.error);
         }
     }
 }
