@@ -5,7 +5,7 @@ const config = db.prepare('SELECT rolesChannel FROM config WHERE guildId = ?');
 module.exports = {
     async execute (interaction) {
         const { rolesChannel } = config.get(BigInt(interaction.guildId));
-        const channelroles = interaction.client.channels.cache.get(rolesChannel);
+        const channelroles = interaction.client.channels.cache.get(rolesChannel.toString());
 
         if (interaction.options.getString('option') === 'webhook') {
             return channelroles
