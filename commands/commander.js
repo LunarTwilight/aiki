@@ -35,8 +35,8 @@ module.exports = {
                     option
                         .setName('option')
                         .setDescription('Option to set up')
-                        .setChoice('Init', 'init')
-                        .setChoice('Webhook', 'webhook')
+                        .addChoice('Init', 'init')
+                        .addChoice('Webhook', 'webhook')
                         .setRequired(true)
                 )
         ),
