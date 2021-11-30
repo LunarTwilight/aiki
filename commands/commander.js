@@ -61,7 +61,7 @@ module.exports = {
                 break;
         }
         shell.exec(command, function (code, stdout, stderr) {
-            interaction.reply('Exit code: ', code);
+            interaction.editReply('Exit code: ', code);
             interaction.followUp('Program output: ', stdout);
             interaction.followUp('Program stderr: ', stderr);
         });

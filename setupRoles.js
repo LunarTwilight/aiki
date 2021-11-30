@@ -14,7 +14,7 @@ module.exports = {
                 })
                 .then((webhook) => console.log(`Created webhook ${webhook}`))
                 .catch(console.error);
-            interaction.reply({
+            interaction.editReply({
                 content: 'Webhook created',
                 ephemeral: true
             });
@@ -115,31 +115,15 @@ module.exports = {
             const webhooks = await channelroles.fetchWebhooks();
             const webhook = webhooks.first();
 
-            webhook
-                .send({ content: platform, components: [rowPlatform] })
-                .then(() => {
-                    webhook
-                        .send({ content: pronoun, components: [rowPronoun] })
-                        .then(() => {
-                            webhook
-                                .send({ content: vertical, components: [rowVertical] })
-                                .then(() => {
-                                    webhook
-                                        .send({ content: region, components: [rowRegion] })
-                                        .then(() => {
-                                            webhook.send({ content: languageA, components: [rowLanguageA, rowLanguageB, rowLanguageC] });
-                                            interaction.reply({
-                                                content: 'Roles messages created',
-                                                ephemeral: true
-                                            });
-                                        })
-                                        .catch(console.error);
-                                })
-                                .catch(console.error);
-                        })
-                        .catch(console.error);
-                })
-                .catch(console.error);
+            await webhook.send({ content: platform, components: [rowPlatform] })
+            await webhook.send({ content: pronoun, components: [rowPronoun] })
+            await webhook.send({ content: vertical, components: [rowVertical] })
+            await webhook.send({ content: region, components: [rowRegion] })
+            await webhook.send({ content: languageA, components: [rowLanguageA, rowLanguageB, rowLanguageC] });
+            interaction.editReply({
+                content: 'Roles messages created',
+                ephemeral: true
+            });
         } catch (error) {
             console.error(error);
         }
