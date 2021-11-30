@@ -26,12 +26,27 @@ module.exports = {
                         .setDescription('The command to run')
                         .setRequired(true)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('roles')
+                .setDescription('Set up roles channel')
+                .addStringOption(option =>
+                    option
+                        .setRequired(true)
+                        .setName('option')
+                        .setChoice('Init', 'init')
+                        .setChoice('Webhook', 'webhook')
+                )
         ),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
             return interaction.reply('https://i.gifer.com/BpGi.gif');
         }
         await interaction.deferReply();
+        if (interaction.options.getSubcommand() === 'roles') {
+            return require('../setupRoles.js').execute(interaction);
+        }
         let command;
         switch (interaction.options.getSubcommand()) {
             case 'update':
