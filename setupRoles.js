@@ -17,7 +17,8 @@ module.exports = {
             interaction.reply({
                 content: 'Webhook created',
                 ephemeral: true
-            })
+            });
+            return;
         }
 
         const platform = 'Please select the platform to see its channels:';
