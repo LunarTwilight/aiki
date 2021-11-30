@@ -8,12 +8,16 @@ module.exports = {
         const channelroles = interaction.client.channels.cache.get(rolesChannel.toString());
 
         if (interaction.options.getString('option') === 'webhook') {
-            return channelroles
+            channelroles
                 .createWebhook('Roles', {
                     avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png'
                 })
                 .then((webhook) => console.log(`Created webhook ${webhook}`))
                 .catch(console.error);
+            interaction.reply({
+                content: 'Webhook created',
+                ephemeral: true
+            })
         }
 
         const platform = 'Please select the platform to see its channels:';
@@ -123,6 +127,10 @@ module.exports = {
                                         .send({ content: region, components: [rowRegion] })
                                         .then(() => {
                                             webhook.send({ content: languageA, components: [rowLanguageA, rowLanguageB, rowLanguageC] });
+                                            interaction.reply({
+                                                content: 'Roles messages created',
+                                                ephemeral: true
+                                            });
                                         })
                                         .catch(console.error);
                                 })
