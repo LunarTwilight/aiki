@@ -3,6 +3,10 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 module.exports = {
     name: 'interactionCreate',
     async execute (interaction) {
+        if (!interaction.isButton()) {
+            return;
+        }
+
         console.log('Received rroles');
         function end (member, action, actionn, role) {
             console.log('End function');
