@@ -34,6 +34,7 @@ module.exports = {
                 .addStringOption(option =>
                     option
                         .setName('option')
+                        .setDescription('Option to set up')
                         .setRequired(true)
                         .setChoice('Init', 'init')
                         .setChoice('Webhook', 'webhook')
