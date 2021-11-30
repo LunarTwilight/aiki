@@ -33,8 +33,8 @@ module.exports = {
                 .setDescription('Set up roles channel')
                 .addStringOption(option =>
                     option
-                        .setRequired(true)
                         .setName('option')
+                        .setRequired(true)
                         .setChoice('Init', 'init')
                         .setChoice('Webhook', 'webhook')
                 )
