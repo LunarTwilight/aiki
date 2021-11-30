@@ -6,8 +6,10 @@ module.exports = {
     async execute (interaction) {
         const { rolesChannel } = config.get(BigInt(interaction.guildId));
         const channelroles = interaction.client.channels.cache.get(rolesChannel.toString());
+        const webhooks = await channelroles.fetchWebhooks();
+        let createdWebhook;
 
-        if (interaction.options.getString('option') === 'webhook') {
+        if (!webhooks.first()) {
             channelroles
                 .createWebhook('Roles', {
                     avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png'
@@ -18,7 +20,7 @@ module.exports = {
                 content: 'Webhook created',
                 ephemeral: true
             });
-            return;
+            createdWebhook = true;
         }
 
         const platform = 'Please select the platform to see its channels:';
@@ -111,21 +113,20 @@ module.exports = {
         const rowLanguageC = new MessageActionRow().addComponents(
             new MessageButton().setCustomId('roles-addllanguages').setLabel('Additional languages').setStyle('PRIMARY')
         );
-        try {
-            const webhooks = await channelroles.fetchWebhooks();
-            const webhook = webhooks.first();
-
-            await webhook.send({ content: platform, components: [rowPlatform] })
-            await webhook.send({ content: pronoun, components: [rowPronoun] })
-            await webhook.send({ content: vertical, components: [rowVertical] })
-            await webhook.send({ content: region, components: [rowRegion] })
-            await webhook.send({ content: languageA, components: [rowLanguageA, rowLanguageB, rowLanguageC] });
-            interaction.editReply({
-                content: 'Roles messages created',
-                ephemeral: true
-            });
-        } catch (error) {
-            console.error(error);
+        const webhook = webhooks.first();
+        webhook.send({ content: platform, components: [rowPlatform] })
+        webhook.send({ content: pronoun, components: [rowPronoun] })
+        webhook.send({ content: vertical, components: [rowVertical] })
+        webhook.send({ content: region, components: [rowRegion] })
+        webhook.send({ content: languageA, components: [rowLanguageA, rowLanguageB, rowLanguageC] });
+        const reply = {
+            content: 'Roles messages created',
+            ephemeral: true
+        }
+        if (createdWebhook) {
+            interaction.followUp(reply);
+        } else {
+            interaction.editReply(reply);
         }
     }
 };

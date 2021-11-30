@@ -31,23 +31,18 @@ module.exports = {
             subcommand
                 .setName('roles')
                 .setDescription('Set up roles channel')
-                .addStringOption(option =>
-                    option
-                        .setName('option')
-                        .setDescription('Option to set up')
-                        .addChoice('Init', 'init')
-                        .addChoice('Webhook', 'webhook')
-                        .setRequired(true)
-                )
         ),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
             return interaction.reply('https://i.gifer.com/BpGi.gif');
         }
-        await interaction.deferReply();
         if (interaction.options.getSubcommand() === 'roles') {
+            await interaction.deferReply({
+                ephemeral: true
+            });
             return require('../setupRoles.js').execute(interaction);
         }
+        await interaction.deferReply();
         let command;
         switch (interaction.options.getSubcommand()) {
             case 'update':
