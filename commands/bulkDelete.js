@@ -5,12 +5,22 @@ const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bulkdelete')
-        .setDescription('bulk deletes messages'),
+        .setDescription('bulk deletes messages')
+        .addNumberOption(option =>
+            option.setName('number')
+                .setDescription('The number of messages to delete')
+                .setRequired(true)
+        ),
     async execute (interaction) {
         const { modRole } = config.get(BigInt(interaction.guildId));
         if (!interaction.member.roles.cache.has(modRole.toString())) {
             return interaction.reply('You are not a mod, I\'d suggest you become one.');
         }
-        //code goes here
+        interaction.channel.bulkDelete(interaction.options.getNumber('number'), true).then(messages => {
+            interaction.reply({
+                content: 'Bulk deleted ' + messages.size + ' messages.',
+                ephemeral: true
+            });
+        })
     }
 }
