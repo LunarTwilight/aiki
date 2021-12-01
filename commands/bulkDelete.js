@@ -6,8 +6,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('bulkdelete')
         .setDescription('bulk deletes messages')
-        .addNumberOption(option =>
-            option.setName('number')
+        .addIntegerOption(option =>
+            option
+                .setName('number')
                 .setDescription('The number of messages to delete')
                 .setRequired(true)
         ),
@@ -16,7 +17,7 @@ module.exports = {
         if (!interaction.member.roles.cache.has(modRole.toString())) {
             return interaction.reply('You are not a mod, I\'d suggest you become one.');
         }
-        interaction.channel.bulkDelete(interaction.options.getNumber('number'), true).then(messages => {
+        interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(messages => {
             interaction.reply({
                 content: 'Bulk deleted ' + messages.size + ' messages.',
                 ephemeral: true
