@@ -21,14 +21,16 @@ module.exports = {
         const log = fetchedLogs.entries.first();
         if (log) {
             const { executor } = log;
-            if (newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString())) {
-                return;
+            let wording = `${newUser.nickname ? 'changed' : 'removed'} their nick`;
+            const modChanged = newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString());
+            if (modChanged) {
+                wording = `had their nick ${newUser.nickname ? 'changed' : 'removed'}`;
             }
+            if (diff < 0.3 && !modChanged) {
+                newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
+                newUser.setNickname(oldUser.nickname, 'Reverting nick change back to Fandom username');
+            }
+            newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${newUser.user.id}> ${wording}.\nOld nick: \`${oldUser.nickname}\`\n${newUser.nickname ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
         }
-        if (diff < 0.3) {
-            newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
-            newUser.setNickname(oldUser.nickname, 'Reverting nick change back to Fandom username');
-        }
-        newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${newUser.user.id}> ${newUser.nickname ? 'changed' : 'removed'} their nick.\nOld nick: \`${oldUser.nickname}\`\n${newUser.nickname ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
     }
 }
