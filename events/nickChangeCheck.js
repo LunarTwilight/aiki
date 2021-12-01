@@ -18,7 +18,9 @@ module.exports = {
         const log = fetchedLogs.entries.first();
         if (log) {
             const { executor } = log;
-            console.log(newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString()));
+            if (newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString())) {
+                return;
+            }
         }
         if (diff < 0.3) {
             newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
