@@ -8,8 +8,11 @@ module.exports = {
         if (!oldUser.nickname) {
             return;
         }
-        const { renameLogChannel, randomChannel, modRole } = config.all(BigInt(newUser.guild.id))[0];
         const newName = newUser.nickname ? newUser.nickname : newUser.user.username;
+        if (oldUser.nickname === newName) {
+            return;
+        }
+        const { renameLogChannel, randomChannel, modRole } = config.all(BigInt(newUser.guild.id))[0];
         const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newName);
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
