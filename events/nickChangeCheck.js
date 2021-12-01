@@ -14,8 +14,8 @@ module.exports = {
         });
         const log = fetchedLogs.entries.first();
         if (log) {
-            const { executer, extra } = log;
-            console.log(log, executer, extra);
+            const { executor } = log;
+            console.log(executor);
         }
         const newName = newUser.nickname ? newUser.nickname : newUser.user.username;
         const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newName);
