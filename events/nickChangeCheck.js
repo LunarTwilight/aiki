@@ -1,6 +1,6 @@
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
-const config = db.prepare('SELECT renameLogChannel, randomChannel FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT renameLogChannel, randomChannel, modRole FROM config WHERE guildId = ?');
 
 module.exports = {
     name: 'guildMemberUpdate',
@@ -8,6 +8,9 @@ module.exports = {
         if (!oldUser.nickname) {
             return;
         }
+        const { renameLogChannel, randomChannel, modRole } = config.all(BigInt(newUser.guild.id))[0];
+        const newName = newUser.nickname ? newUser.nickname : newUser.user.username;
+        const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newName);
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
             type: 'MEMBER_UPDATE'
@@ -15,11 +18,8 @@ module.exports = {
         const log = fetchedLogs.entries.first();
         if (log) {
             const { executor } = log;
-            console.log(executor);
+            console.log(newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString()));
         }
-        const newName = newUser.nickname ? newUser.nickname : newUser.user.username;
-        const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newName);
-        const { renameLogChannel, randomChannel } = config.all(BigInt(newUser.guild.id))[0];
         if (diff < 0.3) {
             newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
             newUser.setNickname(oldUser.nickname, 'Reverting nick change back to Fandom username');
