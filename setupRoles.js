@@ -1,6 +1,7 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
 const db = require('./database.js');
 const config = db.prepare('SELECT rolesChannel FROM config WHERE guildId = ?');
+const { clientId } = require('./config.json');
 
 module.exports = {
     async execute (interaction) {
@@ -21,6 +22,9 @@ module.exports = {
                 ephemeral: true
             });
             createdWebhook = true;
+        }
+        if (channelWebhook.owner.id !== clientId) {
+            throw new Error('Roles webhook was not created by the bot.');
         }
 
         const platform = 'Please select the platform to see its channels:';
