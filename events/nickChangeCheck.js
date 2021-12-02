@@ -5,32 +5,34 @@ const config = db.prepare('SELECT renameLogChannel, randomChannel, modRole FROM 
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
-        if (!oldUser.nickname) {
-            return;
-        }
-        const newName = newUser.nickname ? newUser.nickname : newUser.user.username;
-        if (oldUser.nickname === newName) {
-            return;
-        }
-        const { renameLogChannel, randomChannel, modRole } = config.all(BigInt(newUser.guild.id))[0];
-        const diff = stringSimilarity.compareTwoStrings(oldUser.nickname, newName);
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
             type: 'MEMBER_UPDATE'
         });
         const log = fetchedLogs.entries.first();
-        if (log) {
-            const { executor } = log;
-            let wording = `${newUser.nickname ? 'changed' : 'removed'} their nick`;
-            const modChanged = newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString());
-            if (modChanged) {
-                wording = `had their nick ${newUser.nickname ? 'changed' : 'removed'}`;
-            }
-            if (diff < 0.3 && !modChanged) {
-                newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
-                newUser.setNickname(oldUser.nickname, 'Reverting nick change back to Fandom username');
-            }
-            newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${newUser.user.id}> ${wording}.\nOld nick: \`${oldUser.nickname}\`\n${newUser.nickname ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
+        if (!log) {
+            return;
         }
+        const { executor, target, changes } = log;
+        if (executor.bot || !changes.some(item => item.key === 'nick')) {
+            return;
+        }
+        const { old: oldNick, new: newNick } = changes.find(item => item.key === 'nick');
+        if (!oldNick) {
+            return;
+        }
+        const newName = newNick || target.username;
+        const diff = stringSimilarity.compareTwoStrings(oldNick, newName);
+        let wording = `${newNick ? 'changed' : 'removed'} their nick`;
+        const { renameLogChannel, randomChannel, modRole } = config.all(BigInt(newUser.guild.id))[0];
+        const modChanged = newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole.toString());
+        if (modChanged) {
+            wording = `had their nick ${newNick ? 'changed' : 'removed'}`;
+        }
+        if (diff < 0.3 && !modChanged) {
+            newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
+            newUser.setNickname(oldNick, 'Reverting nick change back to Fandom username');
+        }
+        newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${newUser.user.id}> ${wording}.\nOld nick: \`${oldUser.nickname}\`\n${newUser.nickname ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
     }
 }
