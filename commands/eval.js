@@ -11,7 +11,7 @@ module.exports = {
                 .setRequired(true)),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
-            return interaction.reply('https://i.gifer.com/BpGi.gif');
+            return interaction.reply('https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230');
         }
         interaction.reply('something happened ig');
         eval(interaction.options.getString('input'));
