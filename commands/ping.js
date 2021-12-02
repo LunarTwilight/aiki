@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('ping'),
     async execute (interaction) {
         const { verifiedRole } = config.get(BigInt(interaction.guildId));
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
+        if (!interaction.member.roles.cache.has(verifiedRole.toString())) {
             return interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
