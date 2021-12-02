@@ -30,9 +30,9 @@ module.exports = {
             wording = `had their nick ${newNick ? 'changed' : 'removed'}`;
         }
         if (diff < 0.3 && !modChanged) {
-            newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + newUser.user.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
+            newUser.guild.channels.cache.get(randomChannel.toString()).send('<@' + target.id + '> please keep your nick as your Fandom username. Your nick change has been reverted.');
             newUser.setNickname(oldNick, 'Reverting nick change back to Fandom username');
         }
-        newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${newUser.user.id}> ${wording}.\nOld nick: \`${oldUser.nickname}\`\n${newUser.nickname ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
+        newUser.guild.channels.cache.get(renameLogChannel.toString()).send(`<@${target.id}> ${wording}.\nOld nick: \`${oldNick}\`\n${newNick ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
     }
 }
