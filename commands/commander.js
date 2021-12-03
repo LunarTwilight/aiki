@@ -18,6 +18,17 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('eval')
+                .setDescription('Eval')
+                .addStringOption(option =>
+                    option
+                        .setName('input')
+                        .setDescription('The JS to run')
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('exec')
                 .setDescription('Executes a command')
                 .addStringOption(option =>
@@ -39,15 +50,21 @@ module.exports = {
                 ephemeral: true
             });
         }
-        if (interaction.options.getSubcommand() === 'roles') {
+        const cmd = interaction.options.getSubcommand();
+        if (cmd === 'roles') {
             await interaction.deferReply({
                 ephemeral: true
             });
             return require('../setupRoles.js').execute(interaction);
         }
+        if (cmd === 'eval') {
+            interaction.reply('something happened ig');
+            eval(interaction.options.getString('input'));
+            return;
+        }
         await interaction.deferReply();
         let command;
-        switch (interaction.options.getSubcommand()) {
+        switch (cmd) {
             case 'update':
                 command = 'cd ~/aiki && git pull';
                 break;
