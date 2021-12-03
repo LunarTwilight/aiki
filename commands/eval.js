@@ -11,7 +11,10 @@ module.exports = {
                 .setRequired(true)),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
-            return interaction.reply('https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230');
+            return interaction.reply({
+                content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',
+                ephemeral: true
+            });
         }
         interaction.reply('something happened ig');
         eval(interaction.options.getString('input'));

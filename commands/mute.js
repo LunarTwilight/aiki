@@ -23,7 +23,10 @@ module.exports = {
     async execute (interaction) {
         const { modRole, muteRole, modChannel } = config.all(BigInt(interaction.guildId))[0];
         if (!interaction.member.roles.cache.has(modRole.toString())) {
-            return interaction.reply('You are not a mod, I\'d suggest you become one.');
+            return interaction.reply({
+                content: 'You are not a mod, I\'d suggest you become one.',
+                ephemeral: true
+            });
         }
         const member = interaction.options.getMember('user');
         if (member.roles.cache.has(muteRole.toString())) {

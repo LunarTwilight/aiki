@@ -15,7 +15,10 @@ module.exports = {
     async execute (interaction) {
         const { modRole } = config.get(BigInt(interaction.guildId));
         if (!interaction.member.roles.cache.has(modRole.toString())) {
-            return interaction.reply('You are not a mod, I\'d suggest you become one.');
+            return interaction.reply({
+                content: 'You are not a mod, I\'d suggest you become one.',
+                ephemeral: true
+            });
         }
         interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(messages => {
             interaction.reply({

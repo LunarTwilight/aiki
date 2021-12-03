@@ -9,7 +9,10 @@ module.exports = {
     async execute (interaction) {
         const { modRole, randomChannel } = config.all(BigInt(interaction.guildId))[0];
         if (!interaction.member.roles.cache.has(modRole.toString())) {
-            return interaction.reply('You are not a mod, I\'d suggest you become one.');
+            return interaction.reply({
+                content: 'You are not a mod, I\'d suggest you become one.',
+                ephemeral: true
+            });
         }
         interaction.reply('The mods request that you move this convo to <#' + randomChannel.toString() + '>.');
     }

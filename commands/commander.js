@@ -34,7 +34,10 @@ module.exports = {
         ),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
-            return interaction.reply('https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230');
+            return interaction.reply({
+                content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',
+                ephemeral: true
+            });
         }
         if (interaction.options.getSubcommand() === 'roles') {
             await interaction.deferReply({
