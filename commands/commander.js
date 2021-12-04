@@ -53,7 +53,7 @@ module.exports = {
                 break;
             case 'eval':
                 interaction.editReply('something happened ig');
-                console.log(interaction.options.getString('input'));
+                eval(interaction.options.getString('input'));
                 break;
             case 'roles':
                 require('../setupRoles.js').execute(interaction);
