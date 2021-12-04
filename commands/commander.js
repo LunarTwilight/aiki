@@ -8,16 +8,6 @@ module.exports = {
         .setDescription('Controls the bot')
         .addSubcommand(subcommand =>
             subcommand
-                .setName('update')
-                .setDescription('Updates the bot')
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('revert')
-                .setDescription('Reverts last update')
-        )
-        .addSubcommand(subcommand =>
-            subcommand
                 .setName('eval')
                 .setDescription('Eval')
                 .addStringOption(option =>
@@ -50,35 +40,24 @@ module.exports = {
                 ephemeral: true
             });
         }
-        const cmd = interaction.options.getSubcommand();
-        if (cmd === 'roles') {
-            await interaction.deferReply({
-                ephemeral: true
-            });
-            return require('../setupRoles.js').execute(interaction);
-        }
-        if (cmd === 'eval') {
-            interaction.reply('something happened ig');
-            eval(interaction.options.getString('input'));
-            return;
-        }
-        await interaction.deferReply();
-        let command;
-        switch (cmd) {
-            case 'update':
-                command = 'cd ~/aiki && git pull';
-                break;
-            case 'revert':
-                command = 'git reset --hard ORIG_HEAD';
-                break;
-            case 'exec':
-                command = interaction.options.getString('command');
-                break;
-        }
-        shell.exec(command, function (code, stdout, stderr) {
-            interaction.editReply('Exit code: ', code);
-            interaction.followUp('Program output: ', stdout);
-            interaction.followUp('Program stderr: ', stderr);
+        await interaction.deferReply({
+            ephemeral: true
         });
+        switch (interaction.options.getSubcommand()) {
+            case 'exec':
+                shell.exec(interaction.options.getString('command'), (code, stdout, stderr) => {
+                    interaction.editReply('Exit code: ', code);
+                    interaction.followUp('Program output: ', stdout);
+                    interaction.followUp('Program stderr: ', stderr);
+                });
+                break;
+            case 'eval':
+                interaction.editReply('something happened ig');
+                console.log(interaction.options.getString('input'));
+                break;
+            case 'roles':
+                require('../setupRoles.js').execute(interaction);
+                break;
+        }
     }
 }
