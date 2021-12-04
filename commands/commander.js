@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const shell = require('shelljs');
 const { devId } = require('../config.json');
 
 module.exports = {
@@ -19,17 +18,6 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
-                .setName('exec')
-                .setDescription('Executes a command')
-                .addStringOption(option =>
-                    option
-                        .setName('command')
-                        .setDescription('The command to run')
-                        .setRequired(true)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
                 .setName('roles')
                 .setDescription('Set up roles channel')
         ),
@@ -44,13 +32,6 @@ module.exports = {
             ephemeral: true
         });
         switch (interaction.options.getSubcommand()) {
-            case 'exec':
-                shell.exec(interaction.options.getString('command'), (code, stdout, stderr) => {
-                    interaction.editReply('Exit code: ', code);
-                    interaction.followUp('Program output: ', stdout);
-                    interaction.followUp('Program stderr: ', stderr);
-                });
-                break;
             case 'eval':
                 interaction.editReply('something happened ig');
                 eval(interaction.options.getString('input'));
