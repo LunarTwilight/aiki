@@ -18,7 +18,7 @@ module.exports = {
             return;
         }
         const { old: oldNick, new: newNick } = changes.find(item => item.key === 'nick');
-        if (!oldNick) {
+        if (!oldNick || oldNick === newNick) {
             return;
         }
         const newName = newNick || target.username;
