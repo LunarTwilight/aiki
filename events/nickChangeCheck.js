@@ -14,7 +14,7 @@ module.exports = {
             return;
         }
         const { executor, target, changes, createdTimestamp } = log;
-        if (executor.bot || !changes.some(item => item.key === 'nick') || Math.floor((Date.now() - ) / 1000)) {
+        if (executor.bot || !changes.some(item => item.key === 'nick') || (Date.now() - createdTimestamp) > (60 * 1000)) {
             return;
         }
         const { old: oldNick, new: newNick } = changes.find(item => item.key === 'nick');
