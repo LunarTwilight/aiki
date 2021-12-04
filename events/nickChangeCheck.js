@@ -13,8 +13,8 @@ module.exports = {
         if (!log) {
             return;
         }
-        const { executor, target, changes } = log;
-        if (executor.bot || !changes.some(item => item.key === 'nick')) {
+        const { executor, target, changes, createdTimestamp } = log;
+        if (executor.bot || !changes.some(item => item.key === 'nick') || Math.floor((Date.now() - ) / 1000)) {
             return;
         }
         const { old: oldNick, new: newNick } = changes.find(item => item.key === 'nick');
