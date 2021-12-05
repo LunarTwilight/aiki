@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const db = require('./database.js');
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
-const getIgnoredUsers = db.prepare('SELECT userid, guildid FROM verificationIgnore');
+const getIgnoredUsers = db.prepare('SELECT userId, guildId FROM verificationIgnore');
 const removeIgnoreUserRow = db.prepare('DELETE FROM verificationIgnore WHERE userId = ?');
 
 module.exports = {
