@@ -9,8 +9,13 @@ module.exports = {
         cron.schedule('0/30 * * * *', () => {
             const ignoredUsers = getIgnoredUsers.all();
             ignoredUsers.forEach(async row => {
-                const guild = await client.guilds.fetch(row.guildId.toString())
-                const user = await guild.members.fetch(row.userId.toString());
+                let user;
+                const guild = await client.guilds.fetch(row.guildId.toString());
+                try {
+                    user = await guild.members.fetch(row.userId.toString());
+                } catch (error) {
+                    //fall through
+                }
                 const role = config.get(row.guildId).verifiedRole.toString();
                 if (!user || user.roles.cache.has(role)) {
                     removeIgnoreUserRow.run(row.userId);
