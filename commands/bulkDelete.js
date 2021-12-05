@@ -5,7 +5,7 @@ const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bulkdelete')
-        .setDescription('bulk deletes messages')
+        .setDescription('Bulk deletes messages')
         .addIntegerOption(option =>
             option
                 .setName('number')

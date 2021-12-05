@@ -5,7 +5,7 @@ const config = db.prepare('SELECT modRole, randomChannel FROM config WHERE guild
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('random')
-        .setDescription('tells users to go to random'),
+        .setDescription('Tells users to go to random'),
     async execute (interaction) {
         const { modRole, randomChannel } = config.all(BigInt(interaction.guildId))[0];
         if (!interaction.member.roles.cache.has(modRole.toString())) {

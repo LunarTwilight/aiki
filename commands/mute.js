@@ -10,15 +10,18 @@ module.exports = {
         .setName('mute')
         .setDescription('Mutes a user')
         .addUserOption(option =>
-            option.setName('user')
+            option
+                .setName('user')
                 .setDescription('User to mute')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('duration')
+            option
+                .setName('duration')
                 .setDescription('Duration of the mute')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('reason')
+            option
+                .setName('reason')
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
         const { modRole, muteRole, modChannel } = config.all(BigInt(interaction.guildId))[0];

@@ -4,7 +4,7 @@ const baseUrl = 'https://support.fandom.com/hc/en-us/requests/new?ticket_form_id
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('staff')
-        .setDescription('posts a link to zendesk')
+        .setDescription('Posts a link to contact staff')
         .addStringOption(option =>
             option.setName('category')
                 .setDescription('Optional category')
