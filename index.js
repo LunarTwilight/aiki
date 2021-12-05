@@ -12,6 +12,8 @@ const client = new Client({
     partials: ['GUILD_MEMBER']
 });
 
+require('mx-color-logger').init();
+
 collectDefaultMetrics({
     label: {
         name: 'aiki'
