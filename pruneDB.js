@@ -9,8 +9,8 @@ module.exports = {
         cron.schedule('0/30 * * * *', () => {
             const ignoredUsers = getIgnoredUsers.all();
             ignoredUsers.forEach(async row => {
-                let user;
                 const guild = await client.guilds.fetch(row.guildId.toString());
+                let user;
                 try {
                     user = await guild.members.fetch(row.userId.toString());
                 } catch (error) {
