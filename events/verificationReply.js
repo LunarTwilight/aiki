@@ -17,7 +17,7 @@ module.exports = {
             return;
         }
 
-        if (checkForWillIgnore.get(message.author.id)?.willIgnore) {
+        if (checkForWillIgnore.get(message.author.id)?.willIgnore && !message.content.includes('!wiki verify')) {
             message.reply('It looks like you\'re having trouble verifying, please contact a moderator.');
             addIgnore.run(message.author.id);
             return;
