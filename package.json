@@ -5,6 +5,8 @@
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.1.0-canary.0",
+    "@sentry/browser": "^6.16.0",
+    "@sentry/tracing": "^6.16.0",
     "better-sqlite3": "^7.4.4",
     "discord-api-types": "^0.24.0",
     "discord.js": "^13.3.1",

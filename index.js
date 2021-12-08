@@ -1,8 +1,11 @@
 const { Client, Intents, Collection } = require('discord.js');
-const { token } = require('./config.json');
+const { token, dsn } = require('./config.json');
 const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
+import * as Sentry from "@sentry/browser";
+import { Integrations } from "@sentry/tracing";
+
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -13,6 +16,14 @@ const client = new Client({
 });
 
 require('mx-color-logger').init();
+
+Sentry.init({
+    dsn,
+    integrations: [
+        new Integrations.BrowserTracing()
+    ],
+    tracesSampleRate: 1.0
+});
 
 collectDefaultMetrics({
     label: {
