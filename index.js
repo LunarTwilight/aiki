@@ -3,8 +3,8 @@ const { token, dsn } = require('./config.json');
 const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
-import * as Sentry from "@sentry/browser";
-import { Integrations } from "@sentry/tracing";
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
 
 const client = new Client({
     intents: [
@@ -19,10 +19,7 @@ require('mx-color-logger').init();
 
 Sentry.init({
     dsn,
-    integrations: [
-        new Integrations.BrowserTracing()
-    ],
-    tracesSampleRate: 1.0
+    tracesSampleRate: 1.0,
 });
 
 collectDefaultMetrics({
