@@ -76,7 +76,7 @@ module.exports = {
                         ephemeral: true
                     });
                 }
-                const { response } = getResponse.run(interaction.guildId, interaction.options.getString('name'));
+                const { response } = getResponse.get(interaction.guildId, interaction.options.getString('name'));
                 interaction.reply('```\n' + response + '\n```');
                 break;
             case 'add':
