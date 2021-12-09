@@ -70,7 +70,7 @@ module.exports = {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
         switch (interaction.options.getSubcommand()) {
             case 'print':
-                if (!interaction.members.roles.cache.has(verifiedRole.toString())) { 
+                if (!interaction.member.roles.cache.has(verifiedRole.toString())) { 
                     return interaction.reply({
                         content: 'This command can not be used by verified users',
                         ephemeral: true
@@ -80,7 +80,7 @@ module.exports = {
                 interaction.reply('```\n' + response + '\n```');
                 break;
             case 'add':
-                if (!interaction.members.roles.cache.has(modRole.toString())) {
+                if (!interaction.member.roles.cache.has(modRole.toString())) {
                     return interaction.reply({
                         content: 'You are not a mod, I\'d suggest you become one.',
                         ephemeral: true
@@ -90,7 +90,7 @@ module.exports = {
                 interaction.reply('Response added.');
                 break;
             case 'edit':
-                if (!interaction.members.roles.cache.has(modRole.toString())) {
+                if (!interaction.member.roles.cache.has(modRole.toString())) {
                     return interaction.reply({
                         content: 'You are not a mod, I\'d suggest you become one.',
                         ephemeral: true
@@ -100,7 +100,7 @@ module.exports = {
                 interaction.reply('Reponse edited.');
                 break;
             case 'delete':
-                if (!interaction.members.roles.cache.has(modRole.toString())) {
+                if (!interaction.member.roles.cache.has(modRole.toString())) {
                     return interaction.reply({
                         content: 'You are not a mod, I\'d suggest you become one.',
                         ephemeral: true
