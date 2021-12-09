@@ -10,7 +10,7 @@ module.exports = {
         if (!message.content.startsWith('!') || !message.member.roles.cache.has(verifiedRole.toString())) {
             return;
         }
-        const { response } = getResponse.get(message.guild.id, message.content.slice(1));
+        const { response = null } = getResponse.get(message.guild.id, message.content.slice(1));
         if (!response) {
             message.react(whatEmoji);
             return;
