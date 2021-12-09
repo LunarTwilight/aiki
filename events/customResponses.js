@@ -10,11 +10,11 @@ module.exports = {
         if (!message.content.startsWith('!') || !message.member.roles.cache.has(verifiedRole.toString())) {
             return;
         }
-        const { response = null } = getResponse.get(message.guild.id, message.content.slice(1));
-        if (!response) {
+        const row = getResponse.get(message.guild.id, message.content.slice(1));
+        if (!row.response) {
             message.react(whatEmoji);
             return;
         }
-        message.channel.send(response);
+        message.channel.send(row.response);
     }
 };
