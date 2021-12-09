@@ -11,7 +11,7 @@ module.exports = {
             return;
         }
         const row = getResponse.get(message.guild.id, message.content.slice(1));
-        if (!row.response) {
+        if (!row || !row.response) {
             message.react(whatEmoji);
             return;
         }
