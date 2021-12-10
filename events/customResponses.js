@@ -7,7 +7,7 @@ module.exports = {
     name: 'messageCreate',
     execute (message) {
         const { verifiedRole } = config.get(message.guild.id);
-        if (!message.content.startsWith('!') || !message.member.roles.cache.has(verifiedRole.toString())) {
+        if (!message.content.startsWith('!') || message.content.startsWith('!wiki') || !message.member.roles.cache.has(verifiedRole.toString())) {
             return;
         }
         const row = getResponse.get(message.guild.id, message.content.slice(1));
