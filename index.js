@@ -19,7 +19,7 @@ require('mx-color-logger').init();
 
 Sentry.init({
     dsn,
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 1.0
 });
 
 collectDefaultMetrics({
