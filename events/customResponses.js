@@ -2,7 +2,7 @@ const { whatEmoji } = require('../config.json');
 const db = require('../database.js');
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
-const excluded = ['!wiki', '!report', '!soap'];
+const excluded = ['!wiki', '!report', '!soap', '!yes'];
 
 module.exports = {
     name: 'messageCreate',
