@@ -22,27 +22,33 @@ module.exports = {
             !message.channel
                 .permissionsFor(message.client.user.id)
                 ?.has(
-                    message.channel.isThread()
-                        ? Permissions.FLAGS.SEND_MESSAGES_IN_THREADS
-                        : Permissions.FLAGS.SEND_MESSAGES
+                    message.channel.isThread() ?
+                        Permissions.FLAGS.SEND_MESSAGES_IN_THREADS :
+                        Permissions.FLAGS.SEND_MESSAGES
                 )
-        ) { return; }
+        ) {
+            return;
+        }
 
         const quotedMessages = new Set();
         const quoteRegex =
             /<?\bhttps:\/\/(?:canary\.|ptb\.)?discord(?:app)?\.com\/channels\/(\d+)\/(\d+)\/(\d+)\b>?/g;
         let quoteMatch = null;
         while ((quoteMatch = quoteRegex.exec(message.content))) {
-            if (quoteMatch[0].startsWith('<') && quoteMatch[0].endsWith('>')) { continue; }
+            if (quoteMatch[0].startsWith('<') && quoteMatch[0].endsWith('>')) {
+                continue;
+            }
             if (
                 quotedMessages.has(
                     quoteMatch[1] + '/' + quoteMatch[2] + '/' + quoteMatch[3]
                 )
-            ) { continue; }
+            ) {
+                continue;
+            }
             quotedMessages.add(
                 quoteMatch[1] + '/' + quoteMatch[2] + '/' + quoteMatch[3]
             );
-            console.log(
+            /*console.log(
                 message.guild.name +
                     ': ' +
                     quoteMatch[1] +
@@ -50,7 +56,7 @@ module.exports = {
                     quoteMatch[2] +
                     '/' +
                     quoteMatch[3]
-            );
+            );*/
             let deleteMessage = false;
             if (
                 quoteMatch[0].length === message.content.length &&
@@ -68,38 +74,44 @@ module.exports = {
                 if (
                     !(await quoteGuild?.members
                         .fetch(message.author.id)
-                        .catch((error) => console.log('- ' + error)))
-                ) { continue; }
+                        .catch(error => console.log('- ' + error)))
+                ) {
+                    continue;
+                }
                 quoteChannel = await quoteGuild.channels
                     .fetch(quoteMatch[2])
-                    .catch((error) => console.log('- ' + error));
+                    .catch(error => console.log('- ' + error));
             }
             if (
                 !quoteChannel
                     ?.permissionsFor(message.author.id)
                     ?.has(Permissions.FLAGS.VIEW_CHANNEL)
-            ) { continue; }
+            ) {
+                continue;
+            }
             if (
                 !quoteChannel
                     .permissionsFor(message.client.user.id)
                     ?.has(Permissions.FLAGS.VIEW_CHANNEL)
-            ) { continue; }
+            ) {
+                continue;
+            }
             await quoteChannel.messages?.fetch(quoteMatch[3]).then(
-                async (quote) => {
+                async quote => {
                     await quote.guild?.members
                         .fetch(quote.author.id)
-                        .catch((error) => console.log('- ' + error));
+                        .catch(error => console.log('- ' + error));
                     let quoteAuthor =
                         quote.author.tag +
-                        (quote.member?.roles.highest.unicodeEmoji
-                            ? ' ' + quote.member.roles.highest.unicodeEmoji
-                            : '') +
-                        (message.guildId !== quoteMatch[1]
-                            ? ' • ' + quoteChannel.guild.name
-                            : '') +
-                        (message.channelId !== quoteMatch[2]
-                            ? ' • #' + quoteChannel.name
-                            : '');
+                        (quote.member?.roles.highest.unicodeEmoji ?
+                            ' ' + quote.member.roles.highest.unicodeEmoji :
+                            '') +
+                        (message.guildId !== quoteMatch[1] ?
+                            ' • ' + quoteChannel.guild.name :
+                            '') +
+                        (message.channelId !== quoteMatch[2] ?
+                            ' • #' + quoteChannel.name :
+                            '');
                     if (
                         quote.member?.nickname &&
                         quoteAuthor.length + quote.member.nickname.length <
@@ -131,7 +143,9 @@ module.exports = {
                                 .toLowerCase()
                                 .includes(message.member.nickname.toLowerCase())
                         )
-                    ) { quotedBy += ' (' + message.member.nickname + ')'; }
+                    ) {
+                        quotedBy += ' (' + message.member.nickname + ')';
+                    }
                     let embeds = [];
                     const embed = new MessageEmbed()
                         .setAuthor(
@@ -148,7 +162,9 @@ module.exports = {
                         .setTimestamp(quote.createdAt)
                         .setColor(quote.member?.displayColor || null);
                     embeds.push(embed);
-                    if (quote.attachments.size) { embed.setImage(quote.attachments.first().url); } else if (!quote.content && quote.embeds.length) {
+                    if (quote.attachments.size) {
+                        embed.setImage(quote.attachments.first().url);
+                    } else if (!quote.content && quote.embeds.length) {
                         embeds = [];
                         const embed1 = new MessageEmbed()
                             .setAuthor(
@@ -183,7 +199,9 @@ module.exports = {
                         /^https:\/\/[a-z\d.-]+\.[a-z\d-]+(?:\/[\w/.?=&#-]*)?$/.test(
                             quote.content
                         )
-                    ) { embed.setImage(quote.content); }
+                    ) {
+                        embed.setImage(quote.content);
+                    }
                     message.channel
                         .send({
                             content: deleteMessage ? `<${quote.url}>` : null,
@@ -194,17 +212,19 @@ module.exports = {
                                 if (deleteMessage) {
                                     message
                                         .delete()
-                                        .catch((error) =>
+                                        .catch(error =>
                                             console.log('- ' + error)
                                         );
                                 }
                             },
-                            (error) => console.log('- ' + error)
+                            error => console.log('- ' + error)
                         );
                 },
-                (error) => console.log('- ' + error)
+                error => console.log('- ' + error)
             );
-            if (deleteMessage) return;
+            if (deleteMessage) {
+                return;
+            }
         }
     }
 };
