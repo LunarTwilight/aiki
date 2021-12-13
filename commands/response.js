@@ -68,44 +68,33 @@ module.exports = {
         ),
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
+        if (interaction.options.getSubcommand() === 'print' && !interaction.member.roles.cache.has(verifiedRole.toString())) {
+            return interaction.reply({
+                content: 'This command can not be used by verified users',
+                ephemeral: true
+            });
+        }
+        if (interaction.options.getSubcommand() !== 'print' && !interaction.member.roles.cache.has(modRole.toString())) {
+            return interaction.reply({
+                content: 'You are not a mod, I\'d suggest you become one.',
+                ephemeral: true
+            });
+        }
         switch (interaction.options.getSubcommand()) {
-            case 'print':
-                if (!interaction.member.roles.cache.has(verifiedRole.toString())) { 
-                    return interaction.reply({
-                        content: 'This command can not be used by verified users',
-                        ephemeral: true
-                    });
-                }
+            case 'print': {
                 const { response } = getResponse.get(interaction.guildId, interaction.options.getString('name'));
                 interaction.reply('```\n' + response + '\n```');
                 break;
+            }
             case 'add':
-                if (!interaction.member.roles.cache.has(modRole.toString())) {
-                    return interaction.reply({
-                        content: 'You are not a mod, I\'d suggest you become one.',
-                        ephemeral: true
-                    });
-                }
                 addResponse.run(interaction.options.getString('name'), interaction.options.getString('content'), interaction.guildId);
                 interaction.reply('Response added.');
                 break;
             case 'edit':
-                if (!interaction.member.roles.cache.has(modRole.toString())) {
-                    return interaction.reply({
-                        content: 'You are not a mod, I\'d suggest you become one.',
-                        ephemeral: true
-                    });
-                }
                 editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
                 interaction.reply('Reponse edited.');
                 break;
             case 'delete':
-                if (!interaction.member.roles.cache.has(modRole.toString())) {
-                    return interaction.reply({
-                        content: 'You are not a mod, I\'d suggest you become one.',
-                        ephemeral: true
-                    });
-                }
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
                 interaction.reply('Response deleted.');
                 break;
