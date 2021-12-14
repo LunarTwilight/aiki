@@ -1,7 +1,7 @@
 const parseDuration = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
 const db = require('../database.js');
-const config = db.prepare('SELECT modLogChannel, modChannel, muteRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT modLogChannel, modChannel, muteRole, messageLogChannel FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
 const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
 
@@ -33,8 +33,9 @@ module.exports = {
             return;
         }
         const highest = {
-            level: undefined,
-            duration: undefined
+            level: null,
+            duration: null,
+            shouldDelete: null
         };
         const regexes = [];
         for (var match of matches) {
@@ -43,19 +44,28 @@ module.exports = {
                 if (level > highest.level) {
                     highest.level = level;
                     highest.duration = match.duration;
+                    highest.shouldDelete = match.shouldDelete;
                 } else {
                     //do nothing
                 }
             } else {
                 highest.level = level;
                 highest.duration = match.duration;
+                highest.shouldDelete = match.shouldDelete;
             }
             regexes.push('`' + new RegExp(match.regex, 'igm').toString() + '`');
         }
         if (highest.level === 2 && !highest.duration) {
             highest.duration = 'infinite';
         }
-        const url = `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`
+        const { modLogChannel, modChannel, muteRole, messageLogChannel } = config.all(BigInt(message.guild.id))[0];
+        let url = `https://discord.com/channels/${message.guildId}/`;
+        if (highest.shouldDelete) {
+            message.delete();
+            url += messageLogChannel.toString() + '/' + message.guild.channels.cache.get(messageLogChannel.toString()).lastMessageId;
+        } else {
+            url += `${message.channelId}/${message.id}`;
+        }
         const logEmbed = new MessageEmbed()
             .setTitle('Automatic ' + levels[highest.level])
             .setURL(url)
@@ -65,7 +75,6 @@ module.exports = {
             logEmbed.addField('Duration', highest.duration);
         }
         logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
-        const { modLogChannel, modChannel, muteRole } = config.all(BigInt(message.guild.id))[0];
         message.guild.channels.cache.get(modLogChannel.toString()).send({
             embeds: [
                 logEmbed
