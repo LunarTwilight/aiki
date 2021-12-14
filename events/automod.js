@@ -62,9 +62,8 @@ module.exports = {
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();
-            await setTimeout(() => {
-                url += messageLogChannel.toString() + '/' + message.guild.channels.cache.get(messageLogChannel.toString()).lastMessageId;
-            }, 1000);
+            await new Promise(res => setTimeout(res, 1000));
+            url += messageLogChannel.toString() + '/' + message.guild.channels.cache.get(messageLogChannel.toString()).lastMessageId;
         } else {
             url += `${message.channelId}/${message.id}`;
         }
