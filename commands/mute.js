@@ -24,21 +24,21 @@ module.exports = {
                 .setName('reason')
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
-        const { modRole, muteRole, modChannel } = config.all(BigInt(interaction.guildId))[0];
-        if (!interaction.member.roles.cache.has(modRole.toString())) {
+        const { modRole, muteRole, modChannel } = config.all(interaction.guildId)[0];
+        if (!interaction.member.roles.cache.has(modRole)) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
         }
         const member = interaction.options.getMember('user');
-        if (member.roles.cache.has(muteRole.toString())) {
+        if (member.roles.cache.has(muteRole)) {
             return interaction.reply({
                 content: 'This user is already muted.',
                 ephemeral: true
             });
         }
-        await member.roles.add(muteRole.toString());
+        await member.roles.add(muteRole);
         const expiry = Date.now() + parseDuration(interaction.options.getString('duration'), 'ms');
         const muteEmbed = new MessageEmbed()
             .setTitle('User muted')
@@ -60,7 +60,7 @@ module.exports = {
                 inline: true
             });
         await interaction.reply('User has been muted');
-        await interaction.client.channels.cache.get(modChannel.toString()).send({
+        await interaction.client.channels.cache.get(modChannel).send({
             embeds: [
                 muteEmbed
             ]

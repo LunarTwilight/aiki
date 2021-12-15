@@ -8,8 +8,8 @@ const addWillIgnore = db.prepare('INSERT INTO verificationIgnore (userId, guildI
 module.exports = {
     name: 'messageCreate',
     execute (message) {
-        const { verificationChannel, verifiedRole } = config.all(BigInt(message.guild.id))[0];
-        if (message.channelId !== verificationChannel.toString() || message.author.bot || message.member.roles.cache.has(verifiedRole.toString())) {
+        const { verificationChannel, verifiedRole } = config.all(message.guild.id)[0];
+        if (message.channelId !== verificationChannel || message.author.bot || message.member.roles.cache.has(verifiedRole)) {
             return;
         }
 

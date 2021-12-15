@@ -68,13 +68,13 @@ module.exports = {
         ),
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
-        if (interaction.options.getSubcommand() === 'print' && !interaction.member.roles.cache.has(verifiedRole.toString())) {
+        if (interaction.options.getSubcommand() === 'print' && !interaction.member.roles.cache.has(verifiedRole)) {
             return interaction.reply({
                 content: 'This command can not be used by verified users',
                 ephemeral: true
             });
         }
-        if (interaction.options.getSubcommand() !== 'print' && !interaction.member.roles.cache.has(modRole.toString())) {
+        if (interaction.options.getSubcommand() !== 'print' && !interaction.member.roles.cache.has(modRole)) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true

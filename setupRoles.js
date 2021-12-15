@@ -5,8 +5,8 @@ const { clientId } = require('./config.json');
 
 module.exports = {
     async execute (interaction) {
-        const { rolesChannel } = config.get(BigInt(interaction.guildId));
-        const channelroles = interaction.client.channels.cache.get(rolesChannel.toString());
+        const { rolesChannel } = config.get(interaction.guildId);
+        const channelroles = interaction.client.channels.cache.get(rolesChannel);
         const webhooks = await channelroles.fetchWebhooks();
         let channelWebhook = webhooks.first();
         let createdWebhook;

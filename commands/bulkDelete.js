@@ -13,8 +13,8 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute (interaction) {
-        const { modRole } = config.get(BigInt(interaction.guildId));
-        if (!interaction.member.roles.cache.has(modRole.toString())) {
+        const { modRole } = config.get(interaction.guildId);
+        if (!interaction.member.roles.cache.has(modRole)) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true

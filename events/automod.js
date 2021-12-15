@@ -60,19 +60,19 @@ module.exports = {
             highest.duration = 'infinite';
         }
         let noUrl;
-        const { modLogChannel, modChannel, muteRole, messageLogChannel } = config.all(BigInt(message.guild.id))[0];
+        const { modLogChannel, modChannel, muteRole, messageLogChannel } = config.all(message.guild.id)[0];
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();
             const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
-            const collected = await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
+            const collected = await message.guild.channels.cache.get(messageLogChannel).awaitMessages({
                 filter,
                 max: 1,
                 time: 10_000,
                 error: ['time']
             });
             if (collected.size) {
-                url += messageLogChannel.toString() + '/' + collected.firstKey();
+                url += messageLogChannel + '/' + collected.firstKey();
             } else {
                 noUrl = true;
             }
@@ -90,14 +90,14 @@ module.exports = {
         if (!noUrl) {
             logEmbed.setURL(url);
         }
-        message.guild.channels.cache.get(modLogChannel.toString()).send({
+        message.guild.channels.cache.get(modLogChannel).send({
             embeds: [
                 logEmbed
             ]
         });
         const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel.toString()).send(`<@${message.author.id}> has been ${action}` + noUrl ? `because of <${url}>.` : '.');
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}` + noUrl ? `because of <${url}>.` : '.');
         }
         switch (highest.level) {
             case 1:
@@ -105,7 +105,7 @@ module.exports = {
                 break;
             case 2: {
                 const user = await message.guild.members.fetch(message.author.id);
-                user.roles.add(muteRole.toString());
+                user.roles.add(muteRole);
                 if (highest.duration !== 'infinite') {
                     const expiry = Date.now() + parseDuration(highest.duration, 'ms');
                     addMuteToDB.run(message.author.id, message.guild.id, expiry);
