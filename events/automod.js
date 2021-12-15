@@ -65,7 +65,7 @@ module.exports = {
         if (highest.shouldDelete) {
             message.delete();
             const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
-            const collection = await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
+            await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
                 filter,
                 max: 1,
                 time: 60_000,
