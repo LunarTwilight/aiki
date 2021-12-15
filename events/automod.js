@@ -65,22 +65,22 @@ module.exports = {
         if (highest.shouldDelete) {
             message.delete();
             const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
-            await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
+            const collected = await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
                 filter,
                 max: 1,
-                time: 60_000,
+                time: 10_000,
                 error: ['time']
-            }).then(collection => {
-                url += messageLogChannel.toString() + '/' + collection.firstKey();
-            }).catch(() => {
-                noUrl = true;
             });
+            if (collected.size) {
+                url += messageLogChannel.toString() + '/' + collected.firstKey();
+            } else {
+                noUrl = true;
+            }
         } else {
             url += `${message.channelId}/${message.id}`;
         }
         const logEmbed = new MessageEmbed()
             .setTitle('Automatic ' + levels[highest.level])
-            .setURL(url)
             .setDescription(message.content)
             .addField('User', '<@' + message.author.id + '>');
         if (highest.level === 2) {
