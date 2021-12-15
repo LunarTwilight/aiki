@@ -70,10 +70,11 @@ module.exports = {
                 max: 1,
                 time: 60_000,
                 error: ['time']
+            }).then(collection => {
+                url += messageLogChannel.toString() + '/' + collection.firstKey();
             }).catch(() => {
                 noUrl = true;
             });
-            url += messageLogChannel.toString() + '/' + collection.firstKey();
         } else {
             url += `${message.channelId}/${message.id}`;
         }
