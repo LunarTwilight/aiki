@@ -18,6 +18,7 @@ const levels = {
 
 module.exports = {
     name: 'messageCreate',
+    // eslint-disable-next-line complexity
     async execute (message) {
         if (message.author.bot) {
             return;
@@ -58,12 +59,21 @@ module.exports = {
         if (highest.level === 2 && !highest.duration) {
             highest.duration = 'infinite';
         }
+        let noUrl;
         const { modLogChannel, modChannel, muteRole, messageLogChannel } = config.all(BigInt(message.guild.id))[0];
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();
-            await new Promise(res => setTimeout(res, 1000));
-            url += messageLogChannel.toString() + '/' + message.guild.channels.cache.get(messageLogChannel.toString()).lastMessageId;
+            const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
+            const collection = await message.guild.channels.cache.get(messageLogChannel.toString()).awaitMessages({
+                filter,
+                max: 1,
+                time: 60_000,
+                error: ['time']
+            }).catch(() => {
+                noUrl = true;
+            });
+            url += messageLogChannel.toString() + '/' + collection.firstKey();
         } else {
             url += `${message.channelId}/${message.id}`;
         }
@@ -76,6 +86,9 @@ module.exports = {
             logEmbed.addField('Duration', highest.duration);
         }
         logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
+        if (!noUrl) {
+            logEmbed.setURL(url);
+        }
         message.guild.channels.cache.get(modLogChannel.toString()).send({
             embeds: [
                 logEmbed
@@ -83,7 +96,7 @@ module.exports = {
         });
         const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel.toString()).send(`<@${message.author.id}> has been ${action} because of <${url}>.`);
+            message.guild.channels.cache.get(modChannel.toString()).send(`<@${message.author.id}> has been ${action}` + noUrl ? `because of <${url}>.` : '.');
         }
         switch (highest.level) {
             case 1:
