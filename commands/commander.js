@@ -20,6 +20,11 @@ module.exports = {
             subcommand
                 .setName('roles')
                 .setDescription('Set up roles channel')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('restart')
+                .setDescription('Restarts the bot')
         ),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
@@ -38,6 +43,9 @@ module.exports = {
                 break;
             case 'roles':
                 require('../setupRoles.js').execute(interaction);
+                break;
+            case 'restart':
+                process.exit(); //will automatically restart
                 break;
         }
     }
