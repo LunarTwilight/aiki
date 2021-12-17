@@ -97,7 +97,7 @@ module.exports = {
         });
         const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}` + (noUrl ? ` because of <${url}>.` : '.'));
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}` + (noUrl ? '.' : ` because of <${url}>.`));
         }
         switch (highest.level) {
             case 1:
