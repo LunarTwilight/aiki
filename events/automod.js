@@ -82,7 +82,8 @@ module.exports = {
         const logEmbed = new MessageEmbed()
             .setTitle('Automatic ' + levels[highest.level])
             .setDescription(message.content)
-            .addField('User', '<@' + message.author.id + '>');
+            .addField('User', '<@' + message.author.id + '>')
+            .addField('Channel', '<#' + message.channel.id + '>');
         if (highest.level === 2) {
             logEmbed.addField('Duration', highest.duration);
         }
