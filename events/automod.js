@@ -46,6 +46,14 @@ module.exports = {
                     highest.level = level;
                     highest.duration = match.duration;
                     highest.shouldDelete = match.shouldDelete;
+                } else if (match.shouldDelete > highest.shouldDelete) {
+                    highest.level = level;
+                    highest.duration = match.duration;
+                    highest.shouldDelete = match.shouldDelete;
+                } else if (parseDuration(match.duration, 'ms') > parseDuration(highest.duration, 'ms')) {
+                    highest.level = level;
+                    highest.duration = match.duration;
+                    highest.shouldDelete = match.shouldDelete;
                 } else {
                     //do nothing
                 }
