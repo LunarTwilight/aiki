@@ -22,7 +22,7 @@ module.exports = {
             return;
         }
         const newName = newNick || target.username;
-        const diff = stringSimilarity.compareTwoStrings(oldNick, newName);
+        const diff = stringSimilarity.compareTwoStrings(oldNick.toLowerCase(), newName.toLowerCase());
         let wording = `${newNick ? 'changed' : 'removed'} their nick`;
         const { renameLogChannel, generalChannel, modRole } = config.all(newUser.guild.id)[0];
         const modChanged = newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole);
