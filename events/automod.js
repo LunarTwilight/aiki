@@ -26,7 +26,7 @@ module.exports = {
 
         const matches = [];
         for (var filter of filters) {
-            if (new RegExp(filter.regex, 'igm').test(message.content)) {
+            if (new RegExp(filter.regex, 'igms').test(message.content)) {
                 matches.push(filter);
             }
         }
@@ -62,7 +62,7 @@ module.exports = {
                 highest.duration = match.duration;
                 highest.shouldDelete = match.shouldDelete;
             }
-            regexes.push('`' + new RegExp(match.regex, 'igm').toString() + '`');
+            regexes.push('`' + new RegExp(match.regex, 'igms').toString() + '`');
         }
         if (highest.level === 2 && !highest.duration) {
             highest.duration = 'infinite';
