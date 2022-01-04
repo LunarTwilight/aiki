@@ -94,13 +94,13 @@ module.exports = {
                         parse: [],
                         repliedUser: false
                     }
-                }).then(message => {
-                    message?.awaitReactions?.({
+                }).then(msg => {
+                    msg?.awaitReactions?.({
                         filter: (reaction, user) => (reaction.emoji.name === '🗑️' && user.id === message.author.id),
                         max: 1, time: 300000
                     }).then(reaction => {
                         if (reaction.size) {
-                            message.delete().catch(error => console.log('- ' + error));
+                            msg.delete().catch(error => console.log('- ' + error));
                         }
                     }, error => console.log('- ' + error));
                     if (deleteMessage) {
