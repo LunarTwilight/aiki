@@ -13,7 +13,7 @@ module.exports = {
                     console.log('backup complete!');
                 })
                 .catch(err => {
-                    console.log('backup failed:', err);
+                    console.error('backup failed:', err);
                 });
         });
     }
