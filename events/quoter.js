@@ -1,3 +1,7 @@
+/* eslint-disable no-cond-assign */
+/* eslint-disable no-negated-condition */
+/* eslint-disable complexity */
+/* eslint-disable no-await-in-loop */
 const { MessageEmbed, MessageAttachment, Permissions } = require('discord.js');
 const imageOptions = {
     dynamic: true,
@@ -19,7 +23,7 @@ module.exports = {
                 continue;
             }
             quotedMessages.add(quoteMatch[1] + '/' + quoteMatch[2] + '/' + quoteMatch[3]);
-            console.log(message.guild.name + ': ' + quoteMatch[1] + '/' + quoteMatch[2] + '/' + quoteMatch[3]);
+            //console.log(message.guild.name + ': ' + quoteMatch[1] + '/' + quoteMatch[2] + '/' + quoteMatch[3]);
             let deleteMessage = false;
             if (quoteMatch[0].length === message.content.length && !(message.attachments.size || message.embeds.length)) {
                 deleteMessage = message.deletable;
@@ -29,10 +33,10 @@ module.exports = {
                 quoteChannel = message.guild.channels.cache.get(quoteMatch[2]);
             } else {
                 const quoteGuild = message.client.guilds.cache.get(quoteMatch[1]);
-                if (!await quoteGuild?.members.fetch(message.author.id).catch(error => console.log('- ' + error))) {
+                if (!await quoteGuild?.members.fetch(message.author.id).catch(error => console.error('- ' + error))) {
                     continue;
                 }
-                quoteChannel = await quoteGuild.channels.fetch(quoteMatch[2]).catch(error => console.log('- ' + error));
+                quoteChannel = await quoteGuild.channels.fetch(quoteMatch[2]).catch(error => console.error('- ' + error));
             }
             if (!quoteChannel?.permissionsFor(message.author.id)?.has(Permissions.FLAGS.VIEW_CHANNEL)) {
                 continue;
@@ -41,7 +45,7 @@ module.exports = {
                 continue;
             }
             await quoteChannel.messages?.fetch(quoteMatch[3]).then(async quote => {
-                await quote.guild?.members.fetch(quote.author.id).catch(error => console.log('- ' + error));
+                await quote.guild?.members.fetch(quote.author.id).catch(error => console.error('- ' + error));
                 let quoteAuthor = quote.author.tag + (quote.member?.roles.highest.unicodeEmoji ? ' ' + quote.member.roles.highest.unicodeEmoji : '') + (message.guildId !== quoteMatch[1] ? ' • ' + quoteChannel.guild.name : '') + (message.channelId !== quoteMatch[2] ? ' • #' + quoteChannel.name : '');
                 if (quote.member?.nickname && quoteAuthor.length + quote.member.nickname.length < 250 && !(quote.member.nickname.toLowerCase().includes(quote.author.username.toLowerCase()) || quote.author.username.toLowerCase().includes(quote.member.nickname.toLowerCase()))) {
                     quoteAuthor = quote.member.nickname + ' • ' + quoteAuthor;
@@ -100,14 +104,14 @@ module.exports = {
                         max: 1, time: 300000
                     }).then(reaction => {
                         if (reaction.size) {
-                            msg.delete().catch(error => console.log('- ' + error));
+                            msg.delete().catch(error => console.error('- ' + error));
                         }
-                    }, error => console.log('- ' + error));
+                    }, error => console.error('- ' + error));
                     if (deleteMessage) {
-                        message.delete().catch(error => console.log('- ' + error));
+                        message.delete().catch(error => console.error('- ' + error));
                     }
-                }, error => console.log('- ' + error))
-            }, error => console.log('- ' + error));
+                }, error => console.error('- ' + error))
+            }, error => console.error('- ' + error));
             if (deleteMessage) {
                 return true;
             }
