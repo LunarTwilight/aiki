@@ -24,7 +24,6 @@ module.exports = {
             if (quoteMatch[0].length === message.content.length && !(message.attachments.size || message.embeds.length)) {
                 deleteMessage = message.deletable;
             }
-            /** @type {import('discord.js').BaseGuildTextChannel} */
             let quoteChannel = null;
             if (message.guildId === quoteMatch[1]) {
                 quoteChannel = message.guild.channels.cache.get(quoteMatch[2]);
