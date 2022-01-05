@@ -92,7 +92,7 @@ module.exports = {
                 break;
             case 'edit':
                 editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
-                interaction.reply('Reponse edited.');
+                interaction.reply('Response edited.');
                 break;
             case 'delete':
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
