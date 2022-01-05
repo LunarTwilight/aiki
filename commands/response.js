@@ -68,6 +68,7 @@ module.exports = {
         ),
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
+        const { response } = getResponse.get(interaction.guildId, interaction.options.getString('name'));
         if (interaction.options.getSubcommand() === 'print' && !interaction.member.roles.cache.has(verifiedRole)) {
             return interaction.reply({
                 content: 'This command can not be used by verified users',
@@ -82,7 +83,10 @@ module.exports = {
         }
         switch (interaction.options.getSubcommand()) {
             case 'print': {
-                const { response } = getResponse.get(interaction.guildId, interaction.options.getString('name'));
+                if (!response) {
+                    interaction.reply('This trigger doesn\'t exist!');
+                    break;
+                }
                 interaction.reply('```\n' + response + '\n```');
                 break;
             }
@@ -91,10 +95,18 @@ module.exports = {
                 interaction.reply('Response added.');
                 break;
             case 'edit':
+                if (!response) {
+                    interaction.reply('This trigger doesn\'t exist!');
+                    break;
+                }
                 editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
                 interaction.reply('Response edited.');
                 break;
             case 'delete':
+                if (!response) {
+                    interaction.reply('This trigger doesn\'t exist!');
+                    break;
+                }
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
                 interaction.reply('Response deleted.');
                 break;
