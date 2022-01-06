@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole, verifiedRole FROM config WHERE guildId = ?');
+const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
 const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId) VALUES (?, ?, ?)');
 const editResponse = db.prepare('UPDATE customResponses SET response = ? WHERE trigger = ? AND guildId = ?');
@@ -10,6 +11,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('response')
         .setDescription('Control custom responses from the bot')
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('print')
+                .setDescription('Lists all custom response triggers registered')
+        )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('print')
@@ -69,19 +75,24 @@ module.exports = {
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
         const response = getResponse.get(interaction.guildId, interaction.options.getString('name'))?.response;
-        if (interaction.options.getSubcommand() === 'print' && !interaction.member.roles.cache.has(verifiedRole)) {
+        const command = interaction.options.getSubcommand();
+        if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
             return interaction.reply({
                 content: 'This command can not be used by verified users',
                 ephemeral: true
             });
         }
-        if (interaction.options.getSubcommand() !== 'print' && !interaction.member.roles.cache.has(modRole)) {
+        if (!/list|print/.test(command) && !interaction.member.roles.cache.has(modRole)) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
         }
-        switch (interaction.options.getSubcommand()) {
+        switch (command) {
+            case 'list': {
+                interaction.reply('My registered custom responses are:\n```' + getResponses(interaction.guildId) + '```');
+                break;
+            }
             case 'print': {
                 if (!response) {
                     interaction.reply('This trigger doesn\'t exist!');
