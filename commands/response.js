@@ -13,7 +13,7 @@ module.exports = {
         .setDescription('Control custom responses from the bot')
         .addSubcommand(subcommand =>
             subcommand
-                .setName('print')
+                .setName('list')
                 .setDescription('Lists all custom response triggers registered')
         )
         .addSubcommand(subcommand =>
