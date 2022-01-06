@@ -90,7 +90,7 @@ module.exports = {
         }
         switch (command) {
             case 'list': {
-                interaction.reply('My registered custom responses are:\n```' + getResponses(interaction.guildId) + '```');
+                interaction.reply('My registered custom responses are:\n```' + getResponses.get(interaction.guildId) + '```');
                 break;
             }
             case 'print': {
