@@ -90,7 +90,8 @@ module.exports = {
         }
         switch (command) {
             case 'list': {
-                interaction.reply('My registered custom responses are:\n```' + getResponses.get(interaction.guildId).join(', ') + '```');
+                const list = getResponses.all(interaction.guildId).map(item => item.trigger);
+                interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
                 break;
             }
             case 'print': {
