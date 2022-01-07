@@ -33,7 +33,7 @@ module.exports = {
         newUser.guild.channels.cache.get(renameLogChannel).send(`<@${target.id}> ${wording}.\nOld nick: \`${oldNick}\`\n${newNick ? 'New nick' : 'Username'}: \`${newName}\`\nSimilarity: ${diff}`);
         if (diff < 0.3 && !modChanged) {
             try {
-                const getUsername = await needle.get('https://community.fandom.com/api.php', {
+                const getUsername = await needle('get', 'https://community.fandom.com/api.php', {
                     action: 'query',
                     list: 'users',
                     ususers: newName,
@@ -45,7 +45,7 @@ module.exports = {
                     console.error(getUsername.body.error);
                 } else {
                     if (getUsername.body.query.users[0].userid) {
-                        const getDiscord = await needle.get('https://services.fandom.com/user-attribute/user/' + getUsername.body.query.users[0].userid + '/attr/discordHandle', {
+                        const getDiscord = await needle('get', 'https://services.fandom.com/user-attribute/user/' + getUsername.body.query.users[0].userid + '/attr/discordHandle', {
                             json: true
                         });
                         if (getDiscord?.body?.value) {
