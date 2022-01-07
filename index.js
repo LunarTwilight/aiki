@@ -4,7 +4,7 @@ const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
 const Sentry = require('@sentry/node');
-const Tracing = require('@sentry/tracing');
+const Tracing = require('@sentry/tracing'); //eslint-disable-line no-unused-vars
 
 const client = new Client({
     intents: [
