@@ -12,7 +12,14 @@ const client = new Client({
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MEMBERS
     ],
-    partials: ['GUILD_MEMBER']
+    partials: ['GUILD_MEMBER'],
+    presence: {
+        activities: {
+            type: 'PLAYING',
+            name: 'Love Brightness'
+        },
+        status: 'idle'
+    }
 });
 
 require('mx-color-logger').init();
