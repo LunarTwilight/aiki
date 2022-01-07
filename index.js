@@ -14,10 +14,10 @@ const client = new Client({
     ],
     partials: ['GUILD_MEMBER'],
     presence: {
-        activities: {
+        activities: [{
             type: 'PLAYING',
             name: 'Love Brightness'
-        },
+        }],
         status: 'idle'
     }
 });
