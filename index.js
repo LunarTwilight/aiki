@@ -22,7 +22,7 @@ const client = new Client({
     }
 });
 
-require('mx-color-logger').init();
+require('merida').init();
 
 Sentry.init({
     dsn,
