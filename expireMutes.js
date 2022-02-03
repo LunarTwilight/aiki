@@ -12,7 +12,7 @@ module.exports = {
                 const user = await client.guilds.cache.get(row.guildId).members.fetch(row.userId);
                 const { muteRole, modChannel } = config.all(row.guildId)[0];
                 if (user.roles.cache.has(muteRole)) {
-                    user.roles.remove(muteRole);
+                    await user.roles.remove(muteRole);
                 }
                 await client.channels.cache.get(modChannel).send('<@' + row.userId + '> has been unmuted.');
                 removeMuteRow.run(row.userId);
