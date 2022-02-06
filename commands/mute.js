@@ -25,7 +25,7 @@ module.exports = {
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
         const { modRole, muteRole, modChannel } = config.all(interaction.guildId)[0];
-        if (!interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
+        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
