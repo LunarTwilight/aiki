@@ -21,7 +21,7 @@ module.exports = {
     // eslint-disable-next-line complexity
     async execute (message) {
         const { modLogChannel, modChannel, muteRole, messageLogChannel, modRole } = config.all(message.guild.id)[0];
-        if (message.author.bot || message.author.roles.highest.comparePositionTo(modRole) >= 0) {
+        if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
 
