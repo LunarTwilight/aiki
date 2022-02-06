@@ -1,7 +1,7 @@
 const parseDuration = require('parse-duration');
 const { MessageEmbed } = require('discord.js');
 const db = require('../database.js');
-const config = db.prepare('SELECT modLogChannel, modChannel, muteRole, messageLogChannel FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT modLogChannel, modChannel, muteRole, messageLogChannel, modRole FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
 const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
 
@@ -20,7 +20,8 @@ module.exports = {
     name: 'messageCreate',
     // eslint-disable-next-line complexity
     async execute (message) {
-        if (message.author.bot) {
+        const { modLogChannel, modChannel, muteRole, messageLogChannel, modRole } = config.all(message.guild.id)[0];
+        if (message.author.bot || message.author.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
 
@@ -68,7 +69,6 @@ module.exports = {
             highest.duration = 'infinite';
         }
         let noUrl;
-        const { modLogChannel, modChannel, muteRole, messageLogChannel } = config.all(message.guild.id)[0];
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();

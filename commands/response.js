@@ -82,7 +82,7 @@ module.exports = {
                 ephemeral: true
             });
         }
-        if (!/list|print/.test(command) && !interaction.member.roles.cache.has(modRole)) {
+        if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true

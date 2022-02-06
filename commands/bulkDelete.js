@@ -14,7 +14,7 @@ module.exports = {
         ),
     async execute (interaction) {
         const { modRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(modRole)) {
+        if (!interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true

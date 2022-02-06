@@ -31,7 +31,7 @@ module.exports = {
         const diff = stringSimilarity.compareTwoStrings(oldNick.toLowerCase(), newName.toLowerCase());
         let wording = `${newNick ? 'changed' : 'removed'} their nick`;
         const { renameLogChannel, generalChannel, modRole } = config.all(newUser.guild.id)[0];
-        const modChanged = newUser.guild.members.cache.get(executor.id).roles.cache.has(modRole);
+        const modChanged = newUser.guild.members.cache.get(executor.id).roles.highest.comparePositionTo(modRole) >= 0;
         if (modChanged) {
             wording = `had their nick ${newNick ? 'changed' : 'removed'}`;
         }

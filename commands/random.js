@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Tells users to go to random'),
     async execute (interaction) {
         const { modRole, randomChannel } = config.all(interaction.guildId)[0];
-        if (!interaction.member.roles.cache.has(modRole)) {
+        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
