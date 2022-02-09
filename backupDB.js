@@ -9,11 +9,8 @@ module.exports = {
         }
         cron.schedule('0 * * * *', () => {
             db.backup(`./backups/backup-${Date.now()}.sqlite`)
-                .then(() => {
-                    console.log('backup complete!');
-                })
                 .catch(err => {
-                    console.error('backup failed:', err);
+                    console.error('backup failed: ', err);
                 });
         });
     }
