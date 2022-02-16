@@ -104,16 +104,15 @@ module.exports = {
         if (!noUrl) {
             logEmbed.setURL(url);
         }
-        await message.guild.channels.cache.get(modLogChannel).send({
+        const msg = await message.guild.channels.cache.get(modLogChannel).send({
             embeds: [
                 logEmbed
             ]
-        }).then(async msg => {
-            const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
-            if (highest.level !== 1) {
-                await message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${msg.url}>.`);
-            }
-        });
+        })
+        const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
+        if (highest.level !== 1) {
+            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${msg.url}>.`);
+        }
         switch (highest.level) {
             case 1:
                 //do nothing
