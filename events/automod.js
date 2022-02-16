@@ -1,4 +1,5 @@
 const parseDuration = require('parse-duration');
+const confusables = require('confusables');
 const { MessageEmbed } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel, modChannel, muteRole, messageLogChannel, modRole FROM config WHERE guildId = ?');
@@ -26,8 +27,9 @@ module.exports = {
         }
 
         const matches = [];
+        const normalizedMsg = confusables.remove(message.content);
         for (var filter of filters) {
-            if (new RegExp(filter.regex, 'igms').test(message.content)) {
+            if (new RegExp(filter.regex, 'igms').test(normalizedMsg)) {
                 matches.push(filter);
             }
         }
