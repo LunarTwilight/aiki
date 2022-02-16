@@ -104,7 +104,7 @@ module.exports = {
         if (!noUrl) {
             logEmbed.setURL(url);
         }
-        message.guild.channels.cache.get(modLogChannel).send({
+        await message.guild.channels.cache.get(modLogChannel).send({
             embeds: [
                 logEmbed
             ]
