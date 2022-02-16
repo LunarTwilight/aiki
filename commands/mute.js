@@ -2,8 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const parseDuration = require('parse-duration');
 const db = require('../database.js');
-const config = db.prepare('SELECT modRole, muteRole, modChannel FROM config WHERE guildId = ?');
-const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
+const config = db.prepare('SELECT modRole, modChannel FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,8 +37,13 @@ module.exports = {
                 ephemeral: true
             });
         }
-        await member.roles.add(muteRole);
-        const expiry = Date.now() + parseDuration(interaction.options.getString('duration'), 'ms');
+        if (parseDuration(interaction.options.getString('duration'), 'ms') > parseDuration('28d', 'ms')) {
+            return interaction.reply({
+                content: 'This mute is too long, please shorten it. (Discord limits mutes to 28 days)',
+                ephemeral: true
+            });
+        }
+        member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), (interaction.options.getString('reason') || 'N/A'));
         const muteEmbed = new MessageEmbed()
             .setTitle('User muted')
             .addFields({
@@ -52,11 +56,11 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Expiry',
-                value: '<t:' + Math.floor(expiry / 1000) + '>',
+                value: '<t:' + Math.floor((Date.now() + parseDuration(interaction.options.getString('duration'), 'ms')) / 1000) + '>',
                 inline: true
             }, {
                 name: 'Reason',
-                value: interaction.options.getString('reason') ? interaction.options.getString('reason') : 'N/A',
+                value: (interaction.options.getString('reason') || 'N/A'),
                 inline: true
             });
         await interaction.reply('User has been muted');
@@ -65,6 +69,5 @@ module.exports = {
                 muteEmbed
             ]
         });
-        addMuteToDB.run(member.id, interaction.guildId, expiry);
     }
 }
