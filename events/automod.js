@@ -69,6 +69,10 @@ module.exports = {
         if (highest.level === 2 && !highest.duration) {
             highest.duration = '28d';
         }
+        if (parseDuration(highest.duration, 'ms') > parseDuration('28d', 'ms')) {
+            highest.duration = '28d';
+            console.warn('Setting duration for filter `' + regexes.join('\n • ') + '` to 28d due to being ' + highest.duration);
+        }
         let noUrl;
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
