@@ -31,7 +31,7 @@ module.exports = {
             });
         }
         const member = interaction.options.getMember('user');
-        if (member.roles.cache.has(muteRole)) {
+        if (member.communicationDisabledUntil) {
             return interaction.reply({
                 content: 'This user is already muted.',
                 ephemeral: true
