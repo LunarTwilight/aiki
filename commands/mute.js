@@ -31,6 +31,12 @@ module.exports = {
             });
         }
         const member = interaction.options.getMember('user');
+        if (!member.moderatable) {
+            return interaction.reply({
+                content: 'Unable to moderate this user.',
+                ephemeral: true
+            });
+        }
         if (member.communicationDisabledUntil) {
             return interaction.reply({
                 content: 'This user is already muted.',
