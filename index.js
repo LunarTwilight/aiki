@@ -45,7 +45,6 @@ http.createServer(async (req, res) => {
 }).listen(22022);
 
 require('./backupDB.js').execute();
-require('./expireMutes.js').execute(client);
 require('./pruneDB.js').execute(client);
 
 client.commands = new Collection();
