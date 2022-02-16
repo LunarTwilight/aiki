@@ -108,11 +108,12 @@ module.exports = {
             embeds: [
                 logEmbed
             ]
+        }).then(msg => {
+            const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
+            if (highest.level !== 1) {
+                message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${msg.url}>.`);
+            }
         });
-        const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
-        if (highest.level !== 1) {
-            message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action}` + (noUrl ? '.' : ` because of <${url}>.`));
-        }
         switch (highest.level) {
             case 1:
                 //do nothing
