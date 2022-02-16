@@ -2,10 +2,12 @@ const stringSimilarity = require('string-similarity');
 const needle = require('needle');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel, generalChannel, modRole FROM config WHERE guildId = ?');
+const addIgnore = db.prepare('INSERT INTO renameNoticeIgnore (userId, guildId, expiry) VALUES (?, ?, ?)')
 
 const revertNick = (newUser, generalChannel, target, oldNick) => {
     newUser.guild.channels.cache.get(generalChannel).send('<@' + target.id + '> please keep your nick as your Fandom username. Your nick change has been reverted. If you have changed your Fandom username, please contact a mod to change your nick here.');
     newUser.setNickname(oldNick, 'Reverting nick change back to Fandom username');
+    addIgnore.run(newUser.id, newUser.guild.id, (Date.now() + (24 * 60 * 60 * 1000)));
 }
 
 module.exports = {
