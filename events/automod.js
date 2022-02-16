@@ -96,7 +96,8 @@ module.exports = {
             .setTitle('Automatic ' + levels[highest.level])
             .setDescription(message.content)
             .addField('User', '<@' + message.author.id + '>')
-            .addField('Channel', '<#' + message.channel.id + '>');
+            .addField('Channel', '<#' + message.channel.id + '>')
+            .addField('Auto Deleted?', highest.shouldDelete ? 'Yes' : 'No');
         if (highest.level === 2) {
             logEmbed.addField('Duration', highest.duration);
         }
