@@ -2,9 +2,8 @@ const parseDuration = require('parse-duration');
 const confusables = require('confusables');
 const { MessageEmbed } = require('discord.js');
 const db = require('../database.js');
-const config = db.prepare('SELECT modLogChannel, modChannel, muteRole, messageLogChannel, modRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
-const addMuteToDB = db.prepare('INSERT INTO mutes (userId, guildId, expiry) VALUES (?, ?, ?)');
 
 const levels = {
     alert: 1,
@@ -21,7 +20,7 @@ module.exports = {
     name: 'messageCreate',
     // eslint-disable-next-line complexity
     async execute (message) {
-        const { modLogChannel, modChannel, muteRole, messageLogChannel, modRole } = config.all(message.guild.id)[0];
+        const { modLogChannel, modChannel, messageLogChannel, modRole } = config.all(message.guild.id)[0];
         if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
@@ -68,7 +67,7 @@ module.exports = {
             regexes.push('`' + new RegExp(match.regex, 'igms').toString() + '`');
         }
         if (highest.level === 2 && !highest.duration) {
-            highest.duration = 'infinite';
+            highest.duration = '28d';
         }
         let noUrl;
         let url = `https://discord.com/channels/${message.guildId}/`;
@@ -114,15 +113,9 @@ module.exports = {
             case 1:
                 //do nothing
                 break;
-            case 2: {
-                const user = await message.guild.members.fetch(message.author.id);
-                user.roles.add(muteRole);
-                if (highest.duration !== 'infinite') {
-                    const expiry = Date.now() + parseDuration(highest.duration, 'ms');
-                    addMuteToDB.run(message.author.id, message.guild.id, expiry);
-                }
+            case 2:
+                (await message.guild.members.fetch(message.author.id)).timeout(parseDuration(highest.duration, 'ms'), 'Automod');
                 break;
-            }
             case 3:
                 message.member.kick('Automod');
                 break;
