@@ -4,7 +4,7 @@ const getIgnoredUsers = db.prepare('SELECT userId FROM renameNoticeIgnore WHERE 
 const removeIgnoreUserRow = db.prepare('DELETE FROM renameNoticeIgnore WHERE userId = ?');
 
 module.exports = {
-    execute (client) {
+    execute () {
         cron.schedule('0/30 * * * *', () => {
             getIgnoredUsers.all(Date.now()).forEach(row => {
                 removeIgnoreUserRow.run(row.userId);

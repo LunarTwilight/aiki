@@ -45,7 +45,7 @@ http.createServer(async (req, res) => {
 }).listen(22022);
 
 require('./backupDB.js').execute();
-require('./pruneDB.js').execute(client);
+require('./pruneDB.js').execute();
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
