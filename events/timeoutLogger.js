@@ -18,7 +18,7 @@ module.exports = {
         let reason;
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
-            type: 'MEMBER_UPDATE',
+            type: 'MEMBER_UPDATE'
         });
         const log = fetchedLogs.entries.first();
         if (!log || log.target.id !== newUser.user.id || log.changes[0].key !== 'communication_disabled_until' || !log.reason) {
@@ -36,7 +36,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Mod',
-                value: '<@' + log.executor.id + '>',
+                value: (log?.executor ? '<@' + log.executor.id + '>' : 'N/A'),
                 inline: true
             }, {
                 name: 'Duration',
