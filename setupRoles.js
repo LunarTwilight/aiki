@@ -17,7 +17,7 @@ module.exports = {
             }).then(webhook => {
                 channelWebhook = webhook;
             });
-            interaction.editReply({
+            await interaction.editReply({
                 content: 'Webhook created',
                 ephemeral: true
             });
@@ -180,9 +180,9 @@ module.exports = {
             ephemeral: true
         }
         if (createdWebhook) {
-            interaction.followUp(reply);
+            await interaction.followUp(reply);
         } else {
-            interaction.editReply(reply);
+            await interaction.editReply(reply);
         }
     }
 };

@@ -54,7 +54,7 @@ module.exports = {
                 ephemeral: true
             });
         }
-        member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), (interaction.options.getString('reason') || 'N/A'));
+        await member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), (interaction.options.getString('reason') || 'N/A'));
         await interaction.reply({
             content: 'User has been muted.',
             ephemeral: true

@@ -21,13 +21,13 @@ module.exports = {
         }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
         }
-        interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(messages => {
-            interaction.reply({
+        await interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(async messages => {
+            await interaction.reply({
                 content: 'Bulk deleted ' + messages.size + ' messages.',
                 ephemeral: true
             });

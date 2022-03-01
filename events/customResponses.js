@@ -5,7 +5,7 @@ const excluded = ['!wiki', '!report', '!soap', '!yes', '!no'];
 
 module.exports = {
     name: 'messageCreate',
-    execute (message) {
+    async execute (message) {
         const { verifiedRole } = config.get(message.guild.id);
         if (!message.content.startsWith('!') || excluded.some(prefix => message.content.startsWith(prefix)) || !message.member.roles.cache.has(verifiedRole)) {
             return;
@@ -14,6 +14,6 @@ module.exports = {
         if (!row || !row.response) {
             return;
         }
-        message.channel.send(row.response);
+        await message.channel.send(row.response);
     }
 };

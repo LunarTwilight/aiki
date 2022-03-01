@@ -15,11 +15,11 @@ module.exports = {
         }
         const { modRole, randomChannel } = config.all(interaction.guildId)[0];
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
         }
-        interaction.reply('The mods request that you move this convo to <#' + randomChannel + '>.');
+        await interaction.reply('The mods request that you move this convo to <#' + randomChannel + '>.');
     }
 }

@@ -122,10 +122,10 @@ module.exports = {
                 (await message.guild.members.fetch(message.author.id)).timeout(parseDuration(highest.duration, 'ms'), 'Automod');
                 break;
             case 3:
-                message.member.kick('Automod');
+                await message.member.kick('Automod');
                 break;
             case 4:
-                message.member.ban({
+                await message.member.ban({
                     reason: 'Automod'
                 });
                 break;

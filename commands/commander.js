@@ -34,7 +34,7 @@ module.exports = {
             });
         }
         if (interaction.user.id !== devId) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',
                 ephemeral: true
             });
@@ -44,7 +44,7 @@ module.exports = {
         });
         switch (interaction.options.getSubcommand()) {
             case 'eval':
-                interaction.editReply('something happened ig');
+                await interaction.editReply('something happened ig');
                 eval(interaction.options.getString('input'));
                 break;
             case 'roles':

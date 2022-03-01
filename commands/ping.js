@@ -9,7 +9,7 @@ module.exports = {
     async execute (interaction) {
         const { verifiedRole } = config.get(interaction.guildId);
         if (interaction.inGuild() && !interaction.member.roles.cache.has(verifiedRole)) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
             });
@@ -18,6 +18,6 @@ module.exports = {
             content: 'Pinging...',
             fetchReply: true
         });
-        interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
+        await interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
     }
 }

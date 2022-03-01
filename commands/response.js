@@ -83,13 +83,13 @@ module.exports = {
         const response = getResponse.get(interaction.guildId, interaction.options.getString('name'))?.response;
         const command = interaction.options.getSubcommand();
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'This command can not be used by verified users',
                 ephemeral: true
             });
         }
         if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
@@ -97,36 +97,36 @@ module.exports = {
         switch (command) {
             case 'list': {
                 const list = getResponses.all(interaction.guildId).map(item => item.trigger);
-                interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
+                await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
                 break;
             }
             case 'print': {
                 if (!response) {
-                    interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This trigger doesn\'t exist!');
                     break;
                 }
-                interaction.reply('```\n' + response + '\n```');
+                await interaction.reply('```\n' + response + '\n```');
                 break;
             }
             case 'add':
                 addResponse.run(interaction.options.getString('name'), interaction.options.getString('content'), interaction.guildId);
-                interaction.reply('Response added.');
+                await interaction.reply('Response added.');
                 break;
             case 'edit':
                 if (!response) {
-                    interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This trigger doesn\'t exist!');
                     break;
                 }
                 editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
-                interaction.reply('Response edited.');
+                await interaction.reply('Response edited.');
                 break;
             case 'delete':
                 if (!response) {
-                    interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This trigger doesn\'t exist!');
                     break;
                 }
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
-                interaction.reply('Response deleted.');
+                await interaction.reply('Response deleted.');
                 break;
         }
     }
