@@ -53,14 +53,14 @@ module.exports = {
         const roleId = interaction.customId.replace(/^roles-/, '');
         const roles = interaction.member.roles;
         const hasRole = roles.cache.has(roleId);
-        interaction.reply({
+        if (hasRole) {
+            await roles.remove(roleId).catch(console.error);
+        } else {
+            await roles.add(roleId).catch(console.error);
+        }
+        await interaction.reply({
             content: `You have been successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`,
             ephemeral: true
         });
-        if (hasRole) {
-            roles.remove(roleId).catch(console.error);
-        } else {
-            roles.add(roleId).catch(console.error);
-        }
     }
 }
