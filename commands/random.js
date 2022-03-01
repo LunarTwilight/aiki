@@ -7,6 +7,12 @@ module.exports = {
         .setName('random')
         .setDescription('Tells users to go to random'),
     async execute (interaction) {
+        if (!interaction.inGuild()) {
+            return await interaction.reply({
+                content: 'This command is only avalible in a server.',
+                ephemeral: true
+            });
+        }
         const { modRole, randomChannel } = config.all(interaction.guildId)[0];
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({

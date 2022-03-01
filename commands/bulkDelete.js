@@ -13,6 +13,12 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute (interaction) {
+        if (!interaction.inGuild()) {
+            return await interaction.reply({
+                content: 'This command is only avalible in a server.',
+                ephemeral: true
+            });
+        }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             return interaction.reply({

@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Get the bot\'s ping'),
     async execute (interaction) {
         const { verifiedRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
+        if (interaction.inGuild() && !interaction.member.roles.cache.has(verifiedRole)) {
             return interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
