@@ -27,7 +27,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Similarity',
-                value: diff,
+                value: diff.toString(),
                 inline: true
             });
         if (diff < 0.3) {
