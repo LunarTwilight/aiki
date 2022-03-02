@@ -7,7 +7,7 @@ module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
         const { renameLogChannel, verifiedRole } = config.get(newUser.guild.id);
-        if (oldUser.nickname || newUser.nickname || !newUser.manageable || !oldUser.roles.cache.has(verifiedRole) || !newUser.roles.cache.has(verifiedRole)) {
+        if (oldUser.nickname || newUser.nickname || !newUser.manageable || !oldUser.roles.cache.has(verifiedRole) || oldUser.user.username === newUser.user.username) {
             return;
         }
         const diff = stringSimilarity.compareTwoStrings(oldUser.user.username.toLowerCase(), newUser.user.username.toLowerCase());
