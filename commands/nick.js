@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
-const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,9 +14,16 @@ module.exports = {
                 .setDescription('Your new nick')
         ),
     async execute (interaction) {
+        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
         if (!interaction.inGuild()) {
             return await interaction.reply({
                 content: 'This command is only avalible in a server.',
+                ephemeral: true
+            });
+        }
+        if (!interaction.member.roles.cache.has(verifiedRole)) {
+            return await interaction.reply({
+                content: 'This command can not be used by verified users',
                 ephemeral: true
             });
         }
@@ -65,7 +72,6 @@ module.exports = {
         } else {
             embed.setTitle('User changed nick');
         }
-        const { renameLogChannel } = config.get(interaction.guildId);
         await newUser.client.channels.cache.get(renameLogChannel).send({
             embeds: [
                 embed
