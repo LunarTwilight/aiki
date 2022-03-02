@@ -1,16 +1,16 @@
 const { MessageEmbed } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
-const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
 
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
-        if (oldUser.nickname || newUser.nickname || !newUser.manageable) {
+        const { renameLogChannel, verifiedRole } = config.get(newUser.guild.id);
+        if (oldUser.nickname || newUser.nickname || !newUser.manageable || !oldUser.roles.cache.has(verifiedRole) || !newUser.roles.cache.has(verifiedRole)) {
             return;
         }
         const diff = stringSimilarity.compareTwoStrings(oldUser.user.username.toLowerCase(), newUser.user.username.toLowerCase());
-        const { renameLogChannel } = config.get(newUser.guild.id);
         const embed = new MessageEmbed()
             .setTitle('User changed username')
             .addFields({
