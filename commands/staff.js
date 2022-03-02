@@ -41,7 +41,7 @@ module.exports = {
                 await interaction.reply('<https://community.fandom.com/wiki/Help:Bad_advertisements>');
                 break;
             case 'spam_vandal':
-                await interaction.reply('Fandom: <#600818678682091562>\nGamepedia: <#573641974276423702>\nWiki: <https://soap.fandom.com>');
+                await interaction.reply('Discord: <#866305196573327370>\nWiki: <https://soap.fandom.com>');
                 break;
         }
     }
