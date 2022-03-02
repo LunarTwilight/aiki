@@ -72,7 +72,7 @@ module.exports = {
         } else {
             embed.setTitle('User changed nick');
         }
-        await newUser.client.channels.cache.get(renameLogChannel).send({
+        await interaction.client.channels.cache.get(renameLogChannel).send({
             embeds: [
                 embed
             ]
