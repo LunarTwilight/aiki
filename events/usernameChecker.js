@@ -6,6 +6,9 @@ const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHE
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
+        if (oldUser.user.username !== newUser.user.username) {
+            console.log(oldUser, newUser);
+        }
         const { renameLogChannel, verifiedRole } = config.get(newUser.guild.id);
         if (oldUser.nickname || newUser.nickname || !newUser.manageable || !oldUser.roles.cache.has(verifiedRole) || oldUser.user.username === newUser.user.username) {
             return;
