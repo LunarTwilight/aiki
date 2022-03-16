@@ -18,7 +18,6 @@ const levels = {
 
 module.exports = {
     name: 'messageCreate',
-    // eslint-disable-next-line complexity
     async execute (message) {
         const { modLogChannel, modChannel, messageLogChannel, modRole } = config.all(message.guild.id)[0];
         if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {

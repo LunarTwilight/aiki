@@ -51,7 +51,7 @@ module.exports = {
         }
 
         const roleId = interaction.customId.replace(/^roles-/, '');
-        const roles = interaction.member.roles;
+        const { roles } = interaction.member;
         const hasRole = roles.cache.has(roleId);
         if (hasRole) {
             await roles.remove(roleId).catch(console.error);

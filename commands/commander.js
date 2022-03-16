@@ -51,8 +51,8 @@ module.exports = {
                 require('../setupRoles.js').execute(interaction);
                 break;
             case 'restart':
+                //eslint-disable-next-line no-process-exit
                 process.exit(); //will automatically restart
-                break;
         }
     }
 }

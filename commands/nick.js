@@ -57,7 +57,7 @@ module.exports = {
                 value: interaction.member.displayName,
                 inline: true
             }, {
-                name: `New ${interaction.options.getString('nick') ? 'nick': 'username'}`,
+                name: `New ${interaction.options.getString('nick') ? 'nick' : 'username'}`,
                 value: newName,
                 inline: true
             }, {
@@ -67,7 +67,7 @@ module.exports = {
             });
         if (!interaction.options.getString('nick')) {
             embed.setTitle('User removed nick');
-        } else if (!interaction.member.nickname) {
+        } else if (!interaction.member.nickname) { //eslint-disable-line no-negated-condition
             embed.setTitle('User set nick');
         } else {
             embed.setTitle('User changed nick');
