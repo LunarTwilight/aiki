@@ -21,10 +21,11 @@ module.exports = {
         }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
+            return;
         }
         await interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(async messages => {
             await interaction.reply({

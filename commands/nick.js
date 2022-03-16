@@ -16,28 +16,32 @@ module.exports = {
     async execute (interaction) {
         const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         if (!interaction.member.roles.cache.has(verifiedRole)) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command can not be used by verified users',
                 ephemeral: true
             });
+            return;
         }
         if (!interaction.member.manageable) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'Bot is unable to change your nick because you\'re higher than it, please use Discord\'s native nick change feature.',
                 ephemeral: true
             });
+            return;
         }
         if (interaction.member.nickname === interaction.options.getString('nick')) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'Your new nick is the same as your old nick.',
                 ephemeral: true
             });
+            return;
         }
         if (!interaction.member.nickname && !interaction.options.getString('nick')) {
             return await interaction.reply({

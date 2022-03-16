@@ -74,25 +74,28 @@ module.exports = {
         ),
     async execute (interaction) {
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
         const response = getResponse.get(interaction.guildId, interaction.options.getString('name'))?.response;
         const command = interaction.options.getSubcommand();
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command can not be used by verified users',
                 ephemeral: true
             });
+            return;
         }
         if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
+            return;
         }
         switch (command) {
             case 'list': {

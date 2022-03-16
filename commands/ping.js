@@ -9,10 +9,11 @@ module.exports = {
     async execute (interaction) {
         const { verifiedRole } = config.get(interaction.guildId);
         if (interaction.inGuild() && !interaction.member.roles.cache.has(verifiedRole)) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
             });
+            return;
         }
         const sent = await interaction.reply({
             content: 'Pinging...',

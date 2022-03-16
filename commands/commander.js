@@ -28,16 +28,18 @@ module.exports = {
         ),
     async execute (interaction) {
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         if (interaction.user.id !== devId) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',
                 ephemeral: true
             });
+            return;
         }
         await interaction.deferReply({
             ephemeral: true

@@ -43,11 +43,12 @@ module.exports = {
                 new MessageButton().setCustomId('roles-597697739949867018').setLabel('Turkish').setStyle('SECONDARY'),
                 new MessageButton().setCustomId('roles-598262772479819826').setLabel('Ukrainian').setStyle('SECONDARY')
             );
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'Select additional roles',
                 components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE],
                 ephemeral: true
             });
+            return;
         }
 
         const roleId = interaction.customId.replace(/^roles-/, '');

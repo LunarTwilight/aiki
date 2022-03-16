@@ -19,7 +19,8 @@ module.exports = {
     async execute (interaction) {
         const cat = interaction.options.getString('category');
         if (!cat) {
-            return await interaction.reply('Fandom: https://support.fandom.com\nGamepedia: https://support.gamepedia.com');
+            await interaction.reply('Fandom: https://support.fandom.com\nGamepedia: https://support.gamepedia.com');
+            return;
         }
         switch (cat) {
             case 'account_help':

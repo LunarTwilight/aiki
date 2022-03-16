@@ -23,36 +23,41 @@ module.exports = {
                 .setDescription('Reason for the mute')),
     async execute (interaction) {
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
             });
+            return;
         }
         const member = interaction.options.getMember('user');
         if (!member.moderatable) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'Unable to moderate this user.',
                 ephemeral: true
             });
+            return;
         }
         if (member.communicationDisabledUntil) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This user is already muted.',
                 ephemeral: true
             });
+            return;
         }
         if (parseDuration(interaction.options.getString('duration'), 'ms') > parseDuration('28d', 'ms')) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This mute is too long, please shorten it. (Discord limits mutes to 28 days)',
                 ephemeral: true
             });
+            return;
         }
         await member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), (interaction.options.getString('reason') || 'N/A'));
         await interaction.reply({
