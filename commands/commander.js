@@ -57,4 +57,4 @@ module.exports = {
                 process.exit(); //will automatically restart
         }
     }
-}
+};

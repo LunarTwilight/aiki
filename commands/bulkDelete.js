@@ -14,10 +14,11 @@ module.exports = {
         ),
     async execute (interaction) {
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
@@ -32,6 +33,6 @@ module.exports = {
                 content: 'Bulk deleted ' + messages.size + ' messages.',
                 ephemeral: true
             });
-        })
+        });
     }
-}
+};

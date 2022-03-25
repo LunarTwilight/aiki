@@ -63,6 +63,6 @@ module.exports = {
         await interaction.reply({
             content: 'User has been muted.',
             ephemeral: true
-        })
+        });
     }
-}
+};

@@ -8,10 +8,11 @@ module.exports = {
         .setDescription('Tells users to go to random'),
     async execute (interaction) {
         if (!interaction.inGuild()) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'This command is only avalible in a server.',
                 ephemeral: true
             });
+            return;
         }
         const { modRole, randomChannel } = config.all(interaction.guildId)[0];
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
@@ -23,4 +24,4 @@ module.exports = {
         }
         await interaction.reply('The mods request that you move this convo to <#' + randomChannel + '>.');
     }
-}
+};

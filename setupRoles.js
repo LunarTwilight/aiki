@@ -178,7 +178,7 @@ module.exports = {
         const reply = {
             content: 'Roles messages created',
             ephemeral: true
-        }
+        };
         if (createdWebhook) {
             await interaction.followUp(reply);
         } else {

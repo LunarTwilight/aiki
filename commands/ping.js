@@ -21,4 +21,4 @@ module.exports = {
         });
         await interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
     }
-}
+};

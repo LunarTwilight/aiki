@@ -39,7 +39,7 @@ http.createServer(async (req, res) => {
         res.setHeader('Content-Type', register.contentType);
         res.end(await register.metrics());
     } catch (err) {
-        res.writeHead(500)
+        res.writeHead(500);
         res.end(err);
     }
 }).listen(22022);

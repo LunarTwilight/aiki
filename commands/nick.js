@@ -44,10 +44,11 @@ module.exports = {
             return;
         }
         if (!interaction.member.nickname && !interaction.options.getString('nick')) {
-            return await interaction.reply({
+            await interaction.reply({
                 content: 'You can not remove a nick you have not set.',
                 ephemeral: true
             });
+            return;
         }
         const newName = interaction.options.getString('nick') || interaction.member.user.username;
         const diff = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());

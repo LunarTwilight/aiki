@@ -14,7 +14,7 @@ const levels = {
     2: 'mute',
     3: 'kick',
     4: 'ban'
-}
+};
 
 module.exports = {
     name: 'messageCreate',
@@ -130,4 +130,4 @@ module.exports = {
                 break;
         }
     }
-}
+};
