@@ -145,8 +145,8 @@ module.exports = {
                 .setLabel('Spanish')
                 .setStyle('SECONDARY'),
             new MessageButton()
-                .setCustomId('roles-597697646504837130')
-                .setLabel('Vietnamese')
+                .setCustomId('roles-922428251459190814')
+                .setLabel('English')
                 .setStyle('SECONDARY')
         );
         const rowLanguageC = new MessageActionRow().addComponents(
