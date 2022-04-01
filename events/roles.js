@@ -3,7 +3,7 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 module.exports = {
     name: 'interactionCreate',
     async execute (interaction) {
-        if (!interaction.isButton()) {
+        if (!interaction.isButton() || !interaction.customId.startsWith('roles-')) {
             return;
         }
 
