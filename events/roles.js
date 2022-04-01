@@ -48,7 +48,11 @@ module.exports = {
             );
             await interaction.reply({
                 content: 'Select additional roles',
-                components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE, rowLanguageF],
+                components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE],
+                ephemeral: true
+            });
+            await interaction.reply({
+                components: [rowLanguageF],
                 ephemeral: true
             });
             return;
