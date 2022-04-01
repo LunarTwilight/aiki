@@ -51,7 +51,7 @@ module.exports = {
                 components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE],
                 ephemeral: true
             });
-            await interaction.reply({
+            await interaction.followUp({
                 components: [rowLanguageF],
                 ephemeral: true
             });
