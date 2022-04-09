@@ -4,7 +4,7 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('blocked')
-        .setDescription('Gives information on what to do when you are blocked'),
+        .setDescription('Gives information on what to do when you (or another user) is blocked'),
 
     async execute (interaction) {
         const button = new MessageActionRow().addComponents(
