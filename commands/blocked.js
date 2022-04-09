@@ -3,7 +3,7 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('blocked')
+        .setName('blocked'),
         .setDescription('Gives information on what to do when you are blocked')
 
     async execute (interaction) {
