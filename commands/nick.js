@@ -24,7 +24,7 @@ module.exports = {
         }
         if (!interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
-                content: 'This command can not be used by verified users',
+                content: 'This command can not be used by non-verified users.',
                 ephemeral: true
             });
             return;

@@ -86,7 +86,7 @@ module.exports = {
         const command = interaction.options.getSubcommand();
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
-                content: 'This command can not be used by unverified users',
+                content: 'This command can not be used by non-verified users.',
                 ephemeral: true
             });
             return;
@@ -115,7 +115,7 @@ module.exports = {
             case 'add':
                 if (excluded.some(prefix => interaction.options.getString('name').startsWith(prefix))) {
                     await interaction.reply({
-                        content: 'Trigger name is not allowed to be used, please select a different name',
+                        content: 'Trigger name is not allowed to be used, please select a different name.',
                         ephemeral: true
                     });
                     return;
