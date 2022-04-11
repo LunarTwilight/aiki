@@ -6,6 +6,7 @@ const getResponse = db.prepare('SELECT response FROM customResponses WHERE guild
 const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId) VALUES (?, ?, ?)');
 const editResponse = db.prepare('UPDATE customResponses SET response = ? WHERE trigger = ? AND guildId = ?');
 const deleteResponse = db.prepare('DELETE FROM customResponses WHERE guildId = ? AND trigger = ?');
+const excluded = ['!wiki', '!report', '!soap'];
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -112,6 +113,13 @@ module.exports = {
                 break;
             }
             case 'add':
+                if (excluded.some(prefix => interaction.options.getString('name').startsWith(prefix))) {
+                    await interaction.reply({
+                        content: 'Trigger name is not allowed to be used, please select a different name',
+                        ephemeral: true
+                    });
+                    return;
+                }
                 addResponse.run(interaction.options.getString('name'), interaction.options.getString('content'), interaction.guildId);
                 await interaction.reply('Response added.');
                 break;
