@@ -86,7 +86,7 @@ module.exports = {
         const command = interaction.options.getSubcommand();
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
-                content: 'This command can not be used by verified users',
+                content: 'This command can not be used by unverified users',
                 ephemeral: true
             });
             return;
@@ -106,7 +106,7 @@ module.exports = {
             }
             case 'print': {
                 if (!response) {
-                    await interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This reposnse doesn\'t exist!');
                     break;
                 }
                 await interaction.reply('```\n' + response + '\n```');
@@ -125,7 +125,7 @@ module.exports = {
                 break;
             case 'edit':
                 if (!response) {
-                    await interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
                 editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
@@ -133,7 +133,7 @@ module.exports = {
                 break;
             case 'delete':
                 if (!response) {
-                    await interaction.reply('This trigger doesn\'t exist!');
+                    await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
