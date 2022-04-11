@@ -1,7 +1,7 @@
 const db = require('../database.js');
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
-const excluded = ['!wiki', '!report', '!soap', '!yes', '!no'];
+const excluded = ['!wiki', '!report', '!soap'];
 
 module.exports = {
     name: 'messageCreate',
