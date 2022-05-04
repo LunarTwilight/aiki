@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const baseUrl = 'https://support.fandom.com/hc/en-us/requests/new?ticket_form_id=';
+const baseUrl = 'https://support.fandom.com/hc/requests/new?ticket_form_id=';
 
 module.exports = {
     data: new SlashCommandBuilder()
