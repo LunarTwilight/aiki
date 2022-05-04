@@ -8,13 +8,28 @@ module.exports = {
         .addStringOption(option =>
             option.setName('category')
                 .setDescription('Optional category')
-                .addChoice('Account Help', 'account_help')
-                .addChoice('Wiki Changes', 'wiki_changes')
-                .addChoice('Problem', 'problem')
-                .addChoice('Protection', 'protection')
-                .addChoice('Other', 'other')
-                .addChoice('Bad Ad', 'bad_ad')
-                .addChoice('Spam/Vandal', 'spam_vandal')
+                .addChoices({
+                    name: 'Account Help',
+                    value: 'account_help'
+                }, {
+                    name: 'Wiki Changes',
+                    value: 'wiki_changes'
+                }, {
+                    name: 'Problem',
+                    value: 'problem'
+                }, {
+                    name: 'Protection',
+                    value: 'protection'
+                }, {
+                    name: 'Other',
+                    value: 'other'
+                }, {
+                    name: 'Bad Ad',
+                    value: 'bad_ad'
+                }, {
+                    name: 'Spam/Vandal',
+                    value: 'span_vandal'
+                })
         ),
     async execute (interaction) {
         const cat = interaction.options.getString('category');
