@@ -7,7 +7,7 @@ const humanizeDuration = require('humanize-duration');
 module.exports = {
     name: 'guildMemberUpdate',
     async execute (oldUser, newUser) {
-        if (!newUser.communicationDisabledUntilTimestamp) {
+        if (!newUser.isCommunicationDisabled()) {
             return;
         }
         const diff = newUser.communicationDisabledUntilTimestamp - new Date().getTime();

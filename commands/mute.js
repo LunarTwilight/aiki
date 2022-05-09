@@ -45,7 +45,7 @@ module.exports = {
             });
             return;
         }
-        if (member.communicationDisabledUntil) {
+        if (member.isCommunicationDisabled()) {
             await interaction.reply({
                 content: 'This user is already muted.',
                 ephemeral: true
