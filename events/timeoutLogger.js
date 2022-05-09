@@ -10,23 +10,20 @@ module.exports = {
         if (!newUser.isCommunicationDisabled()) {
             return;
         }
-        const diff = newUser.communicationDisabledUntilTimestamp - new Date().getTime();
-        const mDiff = parseDuration(diff, 'm');
-        const roundedDiff = Math.round(mDiff);
-        const msDiff = parseDuration(roundedDiff + 'm', 'ms');
-
-        let reason;
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
             type: 'MEMBER_UPDATE'
         });
         const log = fetchedLogs.entries.first();
-        if (!log || log.target.id !== newUser.user.id || log.changes[0].key !== 'communication_disabled_until' || !log.reason) {
-            reason = 'N/A';
-        } else {
-            reason = log.reason;
+        if (!log || log.target.id !== newUser.user.id || log.changes[0].key !== 'communication_disabled_until') {
+            return;
         }
 
+        const timestamp = new Date(log.changes[0].new).getTime();
+        const diff = timestamp - new Date().getTime();
+        const mDiff = parseDuration(diff, 'm');
+        const roundedDiff = Math.round(mDiff);
+        const msDiff = parseDuration(roundedDiff + 'm', 'ms');
         const { modLogChannel } = config.get(newUser.guild.id);
         const embed = new MessageEmbed()
             .setTitle('User muted')
@@ -44,11 +41,11 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Expiry',
-                value: '<t:' + Math.floor((newUser.communicationDisabledUntilTimestamp / 1000)) + '>',
+                value: '<t:' + Math.floor((timestamp / 1000)) + '>',
                 inline: true
             }, {
                 name: 'Reason',
-                value: reason,
+                value: log.reason || 'N/A',
                 inline: true
             });
         await newUser.client.channels.cache.get(modLogChannel).send({
