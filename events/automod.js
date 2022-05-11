@@ -24,6 +24,13 @@ module.exports = {
             return;
         }
 
+        const excludedCategories = [
+            '595522513249894400' //russian
+        ];
+        if (excludedCategories.includes(message.channel.parentId)) {
+            return;
+        }
+
         const matches = [];
         const normalizedMsg = confusables.remove(message.content);
         for (var filter of filters) {
