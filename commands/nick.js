@@ -38,7 +38,7 @@ module.exports = {
         }
         if (interaction.member.nickname === interaction.options.getString('nick')) {
             await interaction.reply({
-                content: 'Your new nick is the same as your old nick.',
+                content: 'You can not set your new nick to be the same as your old nick.',
                 ephemeral: true
             });
             return;
