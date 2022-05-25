@@ -67,7 +67,7 @@ module.exports = {
             await roles.add(roleId).catch(console.error);
         }
         await interaction.reply({
-            content: `You have been successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`,
+            content: `You have successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`,
             ephemeral: true
         });
     }
