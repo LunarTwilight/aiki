@@ -5,7 +5,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
-    "@sentry/node": "^7.1.1",
+    "@sentry/node": "^7.2.0",
     "@sentry/tracing": "^7.1.1",
     "better-sqlite3": "^7.5.3",
     "confusables": "^1.1.0",
