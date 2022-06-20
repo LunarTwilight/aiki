@@ -7,6 +7,7 @@ module.exports = {
         if (!fs.existsSync('./backups')) {
             fs.mkdirSync('./backups');
         }
+
         cron.schedule('0 * * * *', async () => {
             await db.backup(`./backups/backup-${Date.now()}.sqlite`)
                 .catch(err => {
