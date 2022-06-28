@@ -6,7 +6,7 @@
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
     "@sentry/node": "^7.1.1",
-    "@sentry/tracing": "^7.1.1",
+    "@sentry/tracing": "^7.3.1",
     "better-sqlite3": "^7.5.3",
     "confusables": "^1.1.0",
     "discord-api-types": "^0.33.5",
