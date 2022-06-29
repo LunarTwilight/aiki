@@ -14,7 +14,6 @@ module.exports = {
                 .setDescription('Your new nick')
         ),
     async execute (interaction) {
-        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
         if (!interaction.inGuild()) {
             await interaction.reply({
                 content: 'This command is only avalible in a server.',
@@ -22,6 +21,7 @@ module.exports = {
             });
             return;
         }
+        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
         if (!interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command can not be used by non-verified users.',

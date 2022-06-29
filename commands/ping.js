@@ -7,8 +7,15 @@ module.exports = {
         .setName('ping')
         .setDescription('Get the bot\'s ping'),
     async execute (interaction) {
+        if (!interaction.inGuild()) {
+            await interaction.reply({
+                content: 'This command is only avalible in a server.',
+                ephemeral: true
+            });
+            return;
+        }
         const { verifiedRole } = config.get(interaction.guildId);
-        if (interaction.inGuild() && !interaction.member.roles.cache.has(verifiedRole)) {
+        if (!interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true
