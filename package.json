@@ -2,6 +2,7 @@
   "name": "aiki",
   "version": "1.0.0",
   "main": "index.js",
+  "test": true,
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
