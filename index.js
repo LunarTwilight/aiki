@@ -44,8 +44,6 @@ http.createServer(async (req, res) => {
     }
 }).listen(22022);
 
-require('./backupDB.js').execute();
-
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
