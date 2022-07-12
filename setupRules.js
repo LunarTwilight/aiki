@@ -24,7 +24,11 @@ module.exports = {
             createdWebhook = true;
         }
         if (channelWebhook.owner.id !== clientId) {
-            throw new Error('Rules webhook was not created by the bot.');
+            await interaction.editReply({
+                content: 'Rules webhook was not created by the bot.',
+                ephemeral: true
+            });
+            return;
         }
 
         const content = await fs.readFile('./rules.md');

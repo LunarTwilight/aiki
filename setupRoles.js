@@ -24,7 +24,11 @@ module.exports = {
             createdWebhook = true;
         }
         if (channelWebhook.owner.id !== clientId) {
-            throw new Error('Roles webhook was not created by the bot.');
+            await interaction.editReply({
+                content: 'Roles webhook was not created by the bot.',
+                ephemeral: true
+            });
+            return;
         }
 
         const platform = 'Please select the platform to see its channels:';
