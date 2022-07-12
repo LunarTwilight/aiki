@@ -31,7 +31,7 @@ module.exports = {
             return;
         }
 
-        const content = await fs.readFile('./rules.md');
+        const content = await fs.readFileSync('./rules.md', 'utf8');
 
         await channelWebhook.send(content);
         const reply = {
