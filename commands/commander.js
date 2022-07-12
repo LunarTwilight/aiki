@@ -23,6 +23,11 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('rules')
+                .setDescription('Set up rules channel')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('restart')
                 .setDescription('Restarts the bot')
         ),
@@ -51,6 +56,9 @@ module.exports = {
                 break;
             case 'roles':
                 require('../setupRoles.js').execute(interaction);
+                break;
+            case 'rules':
+                require('../setupRules.js').execute(interaction);
                 break;
             case 'restart':
                 //eslint-disable-next-line no-process-exit
