@@ -1,5 +1,5 @@
 const Database = require('better-sqlite3');
-const db = new Database('/root/aiki/db.sqlite', {
+const db = new Database(__dirname + '/db.sqlite', {
     fileMustExist: true
 });
 db.defaultSafeIntegers(true);
