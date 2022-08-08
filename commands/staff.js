@@ -34,7 +34,7 @@ module.exports = {
     async execute (interaction) {
         const cat = interaction.options.getString('category');
         if (!cat) {
-            await interaction.reply('Fandom: https://support.fandom.com\nGamepedia: https://support.gamepedia.com');
+            await interaction.reply('https://support.fandom.com');
             return;
         }
         switch (cat) {
