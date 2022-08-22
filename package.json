@@ -9,7 +9,7 @@
     "@sentry/tracing": "^7.6.0",
     "better-sqlite3": "^7.6.0",
     "confusables": "^1.1.1",
-    "discord-api-types": "^0.36.1",
+    "discord-api-types": "^0.37.4",
     "discord.js": "^13.8.1",
     "humanize-duration": "^3.27.2",
     "merida": "^2.0.8",
