@@ -61,8 +61,9 @@ module.exports = {
                 require('../setupRules.js').execute(interaction);
                 break;
             case 'restart':
+                await interaction.editReply('it shall be done');
                 //eslint-disable-next-line no-process-exit
-                process.exit(); //will automatically restart
+                process.exit(); //should automatically restart
         }
     }
 };
