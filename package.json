@@ -5,17 +5,17 @@
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
-    "@sentry/node": "^7.6.0",
-    "@sentry/tracing": "^7.6.0",
-    "better-sqlite3": "^7.6.0",
+    "@sentry/node": "^7.12.1",
+    "@sentry/tracing": "^7.12.1",
+    "better-sqlite3": "^7.6.2",
     "confusables": "^1.1.1",
     "discord-api-types": "^0.36.1",
     "discord.js": "^13.8.1",
-    "humanize-duration": "^3.27.2",
+    "humanize-duration": "^3.27.3",
     "merida": "^2.0.8",
     "needle": "^3.1.0",
     "parse-duration": "^1.0.2",
-    "prom-client": "^14.0.1",
+    "prom-client": "^14.1.0",
     "string-similarity": "^4.0.4"
   }
 }
