@@ -51,7 +51,7 @@ module.exports = {
             }
             if (req.body.query.users[0].missing) {
                 await interaction.reply({
-                    content: 'User doesn\'t exsit!',
+                    content: 'User doesn\'t exist!',
                     ephemeral: true
                 });
                 return;
