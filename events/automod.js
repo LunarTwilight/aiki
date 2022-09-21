@@ -25,7 +25,9 @@ module.exports = {
         }
 
         const excludedCategories = [
-            '595522513249894400' //russian
+            '595522513249894400', //russian
+            '615452930577006602', //french
+            '586484740949934080' //spanish
         ];
         if (excludedCategories.includes((message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId))) {
             return;
