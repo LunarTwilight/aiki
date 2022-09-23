@@ -27,7 +27,12 @@ module.exports = {
         const excludedCategories = [
             '595522513249894400', //russian
             '615452930577006602', //french
-            '586484740949934080' //spanish
+            '586484740949934080', //spanish
+            '577582576902864896', //german
+            '663664101452677120', //japanese
+            '823503726470758400', //italian
+            '686483899827879979', //portugese
+            '610749085955260416' //polish
         ];
         if (excludedCategories.includes((message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId))) {
             return;
