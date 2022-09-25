@@ -1,6 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { devId } = require('../config.json');
 const inspect = require('util');
+inspect.defaultOptions = {
+    compact: false,
+    breakLength: Infinity
+};
 
 module.exports = {
     data: new SlashCommandBuilder()
