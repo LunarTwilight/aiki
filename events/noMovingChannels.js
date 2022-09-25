@@ -9,10 +9,7 @@ module.exports = {
         }
 
         const channelPosition = channelPositions.get(oldChannel.guildId, oldChannel.id);
-        if (!channelPosition) {
-            return;
-        }
-        if (newChannel.position !== channelPosition.position) {
+        if (channelPosition && newChannel.position !== channelPosition.position) {
             newChannel.setPosition(channelPosition.position, {
                 reason: 'Reverting possible accidental channel move'
             });
