@@ -9,7 +9,7 @@ module.exports = {
         }
 
         const channelPosition = channelPositions.get(oldChannel.guildId, oldChannel.id);
-        if (!channelPosition || !channelPosition.position) {
+        if (!channelPosition) {
             return;
         }
         if (newChannel.position !== channelPosition.position) {
