@@ -58,7 +58,7 @@ module.exports = {
             case 'eval': {
                 let text = null;
                 try {
-                    text = inspect(await eval(interaction.response.getString('input'))); //eslint-disable-line no-eval
+                    text = inspect(await eval(interaction.options.getString('input'))); //eslint-disable-line no-eval
                 } catch (error) {
                     text = error.toString();
                 }
