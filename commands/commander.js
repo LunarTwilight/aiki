@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { devId } = require('../config.json');
+const inspect = require('util');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -50,10 +51,25 @@ module.exports = {
             ephemeral: true
         });
         switch (interaction.options.getSubcommand()) {
-            case 'eval':
-                await interaction.editReply('something happened ig');
-                eval(interaction.options.getString('input'));
+            case 'eval': {
+                let text = null;
+                try {
+                    text = inspect(await eval(interaction.response.getString('input'))); //eslint-disable-line no-eval
+                } catch (error) {
+                    text = error.toString();
+                }
+                if (!text) {
+                    await interaction.editReply('something went wrong, text wasn\'t set');
+                    break;
+                }
+                if (text.length > 1990) {
+                    await interaction.editReply('message too long, check console');
+                    console.log(text);
+                    break;
+                }
+                await interaction.editReply('```js\n' + text + '\n```');
                 break;
+            }
             case 'roles':
                 require('../setupRoles.js').execute(interaction);
                 break;
