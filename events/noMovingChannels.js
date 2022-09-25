@@ -4,12 +4,7 @@ const channelPositions = db.prepare('SELECT position FROM channelPositions WHERE
 module.exports = {
     name: 'channelUpdate',
     execute (oldChannel, newChannel) {
-        if (
-            oldChannel.isDMBased() ||
-            !oldChannel.isTextBased() ||
-            oldChannel.isThread() ||
-            oldChannel.isVoiceBased()
-        ) {
+        if (oldChannel.type !== 'GUILD_TEXT') {
             return;
         }
 
