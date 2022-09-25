@@ -1,10 +1,11 @@
 const db = require('../database.js');
 const channelPositions = db.prepare('SELECT position FROM channelPositions WHERE guildId = ? AND channelId = ?');
+let cooldown = false;
 
 module.exports = {
     name: 'channelUpdate',
     execute (oldChannel, newChannel) {
-        if (oldChannel.type !== 'GUILD_TEXT') {
+        if (oldChannel.type !== 'GUILD_TEXT' || cooldown) {
             return;
         }
 
@@ -13,6 +14,10 @@ module.exports = {
             newChannel.setPosition(channelPosition.position, {
                 reason: 'Reverting possible accidental channel move'
             });
+            cooldown = true;
+            setTimeout(() => {
+                cooldown = false;
+            }, 10000);
         }
     }
 };
