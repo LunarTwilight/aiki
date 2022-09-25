@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { devId } = require('../config.json');
-const inspect = require('util');
+const { inspect } = require('util');
 inspect.defaultOptions = {
     compact: false,
     breakLength: Infinity
