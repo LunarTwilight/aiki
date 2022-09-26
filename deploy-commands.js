@@ -10,7 +10,7 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(token);
 const type = process.argv.slice(2)[0] === 'global' ? Routes.applicationCommands(clientId) : Routes.applicationGuildCommands(clientId, process.argv.slice(2)[0]);
 
 rest.put(type, { body: commands })
