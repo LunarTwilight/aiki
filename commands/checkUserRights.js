@@ -12,15 +12,9 @@ module.exports = {
                 .setName('user')
                 .setDescription('The username of the user')
                 .setRequired(true)
-        ),
+        )
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { verifiedRole } = config.get(interaction.guildId);
         if (!interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({

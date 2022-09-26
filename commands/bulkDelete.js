@@ -11,15 +11,9 @@ module.exports = {
                 .setName('number')
                 .setDescription('The number of messages to delete')
                 .setRequired(true)
-        ),
+        )
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({

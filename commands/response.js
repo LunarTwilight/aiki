@@ -72,15 +72,9 @@ module.exports = {
                         .setDescription('The name of the trigger')
                         .setRequired(true)
                 )
-        ),
+        )
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
         const response = getResponse.get(interaction.guildId, interaction.options.getString('name'))?.response;
         const command = interaction.options.getSubcommand();

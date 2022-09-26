@@ -35,15 +35,9 @@ module.exports = {
             subcommand
                 .setName('restart')
                 .setDescription('Restarts the bot')
-        ),
+        )
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         if (interaction.user.id !== devId) {
             await interaction.reply({
                 content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',

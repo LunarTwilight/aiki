@@ -20,15 +20,9 @@ module.exports = {
         .addStringOption(option =>
             option
                 .setName('reason')
-                .setDescription('Reason for the mute')),
+                .setDescription('Reason for the mute'))
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { modRole } = config.get(interaction.guildId);
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({

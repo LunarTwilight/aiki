@@ -11,15 +11,9 @@ module.exports = {
             option
                 .setName('nick')
                 .setDescription('Your new nick')
-        ),
+        )
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
         if (!interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({

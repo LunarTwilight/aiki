@@ -5,15 +5,9 @@ const config = db.prepare('SELECT modRole, randomChannel FROM config WHERE guild
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('random')
-        .setDescription('Tells users to go to random'),
+        .setDescription('Tells users to go to random')
+        .setDMPermission(false),
     async execute (interaction) {
-        if (!interaction.inGuild()) {
-            await interaction.reply({
-                content: 'This command is only avalible in a server.',
-                ephemeral: true
-            });
-            return;
-        }
         const { modRole, randomChannel } = config.all(interaction.guildId)[0];
         if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
