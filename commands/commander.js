@@ -100,7 +100,7 @@ module.exports = {
                 //eslint-disable-next-line no-process-exit
                 process.exit(); //should automatically restart
                 break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
-            case 'deployCommands':
+            case 'deploycommands':
                 require('../deployCommands.js').execute(interaction);
                 break;
         }
