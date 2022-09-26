@@ -1,4 +1,4 @@
-const { Client, Intents, Collection } = require('discord.js'); //eslint-disable-line no-redeclare
+const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js'); //eslint-disable-line no-redeclare
 const { token, dsn } = require('./config.json');
 const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
@@ -8,11 +8,11 @@ const Tracing = require('@sentry/tracing'); //eslint-disable-line no-unused-vars
 
 const client = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MEMBERS
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers
     ],
-    partials: ['GUILD_MEMBER'],
+    partials: [Partials.GuildMember],
     presence: {
         activities: [{
             type: 'PLAYING',
