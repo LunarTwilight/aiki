@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const parseDuration = require('parse-duration');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole, verifiedRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const baseUrl = 'https://support.fandom.com/hc/requests/new?ticket_form_id=';
 
 module.exports = {

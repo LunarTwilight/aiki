@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, MessageEmbed } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');

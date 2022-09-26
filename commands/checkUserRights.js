@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const needle = require('needle');
 const db = require('../database.js');
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
