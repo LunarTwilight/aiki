@@ -38,7 +38,7 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
-                .setName('deployCommands')
+                .setName('deploycommands')
                 .setDescription('Deploys slash commands')
                 .addStringOption(option =>
                     option
