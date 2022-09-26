@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, AuditLogEvent } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel FROM config WHERE guildId = ?');
 const parseDuration = require('parse-duration');
@@ -12,7 +12,7 @@ module.exports = {
         }
         const fetchedLogs = await newUser.guild.fetchAuditLogs({
             limit: 1,
-            type: 'MEMBER_UPDATE'
+            type: AuditLogEvent.MemberUpdate
         });
         const log = fetchedLogs.entries.first();
         if (!log || log.target.id !== newUser.user.id || log.changes[0].key !== 'communication_disabled_until') {
@@ -25,9 +25,9 @@ module.exports = {
         const roundedDiff = Math.round(mDiff);
         const msDiff = parseDuration(roundedDiff + 'm', 'ms');
         const { modLogChannel } = config.get(newUser.guild.id);
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('User muted')
-            .addFields({
+            .addFields([{
                 name: 'User',
                 value: '<@' + newUser.user.id + '>',
                 inline: true
@@ -47,7 +47,7 @@ module.exports = {
                 name: 'Reason',
                 value: log.reason || 'N/A',
                 inline: true
-            });
+            }]);
         await newUser.client.channels.cache.get(modLogChannel).send({
             embeds: [
                 embed

@@ -1,7 +1,7 @@
 module.exports = {
     name: 'interactionCreate',
     async execute (interaction) {
-        if (!interaction.isCommand()) {
+        if (!interaction.isChatInputCommand()) {
             return;
         }
 

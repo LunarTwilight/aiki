@@ -1,6 +1,6 @@
 const parseDuration = require('parse-duration');
 const confusables = require('confusables');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
@@ -105,16 +105,29 @@ module.exports = {
         } else {
             url += `${message.channelId}/${message.id}`;
         }
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setTitle('Automatic ' + levels[highest.level])
             .setDescription(message.content)
-            .addField('User', '<@' + message.author.id + '>')
-            .addField('Channel', '<#' + message.channel.id + '>')
-            .addField('Auto Deleted?', highest.shouldDelete ? 'Yes' : 'No');
+            .addFields([{
+                name: 'User',
+                value: '<@' + message.author.id + '>'
+            }, {
+                name: 'Channel',
+                value: '<#' + message.channel.id + '>'
+            }, {
+                name: 'Auto Deleted?',
+                value: (highest.shouldDelete ? 'Yes' : 'No')
+            }]);
         if (highest.level === 2) {
-            logEmbed.addField('Duration', highest.duration);
+            logEmbed.addFields([{
+                name: 'Duration',
+                value: highest.duration
+            }]);
         }
-        logEmbed.addField('Matched', '• ' + regexes.join('\n • '));
+        logEmbed.addFields([{
+            name: 'Matched',
+            value: '• ' + regexes.join('\n • ')
+        }]);
         if (!noUrl) {
             logEmbed.setURL(url);
         }

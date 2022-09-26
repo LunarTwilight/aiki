@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
@@ -14,9 +14,9 @@ module.exports = {
             return;
         }
         const diff = stringSimilarity.compareTwoStrings(oldUser.user.username.toLowerCase(), newUser.user.username.toLowerCase());
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('User changed username')
-            .addFields({
+            .addFields([{
                 name: 'User',
                 value: '<@' + newUser.user.id + '>',
                 inline: true
@@ -32,12 +32,13 @@ module.exports = {
                 name: 'Similarity',
                 value: diff.toString(),
                 inline: true
-            });
+            }, {
+                name: 'Set nick?',
+                value: (diff < 0.3 ? 'Yes' : 'No'),
+                inline: true
+            }]);
         if (diff < 0.3) {
             await newUser.setNickname(oldUser.user.username, 'New username not similar to old username');
-            embed.addField('Set nick?', 'Yes', true);
-        } else {
-            embed.addField('Set nick?', 'No', true);
         }
         await newUser.client.channels.cache.get(renameLogChannel).send({
             embeds: [

@@ -1,25 +1,25 @@
-const { SlashCommandBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('blocked')
         .setDescription('Gives information on what to do when you (or another user) is blocked'),
     async execute (interaction) {
-        const button = new MessageActionRow().addComponents(
-            new MessageButton()
+        const button = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId('blocked-global')
                 .setLabel('I\'m globally blocked')
-                .setStyle('PRIMARY'),
+                .setStyle(ButtonStyle.Primary),
 
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('blocked-local')
                 .setLabel('I\'m locally blocked')
-                .setStyle('PRIMARY'),
+                .setStyle(ButtonStyle.Primary),
 
-            new MessageButton()
+            new ButtonBuilder()
                 .setURL('https://c.fandom.com/wiki/Help:I_have_been_blocked')
                 .setLabel('General help page')
-                .setStyle('LINK')
+                .setStyle(ButtonStyle.Link)
         );
 
         await interaction.reply({

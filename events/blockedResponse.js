@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     name: 'interactionCreate',
@@ -14,13 +14,13 @@ module.exports = {
 
         switch (interaction.customId) {
             case 'blocked-global':
-                button = new MessageActionRow().addComponents(
-                    new MessageButton()
+                button = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
                         .setURL(
                             'https://support.fandom.com/hc/en-us/requests/new?ticket_form_id=360000931094&tf_360017834073=__dc.my_account_is_blocked__&tf_1500002786382=fandom_block_global'
                         )
                         .setLabel('Contact Fandom staff')
-                        .setStyle('LINK')
+                        .setStyle(ButtonStyle.Link)
                 );
 
                 interaction.reply({

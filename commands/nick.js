@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
@@ -45,7 +45,7 @@ module.exports = {
         }
         const newName = interaction.options.getString('nick') || interaction.member.user.username;
         const diff = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .addFields({
                 name: 'User',
                 value: '<@' + interaction.member.id + '>',
