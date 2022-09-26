@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { devId } = require('../config.json');
+const { devId, mainServer, testServer } = require('../config.json');
 const { inspect } = require('util');
 inspect.defaultOptions = {
     compact: false,
@@ -35,6 +35,27 @@ module.exports = {
             subcommand
                 .setName('restart')
                 .setDescription('Restarts the bot')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('deployCommands')
+                .setDescription('Deploys slash commands')
+                .addStringOption(option =>
+                    option
+                        .setName('location')
+                        .setDescription('Location of slash commands deployment')
+                        .setRequired(true)
+                        .addChoices({
+                            name: 'global',
+                            value: 'global'
+                        }, {
+                            name: 'F/G',
+                            value: mainServer
+                        }, {
+                            name: 'Test',
+                            value: testServer
+                        })
+                )
         )
         .setDMPermission(false),
     async execute (interaction) {
@@ -78,6 +99,10 @@ module.exports = {
                 await interaction.editReply('it shall be done');
                 //eslint-disable-next-line no-process-exit
                 process.exit(); //should automatically restart
+                break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
+            case 'deployCommands':
+                require('../deployCommands.js').execute(interaction);
+                break;
         }
     }
 };
