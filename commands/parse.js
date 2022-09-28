@@ -46,6 +46,10 @@ module.exports = {
                 return;
             }
 
+            if (req.body.parse.text.length > 1985) {
+                await interaction.reply('Sorry, result is too long.');
+                return;
+            }
             await interaction.reply('```html\n' + req.body.parse.text + '\n```');
         });
     }
