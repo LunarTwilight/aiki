@@ -24,7 +24,7 @@ module.exports = {
 
         await interaction.reply({
             content:
-                'Blocked? Don\'t panic! See the linked pages for information on what to do. \n\nNote: **Do __not__ create a seperate account**, that is considered [sockpuppetry](https://c.fandom.com/Help:Sockpuppetry). Instead, follow the instructions in the linked help page.',
+                'Blocked? Don\'t panic! See the linked pages for information on what to do. \n\nNote: **Do __not__ create a separate account**, that is considered [sockpuppetry](https://c.fandom.com/Help:Sockpuppetry). Instead, follow the instructions in the linked help page.',
             components: [button]
         });
     }
