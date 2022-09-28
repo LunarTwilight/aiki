@@ -5,7 +5,7 @@ const channelPositions = db.prepare('SELECT position FROM channelPositions WHERE
 module.exports = {
     name: 'channelUpdate',
     execute (oldChannel, newChannel) {
-        if (oldChannel.type !== ChannelType.GuildText) {
+        /*if (oldChannel.type !== ChannelType.GuildText) {
             return;
         }
 
@@ -14,6 +14,6 @@ module.exports = {
             newChannel.setPosition(channelPosition.position, {
                 reason: 'Reverting possible accidental channel move'
             });
-        }
+        }*/
     }
 };
