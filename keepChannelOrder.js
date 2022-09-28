@@ -10,10 +10,10 @@ module.exports = {
             client.guilds.cache.each(guild => {
                 //https://stackoverflow.com/a/50951372
                 const positions = channelPositions.all(guild.id).map(({
-                    channelId: channel,
+                    channelId,
                     ...rest
                 }) => ({
-                    channel,
+                    channel: channelId,
                     ...rest
                 }));
 
