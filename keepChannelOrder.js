@@ -17,7 +17,11 @@ module.exports = {
                     ...rest
                 }));
 
-                guild.channels.setPositions(positions).catch(console.error);
+                guild.channels.setPositions(positions)
+                    .then(() => {
+                        console.log('Setting positions of channels.');
+                    })
+                    .catch(console.error);
             });
         });
     }
