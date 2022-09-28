@@ -6,6 +6,7 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute (client) {
+        return;
         cron.schedule('0 * * * *', () => {
             client.guilds.cache.each(guild => {
                 //https://stackoverflow.com/a/50951372
