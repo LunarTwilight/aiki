@@ -50,6 +50,13 @@ module.exports = {
                 });
                 return;
             }
+            if (req.body.query.users[0].invalid) {
+                await interaction.reply({
+                    content: 'Not a valid user! (perhaps you tried using an IP?)',
+                    ephemeral: true
+                });
+                return;
+            }
 
             const ug = req.body.query.users[0].groups;
             await interaction.reply(`Autoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
