@@ -59,7 +59,7 @@ module.exports = {
             }
 
             const ug = req.body.query.users[0].groups;
-            await interaction.reply(`Autoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
+            await interaction.reply(`**${interaction.options.getString('user')}**:\nAutoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
         });
     }
 };
