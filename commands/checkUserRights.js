@@ -33,7 +33,7 @@ module.exports = {
             format: 'json'
         }, {
             // eslint-disable-next-line camelcase
-            user_agent: 'Aiki (contact Sophiedp abot issues)'
+            user_agent: 'Aiki (contact Sophiedp about issues)'
         }, async (err, req) => {
             if (err || req.body.error) {
                 console.error((err || req.body.error));
