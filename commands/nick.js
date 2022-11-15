@@ -43,6 +43,13 @@ module.exports = {
             });
             return;
         }
+        if (interaction.options.getString('nick').length > 32) {
+            await interaction.reply({
+                content: 'Your nick is too long, please shorten it to 32 characters or less.',
+                ephemeral: true
+            });
+            return;
+        }
         const newName = interaction.options.getString('nick') || interaction.member.user.username;
         const diff = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
         const embed = new EmbedBuilder()
