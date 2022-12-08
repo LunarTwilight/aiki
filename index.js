@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js'); //eslint-disable-line no-redeclare
+const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
 const { token, dsn } = require('./config.json');
 const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
