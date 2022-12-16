@@ -18,7 +18,7 @@ module.exports = {
             await interaction.reply({
                 content: 'There was an error while executing this command!',
                 ephemeral: true
-            });//.catch(() => {}); //don't do anything about it, it's most likely just that an interaction has already replied or deferred
+            });
         }
     }
 };
