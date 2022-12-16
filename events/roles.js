@@ -7,6 +7,10 @@ module.exports = {
             return;
         }
 
+        await interaction.deferReply({
+            ephemeral: true
+        });
+
         if (interaction.customId.match(/roles-addllanguages/)) {
             const rowLanguageA = new ActionRowBuilder().addComponents(
                 new ButtonBuilder().setCustomId('roles-826043787364139021').setLabel('Arabic').setStyle(ButtonStyle.Secondary),
@@ -46,10 +50,9 @@ module.exports = {
             const rowLanguageF = new ActionRowBuilder().addComponents(
                 new ButtonBuilder().setCustomId('roles-597697646504837130').setLabel('Vietnamese').setStyle(ButtonStyle.Secondary)
             );
-            await interaction.reply({
+            await interaction.editReply({
                 content: 'Select additional roles',
-                components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE],
-                ephemeral: true
+                components: [rowLanguageA, rowLanguageB, rowLanguageC, rowLanguageD, rowLanguageE]
             });
             await interaction.followUp({
                 components: [rowLanguageF],
@@ -66,9 +69,8 @@ module.exports = {
         } else {
             await roles.add(roleId).catch(console.error);
         }
-        await interaction.reply({
-            content: `You have successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`,
-            ephemeral: true
+        await interaction.editReply({
+            content: `You have successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`
         });
     }
 };
