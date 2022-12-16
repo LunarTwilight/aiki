@@ -55,7 +55,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .addFields({
                 name: 'User',
-                value: '<@' + interaction.member.id + '>',
+                value: `<@${interaction.member.id}>`,
                 inline: true
             }, {
                 name: `Old ${interaction.member.nickname ? 'nick' : 'username'}`,

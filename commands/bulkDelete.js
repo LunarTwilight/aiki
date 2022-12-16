@@ -24,7 +24,7 @@ module.exports = {
         }
         await interaction.channel.bulkDelete(interaction.options.getInteger('number'), true).then(async messages => {
             await interaction.reply({
-                content: 'Bulk deleted ' + messages.size + ' messages.',
+                content: `Bulk deleted ${messages.size} messages.`,
                 ephemeral: true
             });
         });
