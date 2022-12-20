@@ -43,7 +43,7 @@ module.exports = {
             });
             return;
         }
-        if (interaction.options.getString('nick').length > 32) {
+        if (interaction.options.getString('nick')?.length > 32) {
             await interaction.reply({
                 content: 'Your nick is too long, please shorten it to 32 characters or less.',
                 ephemeral: true
