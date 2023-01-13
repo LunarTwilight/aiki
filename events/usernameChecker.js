@@ -18,7 +18,7 @@ module.exports = {
             .setTitle('User changed username')
             .addFields([{
                 name: 'User',
-                value: '<@' + newUser.user.id + '>',
+                value: `<@${newUser.user.id}>`,
                 inline: true
             }, {
                 name: 'Old username',

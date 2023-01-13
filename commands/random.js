@@ -16,6 +16,6 @@ module.exports = {
             });
             return;
         }
-        await interaction.reply('The mods request that you move this convo to <#' + randomChannel + '>.');
+        await interaction.reply(`The mods request that you move this convo to <#${randomChannel}>.`);
     }
 };

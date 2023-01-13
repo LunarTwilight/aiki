@@ -29,11 +29,11 @@ module.exports = {
             .setTitle('User muted')
             .addFields([{
                 name: 'User',
-                value: '<@' + newUser.user.id + '>',
+                value: `<@${newUser.user.id}>`,
                 inline: true
             }, {
                 name: 'Mod',
-                value: (log?.executor ? '<@' + log.executor.id + '>' : 'N/A'),
+                value: (log?.executor ? `<@${log.executor.id}>` : 'N/A'),
                 inline: true
             }, {
                 name: 'Duration',
@@ -41,7 +41,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Expiry',
-                value: '<t:' + Math.floor((timestamp / 1000)) + '>',
+                value: `<t:${Math.floor((timestamp / 1000))}>`,
                 inline: true
             }, {
                 name: 'Reason',
