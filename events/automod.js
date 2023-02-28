@@ -1,6 +1,6 @@
 const parseDuration = require('parse-duration');
 const confusables = require('confusables');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
 const filters = db.prepare('SELECT * FROM filters').all();
@@ -136,9 +136,21 @@ module.exports = {
                 logEmbed
             ]
         });
-        const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
         if (highest.level !== 1) {
-            await message.guild.channels.cache.get(modChannel).send(`<@${message.author.id}> has been ${action} because of <${msg.url}>.`);
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Reason')
+                        .setStyle(ButtonStyle.Link)
+                        .setURL(msg.url)
+                );
+            const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
+            await message.guild.channels.cache.get(modChannel).send({
+                content: `<@${message.author.id}> has been ${action}.`,
+                components: [
+                    row
+                ]
+            });
         }
         switch (highest.level) {
             case 1:
