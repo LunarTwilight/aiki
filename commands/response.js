@@ -114,6 +114,13 @@ module.exports = {
                     });
                     return;
                 }
+                if (response) {
+                    await interaction.reply({
+                        content: 'Response already exists!',
+                        ephemeral: true
+                    });
+                    return;
+                }
                 addResponse.run(interaction.options.getString('name'), interaction.options.getString('content'), interaction.guildId);
                 await interaction.reply('Response added.');
                 break;
