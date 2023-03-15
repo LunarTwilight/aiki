@@ -60,7 +60,8 @@ module.exports = {
                 'INFLAMMATORY',
                 'OBSCENE',
                 'SPAM'
-            ]
+            ],
+            languages: ['en']
         });
         const scores = await calculateScores(result);
 
