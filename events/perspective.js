@@ -56,7 +56,7 @@ module.exports = {
                 'PROFANITY',
                 'THREAT',
                 'SEXUALLY_EXPLICIT',
-                'INCOHERENT',
+                //'INCOHERENT',
                 'INFLAMMATORY',
                 'OBSCENE',
                 'SPAM'
