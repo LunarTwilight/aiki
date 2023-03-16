@@ -9,6 +9,10 @@ const perspective = new Perspective({
 const db = require('../database.js');
 const config = db.prepare('SELECT modChannel, modRole FROM config WHERE guildId = ?');
 
+const formatScores = async scores => {
+    //
+};
+
 const checkThreshold = async scores => {
     const values = Object.values(scores);
     if (_.some(values, item => item >= 0.7)) {
@@ -56,7 +60,6 @@ module.exports = {
                 SEVERE_TOXICITY: {},
                 IDENTITY_ATTACK: {},
                 INSULT: {},
-                PROFANITY: {},
                 THREAT: {},
                 SEXUALLY_EXPLICIT: {}
             },
@@ -75,7 +78,7 @@ module.exports = {
                         .setURL(message.url)
                 );
             await message.guild.channels.cache.get(modChannel).send({
-                content: `<@${message.author.id}> has sent a message in \`#${message.channel.name}\` that might need mod attention.\n\`\`\`js\n${JSON.stringify(scores, null, 4)}\n\`\`\``,
+                content: `<@${message.author.id}> has sent a message in \`#${message.channel.name}\` that might need mod attention.\n\`\`\`js\n${formatScores(scores)}\n\`\`\``,
                 components: [
                     row
                 ]
