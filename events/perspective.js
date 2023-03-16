@@ -55,9 +55,7 @@ module.exports = {
                 'INSULT',
                 'PROFANITY',
                 'THREAT',
-                'SEXUALLY_EXPLICIT',
-                'INFLAMMATORY',
-                'OBSCENE'
+                'SEXUALLY_EXPLICIT'
             ],
             languages: ['en']
         });
