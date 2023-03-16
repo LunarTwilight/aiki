@@ -75,7 +75,7 @@ module.exports = {
                         .setURL(message.url)
                 );
             await message.guild.channels.cache.get(modChannel).send({
-                content: `<@${message.author.id}> has sent a message that might need mod attention.\n\`\`\`js\n${JSON.stringify(scores, null, 4)}\n\`\`\``,
+                content: `<@${message.author.id}> has sent a message in \`#${message.channel.name}\` that might need mod attention.\n\`\`\`js\n${JSON.stringify(scores, null, 4)}\n\`\`\``,
                 components: [
                     row
                 ]
