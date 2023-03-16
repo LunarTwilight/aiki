@@ -1,5 +1,5 @@
 const confusables = require('confusables');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { perspectiveAPIkey } = require('../config.json');
 const Perspective = require('perspective-api-client');
 const _ = require('lodash');
@@ -10,15 +10,13 @@ const db = require('../database.js');
 const config = db.prepare('SELECT modChannel, modRole FROM config WHERE guildId = ?');
 
 const formatScores = async scores => {
-    //
-};
-
-const checkThreshold = async scores => {
-    const values = Object.values(scores);
-    if (_.some(values, item => item >= 0.7)) {
-        return true;
-    }
-    return false;
+    const list = [];
+    _.each(scores, (value, key) => {
+        if (value >= 0.7) {
+            list.push(key);
+        }
+    });
+    return list.join(', ');
 };
 
 const calculateScores = async result => {
@@ -67,20 +65,27 @@ module.exports = {
         });
         const scores = await calculateScores(result);
 
-        const aboveThreshold = await checkThreshold(scores);
-
-        if (aboveThreshold) {
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setLabel('Message')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(message.url)
-                );
+        if (_.some(Object.values(scores), item => item >= 0.7)) {
+            const embed = new EmbedBuilder()
+                .setTitle('Possible mod action needed')
+                .setURL(message.url)
+                .setDescription(message.content)
+                .addFields([{
+                    name: 'User',
+                    value: '<@' + message.author.id + '>',
+                    inline: true
+                }, {
+                    name: 'Channel',
+                    value: '#' + message.channel.name,
+                    inline: true
+                }, {
+                    name: 'Attributes triggered',
+                    value: formatScores(scores),
+                    inline: true
+                }]);
             await message.guild.channels.cache.get(modChannel).send({
-                content: `<@${message.author.id}> has sent a message in \`#${message.channel.name}\` that might need mod attention.\n\`\`\`js\n${formatScores(scores)}\n\`\`\``,
-                components: [
-                    row
+                embeds: [
+                    embed
                 ]
             });
         }
