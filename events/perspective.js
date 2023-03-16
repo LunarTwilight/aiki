@@ -80,7 +80,7 @@ module.exports = {
                     inline: true
                 }, {
                     name: 'Attributes triggered',
-                    value: formatScores(scores),
+                    value: (await formatScores(scores)),
                     inline: true
                 }]);
             await message.guild.channels.cache.get(modChannel).send({
