@@ -79,7 +79,7 @@ module.exports = {
                     value: '#' + message.channel.name,
                     inline: true
                 }, {
-                    name: 'Attributes triggered',
+                    name: 'Attributes hit',
                     value: (await formatScores(scores)),
                     inline: true
                 }]);
