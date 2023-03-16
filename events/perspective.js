@@ -24,7 +24,7 @@ const checkThreshold = async scores => {
 const calculateScores = async result => {
     const scores = {};
     _.each(result, (value, key) => {
-        _.set(scores, key, value.summaryScore.value);
+        _.set(scores, key, value.summaryScore.value.toFixed(2));
     });
     return scores;
 };
