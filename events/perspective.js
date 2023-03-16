@@ -56,10 +56,8 @@ module.exports = {
                 'PROFANITY',
                 'THREAT',
                 'SEXUALLY_EXPLICIT',
-                //'INCOHERENT',
                 'INFLAMMATORY',
-                'OBSCENE',
-                'SPAM'
+                'OBSCENE'
             ],
             languages: ['en']
         });
