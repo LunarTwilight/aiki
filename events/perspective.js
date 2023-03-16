@@ -51,7 +51,7 @@ module.exports = {
             comment: {
                 text: confusables.remove(message.content)
             },
-            attributes: {
+            requestedAttributes: {
                 TOXICITY: {},
                 SEVERE_TOXICITY: {},
                 IDENTITY_ATTACK: {},
