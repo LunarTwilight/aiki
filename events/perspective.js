@@ -69,7 +69,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle('Possible mod action needed')
                 .setURL(message.url)
-                .setDescription(message.content)
+                .setDescription('>>> ' + message.content)
                 .addFields([{
                     name: 'User',
                     value: '<@' + message.author.id + '>',
