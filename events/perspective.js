@@ -33,7 +33,7 @@ module.exports = {
     name: 'messageCreate',
     async execute (message) {
         const { modChannel, modRole } = config.all(message.guild.id)[0];
-        if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
+        if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0 || !message.content.trim()) {
             return;
         }
 
