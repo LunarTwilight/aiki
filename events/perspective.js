@@ -47,16 +47,19 @@ module.exports = {
             return;
         }
 
-        const { attributeScores: result } = await perspective.analyze(confusables.remove(message.content), {
-            attributes: [
-                'TOXICITY',
-                'SEVERE_TOXICITY',
-                'IDENTITY_ATTACK',
-                'INSULT',
-                'PROFANITY',
-                'THREAT',
-                'SEXUALLY_EXPLICIT'
-            ],
+        const { attributeScores: result } = await perspective.analyze({
+            comment: {
+                text: confusables.remove(message.content)
+            },
+            attributes: {
+                TOXICITY: {},
+                SEVERE_TOXICITY: {},
+                IDENTITY_ATTACK: {},
+                INSULT: {},
+                PROFANITY: {},
+                THREAT: {},
+                SEXUALLY_EXPLICIT: {}
+            },
             languages: ['en']
         });
         const scores = await calculateScores(result);
