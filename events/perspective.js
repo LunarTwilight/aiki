@@ -66,7 +66,8 @@ module.exports = {
                 THREAT: {},
                 SEXUALLY_EXPLICIT: {}
             },
-            languages: ['en']
+            languages: ['en'],
+            doNotStore: true
         });
         const scores = await calculateScores(result);
 
