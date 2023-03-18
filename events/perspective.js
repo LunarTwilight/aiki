@@ -71,7 +71,8 @@ module.exports = {
                 languages: ['en'],
                 doNotStore: true
             }, {
-                doNotStore: true
+                doNotStore: true,
+                stripHTML: false
             });
             result = attributeScores;
         } catch (error) {
