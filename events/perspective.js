@@ -54,32 +54,24 @@ module.exports = {
             return;
         }
 
-        let result = null;
-        try {
-            const { attributeScores } = await perspective.analyze({
-                comment: {
-                    text: confusables.remove(message.content)
-                },
-                requestedAttributes: {
-                    TOXICITY: {},
-                    SEVERE_TOXICITY: {},
-                    IDENTITY_ATTACK: {},
-                    INSULT: {},
-                    THREAT: {},
-                    SEXUALLY_EXPLICIT: {}
-                },
-                languages: ['en'],
-                doNotStore: true
-            }, {
-                doNotStore: true,
-                stripHTML: false
-            });
-            result = attributeScores;
-        } catch (error) {
-            console.error(error);
-            console.log(`${confusables.remove(message.content)}`);
-            return;
-        }
+        const { attributeScores: result } = await perspective.analyze({
+            comment: {
+                text: confusables.remove(message.content)
+            },
+            requestedAttributes: {
+                TOXICITY: {},
+                SEVERE_TOXICITY: {},
+                IDENTITY_ATTACK: {},
+                INSULT: {},
+                THREAT: {},
+                SEXUALLY_EXPLICIT: {}
+            },
+            languages: ['en'],
+            doNotStore: true
+        }, {
+            doNotStore: true,
+            stripHTML: false
+        });
         const scores = await calculateScores(result);
 
         if (_.some(Object.values(scores), item => item >= 0.7)) {
