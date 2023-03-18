@@ -74,8 +74,7 @@ module.exports = {
             result = attributeScores;
         } catch (error) {
             console.error(error);
-            console.log(`${typeof confusables.remove(message.content)}`);
-            console.log(`${typeof confusables.remove(message.content).toString()}`);
+            console.log(`${confusables.remove(message.content)}`);
             return;
         }
         const scores = await calculateScores(result);
