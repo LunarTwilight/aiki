@@ -85,7 +85,7 @@ module.exports = {
                     inline: true
                 }, {
                     name: 'Channel',
-                    value: '#' + message.channel.name,
+                    value: '<#' + message.channel.id + '>',
                     inline: true
                 }, {
                     name: 'Attributes hit',
