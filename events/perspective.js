@@ -12,7 +12,7 @@ const config = db.prepare('SELECT modChannel, modRole FROM config WHERE guildId 
 const formatScores = async scores => {
     const list = [];
     _.each(scores, (value, key) => {
-        if (value >= 0.8) {
+        if (value >= 0.9) {
             list.push(key);
         }
     });
@@ -74,7 +74,7 @@ module.exports = {
         });
         const scores = await calculateScores(result);
 
-        if (_.some(Object.values(scores), item => item >= 0.8)) {
+        if (_.some(Object.values(scores), item => item >= 0.9)) {
             const embed = new EmbedBuilder()
                 .setTitle('Possible mod action needed')
                 .setURL(message.url)
