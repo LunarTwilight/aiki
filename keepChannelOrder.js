@@ -7,7 +7,6 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute (client) {
-        return;
         cron.schedule('*/1 * * * *', () => {
             client.guilds.cache.each(guild => {
                 if (testServer !== guild.id) {
