@@ -45,8 +45,6 @@ http.createServer(async (req, res) => {
     }
 }).listen(22022);
 
-require('./keepChannelOrder.js').execute(client);
-
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
