@@ -28,7 +28,7 @@ module.exports = {
             action: 'query',
             list: 'users',
             ususers: interaction.options.getString('user'),
-            usprop: 'groups',
+            usprop: 'groups|registration',
             formatversion: 2,
             format: 'json'
         }, {
@@ -58,7 +58,10 @@ module.exports = {
             }
 
             const ug = req.body.query.users[0].groups;
-            await interaction.reply(`**${interaction.options.getString('user')}**:\nAutoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
+            const registration = new Date(req.body.query.users[0].registration);
+            const willBeAutoconfirmed = registration.setDate(registration.getDate() + 4);
+            const willBeAutoconfirmedTimestamp = new Date(willBeAutoconfirmed).getTime();
+            await interaction.reply(`**${interaction.options.getString('user')}**:\nAutoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no; will be in <t:' + willBeAutoconfirmedTimestamp + ':R>'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
         });
     }
 };
