@@ -136,22 +136,28 @@ module.exports = {
                 logEmbed
             ]
         });
-        if (highest.level !== 1) {
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setLabel('Reason')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(msg.url)
-                );
-            const action = highest.level === 2 ? 'muted for ' + highest.duration : levels[highest.level] + 'ed';
-            await message.guild.channels.cache.get(modChannel).send({
-                content: `<@${message.author.id}> has been ${action}.`,
-                components: [
-                    row
-                ]
-            });
-        }
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel('Reason')
+                    .setStyle(ButtonStyle.Link)
+                    .setURL(msg.url)
+            );
+        const generateModAlertWording = function () {
+            if (highest.level === 1) {
+                return 'triggered an alert';
+            }
+            if (highest.level === 2) {
+                return 'been muted for ' + highest.duration;
+            }
+            return levels[highest.level] + 'ed';
+        };
+        await message.guild.channels.cache.get(modChannel).send({
+            content: `<@${message.author.id}> has ${generateModAlertWording()}.`,
+            components: [
+                row
+            ]
+        });
         switch (highest.level) {
             case 1:
                 //do nothing
