@@ -14,7 +14,8 @@ module.exports = {
         ) {
             return;
         }
-        const row = getResponse.get(message.guild.id, message.content.slice(1));
+        const msg = message.content.slice(1).replace(/(.\S+).*/, '$1').trim();
+        const row = getResponse.get(message.guild.id, msg);
         if (!row?.response) {
             return;
         }

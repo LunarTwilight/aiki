@@ -76,7 +76,7 @@ module.exports = {
         .setDMPermission(false),
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
-        const response = getResponse.get(interaction.guildId, interaction.options.getString('name'))?.response;
+        const response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
         const command = interaction.options.getSubcommand();
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
@@ -107,7 +107,7 @@ module.exports = {
                 break;
             }
             case 'add':
-                if (excluded.some(prefix => interaction.options.getString('name').startsWith(prefix))) {
+                if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
                     await interaction.reply({
                         content: 'Trigger name is not allowed to be used, please select a different name.',
                         ephemeral: true
@@ -121,7 +121,7 @@ module.exports = {
                     });
                     return;
                 }
-                addResponse.run(interaction.options.getString('name'), interaction.options.getString('content'), interaction.guildId);
+                addResponse.run(interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
                 await interaction.reply('Response added.');
                 break;
             case 'edit':
@@ -129,7 +129,7 @@ module.exports = {
                     await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
-                editResponse.run(interaction.options.getString('content'), interaction.options.getString('name'), interaction.guildId);
+                editResponse.run(interaction.options.getString('content'), interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
                 await interaction.reply('Response edited.');
                 break;
             case 'delete':
@@ -137,7 +137,7 @@ module.exports = {
                     await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
-                deleteResponse.run(interaction.guildId, interaction.options.getString('name'));
+                deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
                 await interaction.reply('Response deleted.');
                 break;
         }
