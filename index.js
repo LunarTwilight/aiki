@@ -13,7 +13,9 @@ const client = new Client({
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.MessageContent
     ],
-    partials: [Partials.GuildMember],
+    partials: [
+        Partials.GuildMember
+    ],
     presence: {
         activities: [{
             type: 'PLAYING',
