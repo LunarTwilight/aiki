@@ -3,4 +3,3 @@ node_modules/
 db.sqlite
 backups/
 db.sqlitesqlite_web
-db-backup.sqlite
