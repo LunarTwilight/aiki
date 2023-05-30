@@ -2,4 +2,3 @@ config.json
 node_modules/
 db.sqlite
 backups/
-db.sqlitesqlite_web
