@@ -6,13 +6,13 @@ const fs = require('fs');
 module.exports = {
     async execute (interaction) {
         const { rulesChannel } = config.get(interaction.guildId);
-        const channelroles = interaction.client.channels.cache.get(rulesChannel);
-        const webhooks = await channelroles.fetchWebhooks();
+        const channelrules = interaction.client.channels.cache.get(rulesChannel);
+        const webhooks = await channelrules.fetchWebhooks();
         let channelWebhook = webhooks.first();
         let createdWebhook;
 
         if (!channelWebhook) {
-            await channelroles.createWebhook('Rules', {
+            await channelrules.createWebhook('Rules', {
                 avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png'
             }).then(webhook => {
                 channelWebhook = webhook;
