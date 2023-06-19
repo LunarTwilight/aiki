@@ -84,7 +84,7 @@ module.exports = {
         });
         if (diff < 0.3) {
             await interaction.reply({
-                content: 'New name is not similar to your Fandom username, and has therefor not been changed. Please re-verify yourself in <#928414471469277194> if your Fandom username has changed.',
+                content: 'New name is not similar to your Fandom username, and has therefore not been changed. Please re-verify yourself in <#928414471469277194> if your Fandom username has changed.',
                 ephemeral: true
             });
         } else {
