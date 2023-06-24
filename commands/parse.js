@@ -50,6 +50,12 @@ module.exports = {
                 await interaction.reply('Sorry, result is too long.');
                 return;
             }
+
+            if (!req.body.parse.text.length) {
+                await interaction.reply('```\n""\n```');
+                return;
+            }
+
             await interaction.reply('```html\n' + req.body.parse.text + '\n```');
         });
     }
