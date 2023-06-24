@@ -32,7 +32,8 @@ module.exports = {
             formatversion: 2,
             disabletoc: true,
             disablelimitreport: true,
-            wrapoutputclass: null
+            wrapoutputclass: null,
+            prop: 'text'
         }, {
             user_agent: 'Aiki (contact Sophiedp about issues)'
         }, async (err, req) => {
