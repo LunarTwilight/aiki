@@ -1,12 +1,13 @@
-const { EmbedBuilder, AuditLogEvent } = require('discord.js');
-const db = require('../database.js');
+import { EmbedBuilder, AuditLogEvent, GuildMember } from 'discord.js';
+import db from '../database.js';
+import parseDuration from 'parse-duration';
+import humanizeDuration from 'humanize-duration';
+
 const config = db.prepare('SELECT modLogChannel FROM config WHERE guildId = ?');
-const parseDuration = require('parse-duration');
-const humanizeDuration = require('humanize-duration');
 
 module.exports = {
     name: 'guildMemberUpdate',
-    async execute (oldUser, newUser) {
+    async execute (_oldUser: GuildMember, newUser: GuildMember) {
         if (!newUser.isCommunicationDisabled()) {
             return;
         }
@@ -15,16 +16,19 @@ module.exports = {
             type: AuditLogEvent.MemberUpdate
         });
         const log = fetchedLogs.entries.first();
-        if (!log || log.target.id !== newUser.user.id || log.changes[0].key !== 'communication_disabled_until') {
+        const firstChange = log?.changes[0]
+        if (!log || log.target?.id !== newUser.user.id || firstChange?.key !== 'communication_disabled_until' || !firstChange.new) {
             return;
         }
 
-        const timestamp = new Date(log.changes[0].new).getTime();
+        const timestamp = new Date(firstChange.new as number).getTime();
         const diff = timestamp - new Date().getTime();
-        const mDiff = parseDuration(diff, 'm');
+        const mDiff = parseDuration(`${ diff }`, 'm') ?? 0;
         const roundedDiff = Math.round(mDiff);
-        const msDiff = parseDuration(roundedDiff + 'm', 'ms');
-        const { modLogChannel } = config.get(newUser.guild.id);
+        const msDiff = parseDuration(roundedDiff + 'm', 'ms') ?? 0;
+        const { modLogChannel } = config.get(newUser.guild.id) as {
+            modLogChannel: string
+        };
         const embed = new EmbedBuilder()
             .setTitle('User muted')
             .addFields([{
@@ -48,7 +52,10 @@ module.exports = {
                 value: log.reason || 'N/A',
                 inline: true
             }]);
-        await newUser.client.channels.cache.get(modLogChannel).send({
+        
+        const channel = await newUser.client.channels.fetch(modLogChannel)
+        if (!channel?.isTextBased()) return
+        await channel.send({
             embeds: [
                 embed
             ]

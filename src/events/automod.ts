@@ -1,9 +1,15 @@
-const parseDuration = require('parse-duration');
-const confusables = require('confusables');
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const db = require('../database.js');
+import parseDuration from 'parse-duration'
+import { remove } from 'confusables'
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js'
+import db from '../database';
+
 const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
-const filters = db.prepare('SELECT * FROM filters').all();
+const filters = db.prepare('SELECT * FROM filters').all() as {
+    action: 'alert' | 'mute' | 'kick' | 'ban'
+    duration: string
+    regex: string
+    shouldDelete: boolean
+}[];
 
 const levels = {
     alert: 1,
@@ -16,11 +22,16 @@ const levels = {
     4: 'ban'
 };
 
-module.exports = {
+export default {
     name: 'messageCreate',
-    async execute (message) {
-        const { modLogChannel, modChannel, messageLogChannel, modRole } = config.all(message.guild.id)[0];
-        if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
+    async execute (message: Message) {
+        const { modLogChannel, modChannel, messageLogChannel, modRole } = config.all(message.guild?.id)[0] as {
+            modLogChannel: string
+            modChannel: string
+            messageLogChannel: string
+            modRole: string
+        };
+        if (message.author.bot || message.channel.isDMBased() || !message.member || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
 
@@ -34,13 +45,15 @@ module.exports = {
             '686483899827879979', //portugese
             '610749085955260416' //polish
         ];
-        if (excludedCategories.includes((message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId))) {
+
+        const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId
+        if (!category || excludedCategories.includes(category)) {
             return;
         }
 
         const matches = [];
-        const normalizedMsg = confusables.remove(message.content);
-        for (var filter of filters) {
+        const normalizedMsg = remove(message.content);
+        for (const filter of filters) {
             if (new RegExp(filter.regex, 'igms').test(normalizedMsg)) {
                 matches.push(filter);
             }
@@ -49,13 +62,15 @@ module.exports = {
             return;
         }
         const highest = {
-            level: null,
-            duration: null,
-            shouldDelete: null
+            level: -Infinity,
+            duration: '',
+            shouldDelete: false
         };
         const regexes = [];
         for (var match of matches) {
             const level = levels[match.action];
+            const matchDuration = parseDuration(match.duration, 'ms')
+            const highestDuration = parseDuration(highest.duration, 'ms')
             if (highest.level) {
                 if (level > highest.level) {
                     highest.level = level;
@@ -65,7 +80,7 @@ module.exports = {
                     highest.level = level;
                     highest.duration = match.duration;
                     highest.shouldDelete = match.shouldDelete;
-                } else if (parseDuration(match.duration, 'ms') > parseDuration(highest.duration, 'ms')) {
+                } else if (matchDuration && highestDuration && matchDuration > highestDuration) {
                     highest.level = level;
                     highest.duration = match.duration;
                     highest.shouldDelete = match.shouldDelete;
@@ -82,7 +97,9 @@ module.exports = {
         if (highest.level === 2 && !highest.duration) {
             highest.duration = '28d';
         }
-        if (parseDuration(highest.duration, 'ms') > parseDuration('28d', 'ms')) {
+        const highestDuration = parseDuration(highest.duration, 'ms')
+        const duration28d = parseDuration('28d', 'ms')
+        if (highestDuration && duration28d && highestDuration > duration28d) {
             highest.duration = '28d';
             console.warn('Setting duration for filter `' + regexes.join('\n • ') + '` to 28d due to being ' + highest.duration);
         }
@@ -90,23 +107,25 @@ module.exports = {
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();
-            const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
-            const collected = await message.guild.channels.cache.get(messageLogChannel).awaitMessages({
-                filter,
-                max: 1,
-                time: 10_000,
-                error: ['time']
-            });
-            if (collected.size) {
-                url += messageLogChannel + '/' + collected.firstKey();
-            } else {
-                noUrl = true;
+            const filter = (m: Message) => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
+            const channel = await message.guild?.channels.fetch(messageLogChannel)
+            if (channel?.isTextBased()) {
+                const collected = await channel.awaitMessages({
+                    filter,
+                    max: 1,
+                    time: 10_000
+                });
+                if (collected.size) {
+                    url += messageLogChannel + '/' + collected.firstKey();
+                } else {
+                    noUrl = true;
+                }
             }
         } else {
             url += `${message.channelId}/${message.id}`;
         }
         const logEmbed = new EmbedBuilder()
-            .setTitle('Automatic ' + levels[highest.level])
+            .setTitle('Automatic ' + levels[highest.level as keyof typeof levels])
             .setDescription(message.content)
             .addFields([{
                 name: 'User',
@@ -131,12 +150,15 @@ module.exports = {
         if (!noUrl) {
             logEmbed.setURL(url);
         }
-        const msg = await message.guild.channels.cache.get(modLogChannel).send({
+        const channel = await message.guild?.channels.fetch(modLogChannel)
+        if ( !channel?.isTextBased()) return
+
+        const msg = await channel.send({
             embeds: [
                 logEmbed
             ]
         });
-        const row = new ActionRowBuilder()
+        const row = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
                     .setLabel('Reason')
@@ -150,9 +172,13 @@ module.exports = {
             if (highest.level === 2) {
                 return 'been muted for ' + highest.duration;
             }
-            return levels[highest.level] + 'ed';
+            return levels[highest.level as keyof typeof levels] + 'ed';
         };
-        await message.guild.channels.cache.get(modChannel).send({
+
+        const mod = await message.guild?.channels.fetch(modChannel)
+        if ( !mod?.isTextBased() ) return
+
+        await mod.send({
             content: `<@${message.author.id}> has ${generateModAlertWording()}.`,
             components: [
                 row
@@ -163,7 +189,10 @@ module.exports = {
                 //do nothing
                 break;
             case 2:
-                (await message.guild.members.fetch(message.author.id)).timeout(parseDuration(highest.duration, 'ms'), 'Automod');
+                const duration = parseDuration(highest.duration, 'ms')
+                if ( duration ) {
+                    (await message.guild?.members.fetch(message.author.id))?.timeout(duration, 'Automod');
+                }
                 break;
             case 3:
                 await message.member.kick('Automod');

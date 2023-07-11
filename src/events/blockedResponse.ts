@@ -1,8 +1,8 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Interaction } from 'discord.js'
 
-module.exports = {
+export default {
     name: 'interactionCreate',
-    execute (interaction) {
+    execute (interaction: Interaction) {
         if (
             !interaction.isButton() ||
             !interaction.customId.startsWith('blocked-')
@@ -14,7 +14,7 @@ module.exports = {
 
         switch (interaction.customId) {
             case 'blocked-global':
-                button = new ActionRowBuilder().addComponents(
+                button = new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setURL(
                             'https://support.fandom.com/hc/en-us/requests/new?ticket_form_id=360000931094&tf_360017834073=__dc.my_account_is_blocked__&tf_1500002786382=fandom_block_global'
