@@ -1,17 +1,18 @@
-const confusables = require('confusables');
-const { EmbedBuilder } = require('discord.js');
-const { perspectiveAPIkey } = require('../config.json');
-const Perspective = require('perspective-api-client');
-const _ = require('lodash');
+import { remove } from 'confusables';
+import { EmbedBuilder, Message } from 'discord.js';
+import { perspectiveAPIkey } from '../config.json';
+// @ts-expect-error - no types
+import Perspective from 'perspective-api-client';
+import _ from 'lodash';
 const perspective = new Perspective({
     apiKey: perspectiveAPIkey
 });
-const db = require('../database.js');
+import db from '../database.js';
 const config = db.prepare('SELECT modChannel, modRole FROM config WHERE guildId = ?');
 
-const formatScores = async scores => {
-    const list = [];
-    _.each(scores, (value, key) => {
+const formatScores = async (scores: number[]) => {
+    const list: unknown[] = [];
+    _.each(scores, (value: number, key: unknown) => {
         if (value >= 0.9) {
             list.push(key);
         }
@@ -19,7 +20,7 @@ const formatScores = async scores => {
     return list.join(', ');
 };
 
-const calculateScores = async result => {
+const calculateScores = async (result: { summaryScore: { value: number } }[]) => {
     const scores = {};
     _.each(result, (value, key) => {
         _.set(scores, key, value.summaryScore.value.toFixed(2));
@@ -29,13 +30,17 @@ const calculateScores = async result => {
 
 module.exports = {
     name: 'messageCreate',
-    async execute (message) {
-        const { modChannel, modRole } = config.all(message.guild.id)[0];
+    async execute (message: Message) {
+        const { modChannel, modRole } = config.all(message.guild?.id)[0] as {
+            modChannel: string
+            modRole: string
+        };
         if (
             message.author.bot ||
-            message.member.roles.highest.comparePositionTo(modRole) >= 0 ||
+            (message.member?.roles.highest.comparePositionTo(modRole) ?? 0) >= 0 ||
             !message.content.trim() ||
-            !confusables.remove(message.content).trim()
+            !remove(message.content).trim() ||
+            message.channel.isDMBased()
         ) {
             return;
         }
@@ -50,13 +55,14 @@ module.exports = {
             '686483899827879979', //portugese
             '610749085955260416' //polish
         ];
-        if (excludedCategories.includes((message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId))) {
+        const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId;
+        if (!category || excludedCategories.includes(category)) {
             return;
         }
 
         const { attributeScores: result } = await perspective.analyze({
             comment: {
-                text: confusables.remove(message.content)
+                text: remove(message.content)
             },
             requestedAttributes: {
                 TOXICITY: {},
@@ -74,7 +80,7 @@ module.exports = {
         });
         const scores = await calculateScores(result);
 
-        if (_.some(Object.values(scores), item => item >= 0.9)) {
+        if (_.some(Object.values(scores), (item: number) => item >= 0.9)) {
             const embed = new EmbedBuilder()
                 .setTitle('Possible mod action needed')
                 .setURL(message.url)
@@ -89,10 +95,14 @@ module.exports = {
                     inline: true
                 }, {
                     name: 'Attributes hit',
-                    value: (await formatScores(scores)),
+                    value: (await formatScores(scores as number[])),
                     inline: true
                 }]);
-            await message.guild.channels.cache.get(modChannel).send({
+            
+            const channel = await message.guild?.channels.fetch(modChannel);
+            if (!channel?.isTextBased()) return;
+
+            await channel.send({
                 embeds: [
                     embed
                 ]

@@ -1,11 +1,18 @@
-module.exports = {
+import { Collection, Interaction } from 'discord.js';
+
+export default {
     name: 'interactionCreate',
-    async execute (interaction) {
+    async execute (interaction: Interaction) {
         if (!interaction.isChatInputCommand()) {
             return;
         }
 
-        const command = interaction.client.commands.get(interaction.commandName);
+        const { commands } = interaction.client as unknown as {
+            commands: Collection<string, {
+                execute: Function
+            }>
+        };
+        const command = commands.get(interaction.commandName);
 
         if (!command) {
             return;
