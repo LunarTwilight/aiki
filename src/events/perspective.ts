@@ -28,7 +28,7 @@ const calculateScores = async (result: { summaryScore: { value: number } }[]) =>
     return scores;
 };
 
-module.exports = {
+export default {
     name: 'messageCreate',
     async execute (message: Message) {
         const { modChannel, modRole } = config.all(message.guild?.id)[0] as {
