@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Interaction } from 'discord.js'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Interaction } from 'discord.js';
 
 export default {
     name: 'interactionCreate',
@@ -63,7 +63,7 @@ export default {
 
         const roleId = interaction.customId.replace(/^roles-/, '');
         const roles = interaction.member?.roles;
-        if ( !roles || Array.isArray(roles) ) return
+        if ( !roles || Array.isArray(roles) ) return;
         const hasRole = roles.cache.has(roleId);
         if (hasRole) {
             await roles.remove(roleId).catch(console.error);

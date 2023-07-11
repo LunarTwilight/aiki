@@ -1,6 +1,6 @@
-import fs from 'fs'
-import { ChatInputCommandInteraction, REST, Routes, SlashCommandBuilder } from 'discord.js'
-import { clientId, token } from './config.json'
+import fs from 'fs';
+import { ChatInputCommandInteraction, REST, Routes, SlashCommandBuilder } from 'discord.js';
+import { clientId, token } from './config.json';
 
 export async function execute( interaction: ChatInputCommandInteraction ) {
     const commands = [];
@@ -19,7 +19,7 @@ export async function execute( interaction: ChatInputCommandInteraction ) {
     }).setToken(token);
 
     let type;
-    const location = interaction.options.getString('location')
+    const location = interaction.options.getString('location');
     if (location === 'global') {
         type = Routes.applicationCommands(clientId);
     } else {

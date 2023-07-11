@@ -70,39 +70,39 @@ module.exports = {
             ephemeral: true
         });
         switch (interaction.options.getSubcommand()) {
-            case 'eval': {
-                let text = null;
-                try {
-                    text = inspect(await eval(interaction.options.getString('input'))); //eslint-disable-line no-eval
-                } catch (error) {
-                    text = error.toString();
-                }
-                if (!text) {
-                    await interaction.editReply('something went wrong, text wasn\'t set');
-                    break;
-                }
-                if (text.length > 1990) {
-                    await interaction.editReply('message too long, check console');
-                    console.log(text);
-                    break;
-                }
-                await interaction.editReply('```js\n' + text + '\n```');
+        case 'eval': {
+            let text = null;
+            try {
+                text = inspect(await eval(interaction.options.getString('input'))); //eslint-disable-line no-eval
+            } catch (error) {
+                text = error.toString();
+            }
+            if (!text) {
+                await interaction.editReply('something went wrong, text wasn\'t set');
                 break;
             }
-            case 'roles':
-                require('../setupRoles.js').execute(interaction);
+            if (text.length > 1990) {
+                await interaction.editReply('message too long, check console');
+                console.log(text);
                 break;
-            case 'rules':
-                require('../setupRules.js').execute(interaction);
-                break;
-            case 'restart':
-                await interaction.editReply('it shall be done');
-                //eslint-disable-next-line no-process-exit
-                process.exit(); //should automatically restart
-                break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
-            case 'deploycommands':
-                require('../deployCommands.js').execute(interaction);
-                break;
+            }
+            await interaction.editReply('```js\n' + text + '\n```');
+            break;
+        }
+        case 'roles':
+            require('../setupRoles.js').execute(interaction);
+            break;
+        case 'rules':
+            require('../setupRules.js').execute(interaction);
+            break;
+        case 'restart':
+            await interaction.editReply('it shall be done');
+            //eslint-disable-next-line no-process-exit
+            process.exit(); //should automatically restart
+            break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
+        case 'deploycommands':
+            require('../deployCommands.js').execute(interaction);
+            break;
         }
     }
 };

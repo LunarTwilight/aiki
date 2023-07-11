@@ -1,6 +1,6 @@
-import { EmbedBuilder, GuildMember } from "discord.js";
-import stringSimilarity from 'string-similarity'
-import db from "../database";
+import { EmbedBuilder, GuildMember } from 'discord.js';
+import stringSimilarity from 'string-similarity';
+import db from '../database';
 
 const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
 
@@ -44,8 +44,8 @@ module.exports = {
         if (diff < 0.3) {
             await newUser.setNickname(oldUser.user.username, 'New username not similar to old username');
         }
-        const channel = await newUser.client.channels.fetch(renameLogChannel)
-        if (!channel?.isTextBased()) return
+        const channel = await newUser.client.channels.fetch(renameLogChannel);
+        if (!channel?.isTextBased()) return;
         await channel.send({
             embeds: [
                 embed

@@ -1,5 +1,5 @@
-import { Message } from "discord.js";
-import db from "../database";
+import { Message } from 'discord.js';
+import db from '../database';
 
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');

@@ -16,7 +16,7 @@ module.exports = {
             type: AuditLogEvent.MemberUpdate
         });
         const log = fetchedLogs.entries.first();
-        const firstChange = log?.changes[0]
+        const firstChange = log?.changes[0];
         if (!log || log.target?.id !== newUser.user.id || firstChange?.key !== 'communication_disabled_until' || !firstChange.new) {
             return;
         }
@@ -53,8 +53,8 @@ module.exports = {
                 inline: true
             }]);
         
-        const channel = await newUser.client.channels.fetch(modLogChannel)
-        if (!channel?.isTextBased()) return
+        const channel = await newUser.client.channels.fetch(modLogChannel);
+        if (!channel?.isTextBased()) return;
         await channel.send({
             embeds: [
                 embed

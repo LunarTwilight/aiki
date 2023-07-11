@@ -93,53 +93,53 @@ module.exports = {
             return;
         }
         switch (command) {
-            case 'list': {
-                const list = getResponses.all(interaction.guildId).map(item => item.trigger);
-                await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
+        case 'list': {
+            const list = getResponses.all(interaction.guildId).map(item => item.trigger);
+            await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
+            break;
+        }
+        case 'print': {
+            if (!response) {
+                await interaction.reply('This reposnse doesn\'t exist!');
                 break;
             }
-            case 'print': {
-                if (!response) {
-                    await interaction.reply('This reposnse doesn\'t exist!');
-                    break;
-                }
-                await interaction.reply('```\n' + response + '\n```');
+            await interaction.reply('```\n' + response + '\n```');
+            break;
+        }
+        case 'add':
+            if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
+                await interaction.reply({
+                    content: 'Trigger name is not allowed to be used, please select a different name.',
+                    ephemeral: true
+                });
+                return;
+            }
+            if (response) {
+                await interaction.reply({
+                    content: 'Response already exists!',
+                    ephemeral: true
+                });
+                return;
+            }
+            addResponse.run(interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
+            await interaction.reply('Response added.');
+            break;
+        case 'edit':
+            if (!response) {
+                await interaction.reply('This response doesn\'t exist!');
                 break;
             }
-            case 'add':
-                if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
-                    await interaction.reply({
-                        content: 'Trigger name is not allowed to be used, please select a different name.',
-                        ephemeral: true
-                    });
-                    return;
-                }
-                if (response) {
-                    await interaction.reply({
-                        content: 'Response already exists!',
-                        ephemeral: true
-                    });
-                    return;
-                }
-                addResponse.run(interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
-                await interaction.reply('Response added.');
+            editResponse.run(interaction.options.getString('content'), interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
+            await interaction.reply('Response edited.');
+            break;
+        case 'delete':
+            if (!response) {
+                await interaction.reply('This response doesn\'t exist!');
                 break;
-            case 'edit':
-                if (!response) {
-                    await interaction.reply('This response doesn\'t exist!');
-                    break;
-                }
-                editResponse.run(interaction.options.getString('content'), interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
-                await interaction.reply('Response edited.');
-                break;
-            case 'delete':
-                if (!response) {
-                    await interaction.reply('This response doesn\'t exist!');
-                    break;
-                }
-                deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
-                await interaction.reply('Response deleted.');
-                break;
+            }
+            deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
+            await interaction.reply('Response deleted.');
+            break;
         }
     }
 };

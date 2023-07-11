@@ -1,6 +1,6 @@
-import parseDuration from 'parse-duration'
-import { remove } from 'confusables'
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js'
+import parseDuration from 'parse-duration';
+import { remove } from 'confusables';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from 'discord.js';
 import db from '../database';
 
 const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
@@ -46,7 +46,7 @@ export default {
             '610749085955260416' //polish
         ];
 
-        const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId
+        const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId;
         if (!category || excludedCategories.includes(category)) {
             return;
         }
@@ -67,10 +67,10 @@ export default {
             shouldDelete: false
         };
         const regexes = [];
-        for (var match of matches) {
+        for (const match of matches) {
             const level = levels[match.action];
-            const matchDuration = parseDuration(match.duration, 'ms')
-            const highestDuration = parseDuration(highest.duration, 'ms')
+            const matchDuration = parseDuration(match.duration, 'ms');
+            const highestDuration = parseDuration(highest.duration, 'ms');
             if (highest.level) {
                 if (level > highest.level) {
                     highest.level = level;
@@ -97,8 +97,8 @@ export default {
         if (highest.level === 2 && !highest.duration) {
             highest.duration = '28d';
         }
-        const highestDuration = parseDuration(highest.duration, 'ms')
-        const duration28d = parseDuration('28d', 'ms')
+        const highestDuration = parseDuration(highest.duration, 'ms');
+        const duration28d = parseDuration('28d', 'ms');
         if (highestDuration && duration28d && highestDuration > duration28d) {
             highest.duration = '28d';
             console.warn('Setting duration for filter `' + regexes.join('\n • ') + '` to 28d due to being ' + highest.duration);
@@ -108,7 +108,7 @@ export default {
         if (highest.shouldDelete) {
             message.delete();
             const filter = (m: Message) => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
-            const channel = await message.guild?.channels.fetch(messageLogChannel)
+            const channel = await message.guild?.channels.fetch(messageLogChannel);
             if (channel?.isTextBased()) {
                 const collected = await channel.awaitMessages({
                     filter,
@@ -150,8 +150,8 @@ export default {
         if (!noUrl) {
             logEmbed.setURL(url);
         }
-        const channel = await message.guild?.channels.fetch(modLogChannel)
-        if ( !channel?.isTextBased()) return
+        const channel = await message.guild?.channels.fetch(modLogChannel);
+        if ( !channel?.isTextBased()) return;
 
         const msg = await channel.send({
             embeds: [
@@ -175,8 +175,8 @@ export default {
             return levels[highest.level as keyof typeof levels] + 'ed';
         };
 
-        const mod = await message.guild?.channels.fetch(modChannel)
-        if ( !mod?.isTextBased() ) return
+        const mod = await message.guild?.channels.fetch(modChannel);
+        if ( !mod?.isTextBased() ) return;
 
         await mod.send({
             content: `<@${message.author.id}> has ${generateModAlertWording()}.`,
@@ -185,23 +185,23 @@ export default {
             ]
         });
         switch (highest.level) {
-            case 1:
-                //do nothing
-                break;
-            case 2:
-                const duration = parseDuration(highest.duration, 'ms')
-                if ( duration ) {
-                    (await message.guild?.members.fetch(message.author.id))?.timeout(duration, 'Automod');
-                }
-                break;
-            case 3:
-                await message.member.kick('Automod');
-                break;
-            case 4:
-                await message.member.ban({
-                    reason: 'Automod'
-                });
-                break;
+        case 1:
+            //do nothing
+            break;
+        case 2:
+            const duration = parseDuration(highest.duration, 'ms');
+            if ( duration ) {
+                (await message.guild?.members.fetch(message.author.id))?.timeout(duration, 'Automod');
+            }
+            break;
+        case 3:
+            await message.member.kick('Automod');
+            break;
+        case 4:
+            await message.member.ban({
+                reason: 'Automod'
+            });
+            break;
         }
     }
 };

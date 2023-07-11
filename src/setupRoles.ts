@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction } from 'discord.js';
 import db from './database';
-import { clientId } from './config.json'
+import { clientId } from './config.json';
 const config = db.prepare('SELECT rolesChannel FROM config WHERE guildId = ?');
 
 export async function execute( interaction: ChatInputCommandInteraction ) {
@@ -16,8 +16,8 @@ export async function execute( interaction: ChatInputCommandInteraction ) {
         const webhook = await channelroles.createWebhook({
             avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png',
             name: 'Roles'
-        })
-        channelWebhook = webhook
+        });
+        channelWebhook = webhook;
         await interaction.editReply({
             content: 'Webhook created'
         });
