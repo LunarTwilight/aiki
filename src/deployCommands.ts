@@ -9,7 +9,6 @@ export async function execute( interaction: ChatInputCommandInteraction ) {
     for (const file of commandFiles) {
         const command = await import(`./commands/${file}`) as {
             data: SlashCommandBuilder
-            execute: Function
         };
         commands.push(command.data.toJSON());
     }

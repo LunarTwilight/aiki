@@ -184,12 +184,12 @@ export default {
                 row
             ]
         });
+        const duration = parseDuration(highest.duration, 'ms');
         switch (highest.level) {
         case 1:
             //do nothing
             break;
         case 2:
-            const duration = parseDuration(highest.duration, 'ms');
             if ( duration ) {
                 (await message.guild?.members.fetch(message.author.id))?.timeout(duration, 'Automod');
             }

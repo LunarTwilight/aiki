@@ -1,3 +1,4 @@
+/* eslint-disable */
 const db = require('./database.js');
 const cron = require('node-cron');
 const channelPositions = db.prepare('SELECT channelId, position FROM channelPositions WHERE guildId = ?');

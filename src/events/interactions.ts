@@ -9,7 +9,7 @@ export default {
 
         const { commands } = interaction.client as unknown as {
             commands: Collection<string, {
-                execute: Function
+                execute: ( i: Interaction ) => void
             }>
         };
         const command = commands.get(interaction.commandName);

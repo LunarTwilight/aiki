@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, Interaction, SlashCommandBuilder } from 'discord.js';
 import { devId, mainServer, testServer } from '../config.json';
 import { inspect } from 'util';
 inspect.defaultOptions = {
@@ -69,7 +69,7 @@ export default {
         await interaction.deferReply({
             ephemeral: true
         });
-        let script: { execute: Function };
+        let script: { execute: ( i: Interaction ) => void };
         switch (interaction.options.getSubcommand()) {
         case 'eval': {
             let text = null;

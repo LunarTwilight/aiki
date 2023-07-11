@@ -1,10 +1,10 @@
-const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
-const { token, dsn } = require('./config.json');
-const fs = require('fs');
-const { collectDefaultMetrics, register } = require('prom-client');
-const http = require('http');
-const Sentry = require('@sentry/node');
-const SentryTracing = require('@sentry/tracing'); //eslint-disable-line no-unused-vars
+import { Client, GatewayIntentBits, Collection, Partials, ActivityType } from 'discord.js';
+import { token, dsn } from './config.json';
+import fs from 'fs';
+import { collectDefaultMetrics, register } from 'prom-client';
+import http from 'http';
+import Sentry from '@sentry/node';
+import '@sentry/tracing'; //eslint-disable-line no-unused-vars
 
 const client = new Client({
     intents: [
@@ -18,14 +18,15 @@ const client = new Client({
     ],
     presence: {
         activities: [{
-            type: 'PLAYING',
+            type: ActivityType.Playing,
             name: 'Love Brightness'
         }],
         status: 'idle'
     }
 });
 
-require('merida').init();
+// @ts-expect-error - no typings
+import( 'merida' ).then( merida => merida.init() );
 
 Sentry.init({
     dsn,
@@ -33,11 +34,11 @@ Sentry.init({
 });
 
 collectDefaultMetrics({
-    label: {
+    labels: {
         name: 'aiki'
     }
 });
-http.createServer(async (req, res) => {
+http.createServer(async (_req, res) => {
     try {
         res.setHeader('Content-Type', register.contentType);
         res.end(await register.metrics());
@@ -50,18 +51,26 @@ http.createServer(async (req, res) => {
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.data.name, command);
+    import(`./commands/${file}`).then( command => {
+        client.commands.set( command.data.name, command ); 
+    } );
 }
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
-    } else {
-        client.on(event.name, (...args) => event.execute(...args));
-    }
+    import(`./events/${file}`).then( event => {
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args));
+        }
+    } );
 }
 
 client.login(token);
+
+declare module 'discord.js' {
+    interface Client {
+        commands: Collection<string, unknown>
+    }
+}
