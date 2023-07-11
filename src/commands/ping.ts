@@ -1,15 +1,19 @@
-const { SlashCommandBuilder } = require('discord.js');
-const db = require('../database.js');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import db from '../database.js';
 const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Get the bot\'s ping')
         .setDMPermission(false),
-    async execute (interaction) {
-        const { verifiedRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
+    async execute (interaction: ChatInputCommandInteraction) {
+        const { verifiedRole } = config.get(interaction.guildId) as {
+            verifiedRole: string
+        };
+        const roles = interaction.member?.roles;
+        if (!roles || Array.isArray(roles)) return;
+        if (!roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command isn\'t allowed to be used by non-verified users.',
                 ephemeral: true

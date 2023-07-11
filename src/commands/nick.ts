@@ -1,9 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const stringSimilarity = require('string-similarity');
-const db = require('../database.js');
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import stringSimilarity from 'string-similarity';
+import db from '../database.js';
 const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('nick')
         .setDescription('Changes your nick (don\'t set a new nick to remove your nick)')
@@ -13,16 +13,22 @@ module.exports = {
                 .setDescription('Your new nick')
         )
         .setDMPermission(false),
-    async execute (interaction) {
-        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
+    async execute (interaction: ChatInputCommandInteraction) {
+        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId) as {
+            renameLogChannel: string
+            verifiedRole: string
+        };
+        const roles = interaction.member?.roles;
+        if (!roles || Array.isArray(roles)) return;
+
+        if (!roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command can not be used by non-verified users.',
                 ephemeral: true
             });
             return;
         }
-        if (!interaction.member.manageable) {
+        if (!interaction.member || !('manageable' in interaction.member)) {
             await interaction.reply({
                 content: 'Bot is unable to change your nick because you\'re higher than it, please use Discord\'s native nick change feature.',
                 ephemeral: true
@@ -43,7 +49,7 @@ module.exports = {
             });
             return;
         }
-        if (interaction.options.getString('nick')?.length > 32) {
+        if ((interaction.options.getString('nick')?.length ?? 0) > 32) {
             await interaction.reply({
                 content: 'Your nick is too long, please shorten it to 32 characters or less.',
                 ephemeral: true
@@ -77,11 +83,14 @@ module.exports = {
         } else {
             embed.setTitle('User changed nick');
         }
-        await interaction.client.channels.cache.get(renameLogChannel).send({
-            embeds: [
-                embed
-            ]
-        });
+        const channel = await interaction.client.channels.fetch(renameLogChannel);
+        if (channel?.isTextBased()) {
+            await channel.send({
+                embeds: [
+                    embed
+                ]
+            });
+        }
         if (diff < 0.3) {
             await interaction.reply({
                 content: 'New name is not similar to your Fandom username, and has therefore not been changed. Please re-verify yourself in <#928414471469277194> if your Fandom username has changed.',

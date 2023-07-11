@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 const baseUrl = 'https://support.fandom.com/hc/requests/new?ticket_form_id=';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('staff')
         .setDescription('Posts a link to contact staff')
@@ -31,7 +31,7 @@ module.exports = {
                     value: 'span_vandal'
                 })
         ),
-    async execute (interaction) {
+    async execute (interaction: ChatInputCommandInteraction) {
         const cat = interaction.options.getString('category');
         if (!cat) {
             await interaction.reply('https://support.fandom.com');

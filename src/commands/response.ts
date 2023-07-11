@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
-const db = require('../database.js');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import db from '../database.js';
 const config = db.prepare('SELECT modRole, verifiedRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
@@ -8,7 +8,7 @@ const editResponse = db.prepare('UPDATE customResponses SET response = ? WHERE t
 const deleteResponse = db.prepare('DELETE FROM customResponses WHERE guildId = ? AND trigger = ?');
 const excluded = ['!wiki', '!report', '!soap'];
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('response')
         .setDescription('Control custom responses from the bot')
@@ -74,18 +74,26 @@ module.exports = {
                 )
         )
         .setDMPermission(false),
-    async execute (interaction) {
-        const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
-        const response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
+    async execute (interaction: ChatInputCommandInteraction) {
+        const { modRole, verifiedRole } = config.all(interaction.guildId)[0] as {
+            modRole: string
+            verifiedRole: string
+        };
+        const row = getResponse.get(interaction.guildId, interaction.options.getString('name', true).replace(/(.\S+).*/, '$1').trim()) as null | {
+            response: unknown
+        };
+        const response = row?.response;
         const command = interaction.options.getSubcommand();
-        if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
+        const roles = interaction.member?.roles;
+        if (!roles || Array.isArray(roles)) return;
+        if (/list|print/.test(command) && !roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command can not be used by non-verified users.',
                 ephemeral: true
             });
             return;
         }
-        if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
+        if (!/list|print/.test(command) && roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
@@ -94,7 +102,10 @@ module.exports = {
         }
         switch (command) {
         case 'list': {
-            const list = getResponses.all(interaction.guildId).map(item => item.trigger);
+            const responses = getResponses.all(interaction.guildId) as {
+                trigger: unknown
+            }[];
+            const list = responses.map(item => item.trigger);
             await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
             break;
         }
@@ -107,7 +118,7 @@ module.exports = {
             break;
         }
         case 'add':
-            if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
+            if (excluded.some(prefix => interaction.options.getString('name', true).trim().startsWith(prefix))) {
                 await interaction.reply({
                     content: 'Trigger name is not allowed to be used, please select a different name.',
                     ephemeral: true
@@ -121,7 +132,7 @@ module.exports = {
                 });
                 return;
             }
-            addResponse.run(interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
+            addResponse.run(interaction.options.getString('name', true).replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
             await interaction.reply('Response added.');
             break;
         case 'edit':
@@ -129,7 +140,7 @@ module.exports = {
                 await interaction.reply('This response doesn\'t exist!');
                 break;
             }
-            editResponse.run(interaction.options.getString('content'), interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
+            editResponse.run(interaction.options.getString('content'), interaction.options.getString('name', true).replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
             await interaction.reply('Response edited.');
             break;
         case 'delete':
@@ -137,7 +148,7 @@ module.exports = {
                 await interaction.reply('This response doesn\'t exist!');
                 break;
             }
-            deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
+            deleteResponse.run(interaction.guildId, interaction.options.getString('name', true).replace(/(.\S+).*/, '$1').trim());
             await interaction.reply('Response deleted.');
             break;
         }

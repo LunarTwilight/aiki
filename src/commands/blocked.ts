@@ -1,11 +1,11 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+import { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction } from 'discord.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('blocked')
         .setDescription('Gives information on what to do when you (or another user) is blocked'),
-    async execute (interaction) {
-        const button = new ActionRowBuilder().addComponents(
+    async execute (interaction: ChatInputCommandInteraction) {
+        const button = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setCustomId('blocked-global')
                 .setLabel('I\'m globally blocked')

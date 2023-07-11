@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require('discord.js');
-const parseDuration = require('parse-duration');
-const db = require('../database.js');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import parseDuration from 'parse-duration';
+import db from '../database.js';
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('mute')
         .setDescription('Mutes a user')
@@ -22,9 +22,13 @@ module.exports = {
                 .setName('reason')
                 .setDescription('Reason for the mute'))
         .setDMPermission(false),
-    async execute (interaction) {
-        const { modRole } = config.get(interaction.guildId);
-        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
+    async execute (interaction: ChatInputCommandInteraction) {
+        const { modRole } = config.get(interaction.guildId) as {
+            modRole: string
+        };
+        const roles = interaction.member?.roles;
+        if (!roles || Array.isArray(roles)) return;
+        if (roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
@@ -32,7 +36,7 @@ module.exports = {
             return;
         }
         const member = interaction.options.getMember('user');
-        if (!member.moderatable) {
+        if (!member || !('moderatable' in member)) {
             await interaction.reply({
                 content: 'Unable to moderate this user.',
                 ephemeral: true
@@ -46,15 +50,15 @@ module.exports = {
             });
             return;
         }
-        if (parseDuration(interaction.options.getString('duration'), 'ms') > parseDuration('28d', 'ms')) {
+        if (parseDuration(interaction.options.getString('duration', true), 'ms') > parseDuration('28d', 'ms')) {
             await interaction.reply({
                 content: 'This mute is too long, please shorten it. (Discord limits mutes to 28 days)',
                 ephemeral: true
             });
             return;
         }
-        const reason = (interaction.member.nickname || interaction.member.user.username) + ' - ' + (interaction.options.getString('reason') || 'N/A');
-        await member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), reason);
+        const reason = (!interaction.member || !('nickname' in interaction.member) || interaction.member.user.username) + ' - ' + (interaction.options.getString('reason') || 'N/A');
+        await member.timeout(parseDuration(interaction.options.getString('duration', true), 'ms'), reason);
         await interaction.reply({
             content: 'User has been muted.',
             ephemeral: true

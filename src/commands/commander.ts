@@ -1,12 +1,12 @@
-const { SlashCommandBuilder } = require('discord.js');
-const { devId, mainServer, testServer } = require('../config.json');
-const { inspect } = require('util');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { devId, mainServer, testServer } from '../config.json';
+import { inspect } from 'util';
 inspect.defaultOptions = {
     compact: false,
     breakLength: Infinity
 };
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('commander')
         .setDescription('Controls the bot')
@@ -58,7 +58,7 @@ module.exports = {
                 )
         )
         .setDMPermission(false),
-    async execute (interaction) {
+    async execute (interaction: ChatInputCommandInteraction) {
         if (interaction.user.id !== devId) {
             await interaction.reply({
                 content: 'https://tenor.com/view/anko-stick-tongue-out-tamako-market-taunt-gif-12801230',
@@ -69,13 +69,14 @@ module.exports = {
         await interaction.deferReply({
             ephemeral: true
         });
+        let script: { execute: Function };
         switch (interaction.options.getSubcommand()) {
         case 'eval': {
             let text = null;
             try {
-                text = inspect(await eval(interaction.options.getString('input'))); //eslint-disable-line no-eval
+                text = inspect(await eval(interaction.options.getString('input') ?? '')); //eslint-disable-line no-eval
             } catch (error) {
-                text = error.toString();
+                text = `${ error }`;
             }
             if (!text) {
                 await interaction.editReply('something went wrong, text wasn\'t set');
@@ -90,10 +91,12 @@ module.exports = {
             break;
         }
         case 'roles':
-            require('../setupRoles.js').execute(interaction);
+            script = await import('../setupRoles.js') as typeof script;
+            script.execute(interaction);
             break;
         case 'rules':
-            require('../setupRules.js').execute(interaction);
+            script = await import('../setupRules.js') as unknown as typeof script;
+            script.execute(interaction);
             break;
         case 'restart':
             await interaction.editReply('it shall be done');
@@ -101,7 +104,8 @@ module.exports = {
             process.exit(); //should automatically restart
             break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
         case 'deploycommands':
-            require('../deployCommands.js').execute(interaction);
+            script = await import('../deployCommands.js') as typeof script;
+            script.execute(interaction);
             break;
         }
     }

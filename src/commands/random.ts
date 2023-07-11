@@ -1,15 +1,20 @@
-const { SlashCommandBuilder } = require('discord.js');
-const db = require('../database.js');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import db from '../database.js';
 const config = db.prepare('SELECT modRole, randomChannel FROM config WHERE guildId = ?');
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('random')
         .setDescription('Tells users to go to random')
         .setDMPermission(false),
-    async execute (interaction) {
-        const { modRole, randomChannel } = config.all(interaction.guildId)[0];
-        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
+    async execute (interaction: ChatInputCommandInteraction) {
+        const { modRole, randomChannel } = config.all(interaction.guildId)[0] as {
+            modRole: string
+            randomChannel: string
+        };
+        const roles = interaction.member?.roles;
+        if (!roles || Array.isArray(roles)) return;
+        if (roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
