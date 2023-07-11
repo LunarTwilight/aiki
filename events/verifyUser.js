@@ -16,7 +16,8 @@ module.exports = {
             });
             return;
         }
-        if (interaction.targetMessage.member.roles.cache.has(verifiedRole)) {
+        const target = await interaction.guild.members.fetch(interaction.targetMessage.author.id);
+        if (target.roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'User is already verified.',
                 ephemeral: true
@@ -33,8 +34,8 @@ module.exports = {
 
         const username = interaction.targetMessage.content.match(/((!)?verify )?(.*)/)[3];
         const reason = `Manual verification done by ${(interaction.member.nickname || interaction.member.user.username)}`;
-        await interaction.targetMessage.member.setNickname(username, reason);
-        await interaction.targetMessage.member.roles.add([verifiedRole, englishRole], reason);
+        await target.setNickname(username, reason);
+        await target.roles.add([verifiedRole, englishRole], reason);
         await interaction.reply({
             content: 'User has been verified.',
             ephemeral: true
