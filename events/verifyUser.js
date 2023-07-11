@@ -1,5 +1,5 @@
 const db = require('../database.js');
-const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT modRole, verifiedRole, englishRole FROM config WHERE guildId = ?');
 
 module.exports = {
     name: 'interactionCreate',
