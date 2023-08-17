@@ -76,8 +76,11 @@ module.exports = {
         .setDMPermission(false),
     async execute (interaction) {
         const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
-        const response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
         const command = interaction.options.getSubcommand();
+        let response = null;
+        if (command !== 'list') {
+            response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
+        }
         if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
             await interaction.reply({
                 content: 'This command can not be used by non-verified users.',
