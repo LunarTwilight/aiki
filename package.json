@@ -5,7 +5,7 @@
   "dependencies": {
     "@sentry/node": "^7.64.0",
     "@sentry/tracing": "^7.64.0",
-    "better-sqlite3": "^8.5.1",
+    "better-sqlite3": "^8.5.2",
     "bufferutil": "^4.0.7",
     "confusables": "^1.1.1",
     "discord.js": "^14.13.0",
