@@ -4,7 +4,6 @@
   "main": "index.js",
   "dependencies": {
     "@sentry/node": "^7.66.0",
-    "@sentry/tracing": "^7.66.0",
     "better-sqlite3": "^8.5.2",
     "bufferutil": "^4.0.7",
     "confusables": "^1.1.1",
