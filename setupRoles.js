@@ -90,7 +90,7 @@ module.exports = {
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('📺')
         );
-        const region = 'Select the region nearest your time zone:';
+        const region = 'Select the region nearest to your time zone:';
         const rowRegion = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
                 .setCustomId('roles-622894005247803412')
