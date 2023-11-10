@@ -9,7 +9,7 @@
     "confusables": "^1.1.1",
     "discord.js": "^14.13.0",
     "erlpack": "github:discord/erlpack",
-    "humanize-duration": "^3.30.0",
+    "humanize-duration": "^3.31.0",
     "lodash": "^4.17.21",
     "merida": "^2.0.8",
     "needle": "^3.2.0",
