@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Toggles a channel between open and closed, assumes current channel if none specified')
         .addRoleOption(option =>
             option
-                .setName('Role')
+                .setName('role')
                 .setDescription('Role to toggle access for')
                 .setRequired(true)
         )
