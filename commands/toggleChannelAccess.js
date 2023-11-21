@@ -44,7 +44,7 @@ module.exports = {
         if (!interaction.options.getBoolean('read') && !interaction.options.getBoolean('write')) {
             const premissions = channel.permissionsFor(role);
             await interaction.reply({
-                content: `<@${role.id}>:\n*Read: ${premissions.has('ViewChannel')}\n*Write: ${premissions.has('SendMessages')}`,
+                content: `${role}:\n*Read: ${premissions.has('ViewChannel')}\n*Write: ${premissions.has('SendMessages')}`,
                 ephemeral: true
             });
             return;
@@ -54,22 +54,28 @@ module.exports = {
         let writeToggled = null;
 
         if (interaction.options.getBoolean('read')) {
-            await channel.edit({
-                permissionOverwrites: {
+            await channel.permissionOverwrites.edit(
+                role,
+                {
                     ViewChannel: interaction.options.getBoolean('read')
                 },
-                reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
-            });
+                {
+                    reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
+                }
+            );
             readToggled = true;
         }
 
         if (interaction.options.getBoolean('write')) {
-            await channel.edit({
-                permissionOverwrites: {
+            await channel.permissionOverwrites.edit(
+                role,
+                {
                     SendMessages: interaction.options.getBoolean('write')
                 },
-                reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
-            });
+                {
+                    reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
+                }
+            );
             writeToggled = true;
         }
 
@@ -83,7 +89,7 @@ module.exports = {
         }
 
         await interaction.reply({
-            content: `${start} access has been toggled for <@${role.id}> in <#${channel.id}>`,
+            content: `${start} access has been toggled for ${role} in <#${channel.id}>`,
             ephemeral: true
         });
     }
