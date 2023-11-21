@@ -34,7 +34,7 @@ module.exports = {
 
         const msg = await generateModLogEmbed({
             highest,
-            content: thread.title,
+            content: thread.name,
             authorId: owner.id,
             channelId: thread.id,
             isThread: true,
