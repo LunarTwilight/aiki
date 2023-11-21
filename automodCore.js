@@ -1,7 +1,7 @@
 const confusables = require('confusables');
 const parseDuration = require('parse-duration');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const db = require('../database.js');
+const db = require('./database.js');
 const filters = db.prepare('SELECT * FROM filters').all();
 
 const levels = {
