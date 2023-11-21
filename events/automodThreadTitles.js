@@ -10,7 +10,7 @@ module.exports = {
         }
         const { modLogChannel, modChannel, modRole } = config.all(thread.guild.id)[0];
         const owner = await thread.guild.members.cache.get(thread.ownerId);
-        console.log(thread);
+        console.log(thread, owner);
         if (owner.user.bot || owner.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
