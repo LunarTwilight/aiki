@@ -67,7 +67,7 @@ const generateMatches = content => {
     return { regexes, highest };
 };
 
-const generateModLogEmbed = async (highest, message, regexes, noUrl, url, modLogChannel) => { //eslint-disable-line max-params
+const generateModLogEmbed = async (highest, message, regexes, url, modLogChannel) => { //eslint-disable-line max-params
     const logEmbed = new EmbedBuilder()
         .setTitle('Automatic ' + levels[highest.level])
         .setDescription(message.content)
@@ -91,7 +91,7 @@ const generateModLogEmbed = async (highest, message, regexes, noUrl, url, modLog
         name: 'Matched',
         value: '• ' + regexes.join('\n • ')
     }]);
-    if (!noUrl) {
+    if (!url) {
         logEmbed.setURL(url);
     }
     const msg = await message.guild.channels.cache.get(modLogChannel).send({

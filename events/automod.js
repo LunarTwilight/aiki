@@ -26,7 +26,6 @@ module.exports = {
 
         const { regexes, highest } = generateMatches(message.content);
 
-        let noUrl;
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {
             message.delete();
@@ -40,12 +39,12 @@ module.exports = {
             if (collected.size) {
                 url += messageLogChannel + '/' + collected.firstKey();
             } else {
-                noUrl = true;
+                url = null;
             }
         } else {
             url += `${message.channelId}/${message.id}`;
         }
-        const msg = await generateModLogEmbed(highest, message, regexes, noUrl, url, modLogChannel);
+        const msg = await generateModLogEmbed(highest, message, regexes, url, modLogChannel);
         await sendModChannelAlert(msg, message, modChannel, highest);
         await doPunishment(highest, message);
     }
