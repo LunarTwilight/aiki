@@ -6,7 +6,7 @@ module.exports = {
     name: 'threadCreate',
     async execute (thread) {
         const { modLogChannel, modChannel, modRole } = config.all(thread.guild.id)[0];
-        const owner = await thread.fetchOwner(true, true);
+        const owner = await thread.guild.members.cache.get(thread.authorId);
         if (owner.user.bot || owner.guildMember.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }
