@@ -71,18 +71,19 @@ const calculateHighestMatch = matches => {
     return { regexes, highest };
 };
 
-const generateModLogEmbed = async (highest, message, regexes, url, modLogChannel) => { //eslint-disable-line max-params
+const generateModLogEmbed = async params => {
+    const { highest, content, authorId, channelId, isThread, regexes, url, modLogChannel } = params;
     const logEmbed = new EmbedBuilder()
         .setTitle('Automatic ' + levels[highest.level])
-        .setDescription(message.content)
+        .setDescription(content)
         .addFields([{
             name: 'User',
-            value: '<@' + message.author.id + '>'
+            value: '<@' + authorId + '>'
         }, {
             name: 'Location',
-            value: '<#' + message.channel.id + '>'
+            value: '<#' + channelId + '>'
         }]);
-    if (!message.channel.isThread()) {
+    if (!isThread) {
         logEmbed.addFields([{
             name: 'Auto Deleted?',
             value: (highest.shouldDelete ? 'Yes' : 'No')
@@ -101,7 +102,7 @@ const generateModLogEmbed = async (highest, message, regexes, url, modLogChannel
     if (!url) {
         logEmbed.setURL(url);
     }
-    const msg = await message.guild.channels.cache.get(modLogChannel).send({
+    const msg = await modLogChannel.send({
         embeds: [
             logEmbed
         ]
@@ -109,7 +110,7 @@ const generateModLogEmbed = async (highest, message, regexes, url, modLogChannel
     return msg;
 };
 
-const sendModChannelAlert = async (msg, message, modChannel, highest) => {
+const sendModChannelAlert = async (msg, userId, modChannel, highest) => {
     const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
@@ -126,29 +127,28 @@ const sendModChannelAlert = async (msg, message, modChannel, highest) => {
         }
         return levels[highest.level] + 'ed';
     };
-    await message.guild.channels.cache.get(modChannel).send({
-        content: `<@${message.author.id}> has ${generateModAlertWording()}.`,
+    await modChannel.send({
+        content: `<@${userId}> has ${generateModAlertWording()}.`,
         components: [
             row
         ]
     });
 };
 
-const doPunishment = async (highest, message) => {
+const doPunishment = async (highest, member) => {
     switch (highest.level) {
         case 1:
             //do nothing
             break;
         case 2: {
-            const user = await message.guild.members.fetch(message.author.id);
-            user.timeout(parseDuration(highest.duration, 'ms'), 'Automod');
+            await member.timeout(parseDuration(highest.duration, 'ms'), 'Automod');
             break;
         }
         case 3:
-            await message.member.kick('Automod');
+            await member.kick('Automod');
             break;
         case 4:
-            await message.member.ban({
+            await member.ban({
                 reason: 'Automod'
             });
             break;

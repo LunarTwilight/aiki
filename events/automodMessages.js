@@ -49,8 +49,17 @@ module.exports = {
         } else {
             url += `${message.channelId}/${message.id}`;
         }
-        const msg = await generateModLogEmbed(highest, message, regexes, url, modLogChannel);
-        await sendModChannelAlert(msg, message, modChannel, highest);
-        await doPunishment(highest, message);
+        const msg = await generateModLogEmbed({
+            highest,
+            content: message.content,
+            authorId: message.author.id,
+            channelId: message.channel.id,
+            isThread: message.channel.isThread(),
+            regexes,
+            url,
+            modLogChannel: message.guild.channels.cache.get(modLogChannel)
+        });
+        await sendModChannelAlert(msg, message.author.id, message.guild.channels.cache.get(modChannel), highest);
+        await doPunishment(highest, message.member);
     }
 };
