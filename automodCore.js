@@ -75,7 +75,7 @@ const generateModLogEmbed = async (highest, message, regexes, noUrl, url, modLog
             name: 'User',
             value: '<@' + message.author.id + '>'
         }, {
-            name: 'Channel',
+            name: 'Location',
             value: '<#' + message.channel.id + '>'
         }, {
             name: 'Auto Deleted?',
