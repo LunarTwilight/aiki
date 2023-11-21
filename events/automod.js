@@ -1,4 +1,4 @@
-const { generateMatches, generateModLogEmbed, sendModChannelAlert, doPunishment } = require('../automodCore.js');
+const { generateMatches, calculateHighestMatch, generateModLogEmbed, sendModChannelAlert, doPunishment } = require('../automodCore.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
 
@@ -24,7 +24,12 @@ module.exports = {
             return;
         }
 
-        const { regexes, highest } = generateMatches(message.content);
+        const matches = generateMatches(message.content);
+        if (!matches) {
+            return;
+        }
+
+        const { regexes, highest } = calculateHighestMatch(matches);
 
         let url = `https://discord.com/channels/${message.guildId}/`;
         if (highest.shouldDelete) {

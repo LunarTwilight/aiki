@@ -24,8 +24,12 @@ const generateMatches = content => {
         }
     }
     if (!matches.length) {
-        return;
+        return null;
     }
+    return matches;
+};
+
+const calculateHighestMatch = matches => {
     const highest = {
         level: null,
         duration: null,
@@ -148,4 +152,4 @@ const doPunishment = async (highest, message) => {
     }
 };
 
-module.exports = { generateMatches, generateModLogEmbed, sendModChannelAlert, doPunishment };
+module.exports = { generateMatches, calculateHighestMatch, generateModLogEmbed, sendModChannelAlert, doPunishment };
