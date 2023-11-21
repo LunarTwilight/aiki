@@ -53,7 +53,7 @@ module.exports = {
         let readToggled = null;
         let writeToggled = null;
 
-        if (interaction.options.getBoolean('read')) {
+        if (interaction.options.getBoolean('read') !== undefined) {
             await channel.permissionOverwrites.edit(
                 role,
                 {
@@ -66,7 +66,7 @@ module.exports = {
             readToggled = true;
         }
 
-        if (interaction.options.getBoolean('write')) {
+        if (interaction.options.getBoolean('write') !== undefined) {
             await channel.permissionOverwrites.edit(
                 role,
                 {
