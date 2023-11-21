@@ -44,7 +44,7 @@ module.exports = {
         if (!interaction.options.getBoolean('read') && !interaction.options.getBoolean('write')) {
             const premissions = channel.permissionsFor(role);
             await interaction.reply({
-                content: `<@${role.id}:\n*Read: ${premissions.has('ViewChannel')}\n*Write: ${premissions.has('SendMessages')}`,
+                content: `<@${role.id}>:\n*Read: ${premissions.has('ViewChannel')}\n*Write: ${premissions.has('SendMessages')}`,
                 ephemeral: true
             });
             return;
