@@ -41,7 +41,7 @@ module.exports = {
         const channel = interaction.options.getChannel('channel') || interaction.channel;
         const role = interaction.options.getRole('role');
 
-        if (interaction.options.getBoolean('read') === undefined && interaction.options.getBoolean('write') === undefined) {
+        if (interaction.options.getBoolean('read') === null && interaction.options.getBoolean('write') === null) {
             const premissions = channel.permissionsFor(role);
             await interaction.reply({
                 content: `${role}:\n*Read: ${premissions.has('ViewChannel')}\n*Write: ${premissions.has('SendMessages')}`,
@@ -53,7 +53,7 @@ module.exports = {
         let readToggled = null;
         let writeToggled = null;
 
-        if (interaction.options.getBoolean('read') !== undefined) {
+        if (interaction.options.getBoolean('read') !== null) {
             await channel.permissionOverwrites.edit(
                 role,
                 {
@@ -66,7 +66,7 @@ module.exports = {
             readToggled = true;
         }
 
-        if (interaction.options.getBoolean('write') !== undefined) {
+        if (interaction.options.getBoolean('write') !== null) {
             await channel.permissionOverwrites.edit(
                 role,
                 {
