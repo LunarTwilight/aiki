@@ -140,10 +140,9 @@ const doPunishment = async (highest, member) => {
         case 1:
             //do nothing
             break;
-        case 2: {
+        case 2:
             await member.timeout(parseDuration(highest.duration, 'ms'), 'Automod');
             break;
-        }
         case 3:
             await member.kick('Automod');
             break;
