@@ -81,10 +81,13 @@ const generateModLogEmbed = async (highest, message, regexes, url, modLogChannel
         }, {
             name: 'Location',
             value: '<#' + message.channel.id + '>'
-        }, {
+        }]);
+    if (!message.channel.isThread()) {
+        logEmbed.addFields([{
             name: 'Auto Deleted?',
             value: (highest.shouldDelete ? 'Yes' : 'No')
         }]);
+    }
     if (highest.level === 2) {
         logEmbed.addFields([{
             name: 'Duration',
