@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
-const config = db.prepare('SELECT renameLogChannel, verifiedRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,16 +12,10 @@ module.exports = {
                 .setName('nick')
                 .setDescription('Your new nick')
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.CreatePublicThreads),
     async execute (interaction) {
-        const { renameLogChannel, verifiedRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
-            await interaction.reply({
-                content: 'This command can not be used by non-verified users.',
-                ephemeral: true
-            });
-            return;
-        }
+        const { renameLogChannel } = config.get(interaction.guildId);
         if (!interaction.member.manageable) {
             await interaction.reply({
                 content: 'Bot is unable to change your nick because you\'re higher than it, please use Discord\'s native nick change feature.',

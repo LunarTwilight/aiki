@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const db = require('../database.js');
-const config = db.prepare('SELECT modRole, randomChannel FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT randomChannel FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()

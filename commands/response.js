@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const db = require('../database.js');
-const config = db.prepare('SELECT modRole, verifiedRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
 const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId) VALUES (?, ?, ?)');
@@ -73,20 +73,14 @@ module.exports = {
                         .setRequired(true)
                 )
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.CreatePublicThreads),
     async execute (interaction) {
-        const { modRole, verifiedRole } = config.all(interaction.guildId)[0];
+        const { modRole } = config.all(interaction.guildId)[0];
         const command = interaction.options.getSubcommand();
         let response = null;
         if (command !== 'list') {
             response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
-        }
-        if (/list|print/.test(command) && !interaction.member.roles.cache.has(verifiedRole)) {
-            await interaction.reply({
-                content: 'This command can not be used by non-verified users.',
-                ephemeral: true
-            });
-            return;
         }
         if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({

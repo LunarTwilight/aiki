@@ -1,7 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const parseDuration = require('parse-duration');
-const db = require('../database.js');
-const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,16 +19,9 @@ module.exports = {
             option
                 .setName('reason')
                 .setDescription('Reason for the mute'))
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute (interaction) {
-        const { modRole } = config.get(interaction.guildId);
-        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            await interaction.reply({
-                content: 'You are not a mod, I\'d suggest you become one.',
-                ephemeral: true
-            });
-            return;
-        }
         const member = interaction.options.getMember('user');
         if (!member.moderatable) {
             await interaction.reply({

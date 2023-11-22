@@ -1,7 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const needle = require('needle');
-const db = require('../database.js');
-const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,17 +11,9 @@ module.exports = {
                 .setDescription('The wikitext to parse')
                 .setRequired(true)
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.CreatePublicThreads),
     async execute (interaction) {
-        const { verifiedRole } = config.get(interaction.guildId);
-        if (!interaction.member.roles.cache.has(verifiedRole)) {
-            await interaction.reply({
-                content: 'This command can not be used by non-verified users.',
-                ephemeral: true
-            });
-            return;
-        }
-
         needle.request('get', 'https://community.fandom.com/api.php', {
             action: 'parse',
             text: interaction.options.getString('text'),

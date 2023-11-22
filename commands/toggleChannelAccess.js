@@ -1,6 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
-const db = require('../database.js');
-const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,17 +25,9 @@ module.exports = {
                 .setName('channel')
                 .setDescription('The channel to toggle premissions on')
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute (interaction) {
-        const { modRole } = config.get(interaction.guildId);
-        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            await interaction.reply({
-                content: 'You are not a mod, I\'d suggest you become one.',
-                ephemeral: true
-            });
-            return;
-        }
-
         const channel = interaction.options.getChannel('channel') || interaction.channel;
         const role = interaction.options.getRole('role');
 

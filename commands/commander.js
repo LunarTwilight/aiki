@@ -57,7 +57,8 @@ module.exports = {
                         })
                 )
         )
-        .setDMPermission(false),
+        .setDMPermission(false)
+        .setDefaultMemberPermissions('0'),
     async execute (interaction) {
         if (interaction.user.id !== devId) {
             await interaction.reply({
