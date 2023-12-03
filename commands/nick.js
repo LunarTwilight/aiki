@@ -3,6 +3,18 @@ const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
 
+const generateEmbedTitle = (nickOptionValue, currentNick, diff) => {
+    let verb = 'changed';
+    if (!nickOptionValue) {
+        verb = 'removed';
+    }
+    if (!currentNick) {
+        verb = 'set';
+    }
+
+    return `User ${diff < 0.3 ? 'tried to' : ''} ${verb} nick`;
+};
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('nick')
@@ -46,7 +58,9 @@ module.exports = {
         }
         const newName = interaction.options.getString('nick') || interaction.member.user.username;
         const diff = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
+        const title = generateEmbedTitle(interaction.options.getString('nick'), interaction.member.nickname, diff);
         const embed = new EmbedBuilder()
+            .setTitle(title)
             .addFields({
                 name: 'User',
                 value: `<@${interaction.member.id}>`,
@@ -64,12 +78,8 @@ module.exports = {
                 value: diff.toString(),
                 inline: true
             });
-        if (!interaction.options.getString('nick')) {
-            embed.setTitle('User removed nick');
-        } else if (!interaction.member.nickname) { //eslint-disable-line no-negated-condition
-            embed.setTitle('User set nick');
-        } else {
-            embed.setTitle('User changed nick');
+        if (diff < 0.3) {
+            embed.setDescription('Rejected due to diff not meeting threshold of 0.3');
         }
         await interaction.client.channels.cache.get(renameLogChannel).send({
             embeds: [
