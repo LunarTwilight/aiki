@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
@@ -157,8 +157,51 @@ module.exports = {
                     break;
                 }
 
-                deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
-                await interaction.reply('Response deleted.');
+                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
+
+                const confirm = new ButtonBuilder()
+                    .setCustomId('confirm')
+                    .setLabel('Delete')
+                    .setStyle(ButtonStyle.Danger);
+
+                const cancel = new ButtonBuilder()
+                    .setCustomId('cancel')
+                    .setLabel('Cancel')
+                    .setStyle(ButtonStyle.Secondary);
+
+                const row = new ActionRowBuilder().addComponents(cancel, confirm);
+
+                const reply = await interaction.reply({
+                    content: `Are you sure you want to delete the response for "${name}"?`,
+                    components: [row],
+                    ephemeral: true
+                });
+
+                try {
+                    const confirmation = await reply.awaitMessageComponent({
+                        filter: i => i.user.id === interaction.user.id,
+                        time: 60_000
+                    });
+
+                    if (confirmation.customId === 'confirm') {
+                        deleteResponse.run(interaction.guildId, name);
+                        await confirmation.update({
+                            content: `The response "${name}" has been deleted`,
+                            components: []
+                        });
+                    } else if (confirmation.customId === 'cancel') {
+                        await confirmation.update({
+                            content: 'Action cancelled',
+                            components: []
+                        });
+                    }
+                } catch (e) {
+                    await interaction.editReply({
+                        content: 'Confirmation not received within 1 minute, cancelling',
+                        components: []
+                    });
+                }
+
                 break;
             }
         }
