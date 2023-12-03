@@ -30,23 +30,11 @@ module.exports = {
             subcommand
                 .setName('add')
                 .setDescription('Adds a new custom response to the bot')
-                .addStringOption(trigger =>
-                    trigger
-                        .setName('name')
-                        .setDescription('The name of the trigger')
-                        .setRequired(true)
-                )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('edit')
                 .setDescription('Edits a custom response')
-                .addStringOption(trigger =>
-                    trigger
-                        .setName('name')
-                        .setDescription('The name of the trigger')
-                        .setRequired(true)
-                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -105,9 +93,11 @@ module.exports = {
                     return;
                 }
 
+                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
+
                 const modal = new ModalBuilder()
-                    .setCustomId('custom-response-add-modal')
-                    .setTitle(`Adding custom reponse for "${interaction.options.getString('name').trim()}"`);
+                    .setCustomId(`response-add-${name}`)
+                    .setTitle(`Adding custom reponse for "${name}"`);
 
                 const contentField = new TextInputBuilder()
                     .setCustomId('content')
@@ -116,21 +106,10 @@ module.exports = {
                     .setPlaceholder('Add some text!')
                     .setRequired(true);
 
-                const secondRow = new ActionRowBuilder().addComponents(contentField);
-                modal.addComponents(secondRow);
+                const row = new ActionRowBuilder().addComponents(contentField);
+                modal.addComponents(row);
 
                 await interaction.showModal(modal);
-
-                try {
-                    const modalReponse = await interaction.awaitModalSubmit({
-                        filter: interaction => interaction.customId === 'custom-response-add-modal',
-                        time: 300000 //5 min
-                    });
-
-                    await interaction.followUp('text is ' + modalReponse.fields.getTextInputValue('content'));
-                } catch {
-                    await interaction.followUp('No modal submitted within 5 minutes');
-                }
 
                 break;
             }
@@ -140,9 +119,11 @@ module.exports = {
                     break;
                 }
 
+                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
+
                 const modal = new ModalBuilder()
-                    .setCustomId('custom-response-edit-modal')
-                    .setTitle(`Editing custom reponse for "${interaction.options.getString('name').trim()}"`);
+                    .setCustomId(`response-edit-${name}`)
+                    .setTitle(`Editing custom reponse for "${name}"`);
 
                 const contentField = new TextInputBuilder()
                     .setCustomId('content')
@@ -151,8 +132,8 @@ module.exports = {
                     .setValue(response)
                     .setRequired(true);
 
-                const secondRow = new ActionRowBuilder().addComponents(contentField);
-                modal.addComponents(secondRow);
+                const row = new ActionRowBuilder().addComponents(contentField);
+                modal.addComponents(row);
 
                 await interaction.showModal(modal);
 
