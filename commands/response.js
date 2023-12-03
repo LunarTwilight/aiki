@@ -109,11 +109,11 @@ module.exports = {
 
                 const modal = new ModalBuilder()
                     .setCustomId(`response-add-${name}`)
-                    .setTitle(`Adding custom reponse for "${name}"`);
+                    .setTitle(`Adding custom response for "${name}"`);
 
                 const contentField = new TextInputBuilder()
                     .setCustomId('content')
-                    .setLabel('Reponse content')
+                    .setLabel('Response content')
                     .setStyle(TextInputStyle.Paragraph)
                     .setPlaceholder('Add some text!')
                     .setRequired(true);
@@ -135,11 +135,11 @@ module.exports = {
 
                 const modal = new ModalBuilder()
                     .setCustomId(`response-edit-${name}`)
-                    .setTitle(`Editing custom reponse for "${name}"`);
+                    .setTitle(`Editing custom response for "${name}"`);
 
                 const contentField = new TextInputBuilder()
                     .setCustomId('content')
-                    .setLabel('Reponse content')
+                    .setLabel('Response content')
                     .setStyle(TextInputStyle.Paragraph)
                     .setValue(response)
                     .setRequired(true);
