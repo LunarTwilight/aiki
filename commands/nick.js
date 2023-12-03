@@ -3,18 +3,6 @@ const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
 
-const generateEmbedTitle = (nickOptionValue, currentNick, diff) => {
-    let verb = 'change';
-    if (!nickOptionValue) {
-        verb = 'removed';
-    }
-    if (!currentNick) {
-        verb = 'set';
-    }
-
-    return `User ${diff < 0.3 ? 'tried to' : ''}${verb} nick`;
-};
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('nick')
