@@ -127,9 +127,9 @@ module.exports = {
                         time: 300000 //5 min
                     });
 
-                    await interaction.reply('text is ' + modalReponse.fields.getTextInputValue('content'));
+                    await interaction.followUp('text is ' + modalReponse.fields.getTextInputValue('content'));
                 } catch {
-                    await interaction.reply('No modal submitted within 5 minutes');
+                    await interaction.followUp('No modal submitted within 5 minutes');
                 }
 
                 break;
