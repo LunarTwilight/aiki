@@ -30,11 +30,23 @@ module.exports = {
             subcommand
                 .setName('add')
                 .setDescription('Adds a new custom response to the bot')
+                .addStringOption(trigger =>
+                    trigger
+                        .setName('name')
+                        .setDescription('The name of the trigger')
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('edit')
                 .setDescription('Edits a custom response')
+                .addStringOption(trigger =>
+                    trigger
+                        .setName('name')
+                        .setDescription('The name of the trigger')
+                        .setRequired(true)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
