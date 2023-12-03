@@ -96,6 +96,9 @@ module.exports = {
             case 'rules':
                 require('../setupRules.js').execute(interaction);
                 break;
+            case 'reports':
+                require('../setupReports.js').execute(interaction);
+                break;
             case 'restart':
                 await interaction.editReply('it shall be done');
                 //eslint-disable-next-line no-process-exit
