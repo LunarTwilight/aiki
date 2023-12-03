@@ -4,7 +4,7 @@ const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
 
 const generateEmbedTitle = (nickOptionValue, currentNick, diff) => {
-    let verb = 'changed';
+    let verb = 'change';
     if (!nickOptionValue) {
         verb = 'removed';
     }
@@ -12,7 +12,7 @@ const generateEmbedTitle = (nickOptionValue, currentNick, diff) => {
         verb = 'set';
     }
 
-    return `User ${diff < 0.3 ? 'tried to' : ''} ${verb} nick`;
+    return `User ${diff < 0.3 ? 'tried to' : ''}${verb} nick`;
 };
 
 module.exports = {
@@ -57,10 +57,8 @@ module.exports = {
             return;
         }
         const newName = interaction.options.getString('nick') || interaction.member.user.username;
-        const diff = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
-        const title = generateEmbedTitle(interaction.options.getString('nick'), interaction.member.nickname, diff);
+        const similarity = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
         const embed = new EmbedBuilder()
-            .setTitle(title)
             .addFields({
                 name: 'User',
                 value: `<@${interaction.member.id}>`,
@@ -74,19 +72,34 @@ module.exports = {
                 value: newName,
                 inline: true
             }, {
+                name: 'Type',
+                value () {
+                    if (!interaction.options.getString('nick')) {
+                        return 'remove';
+                    }
+                    if (!interaction.member.nickname) {
+                        return 'set';
+                    }
+                    return 'change';
+                },
+                inline: true
+            }, {
                 name: 'Similarity',
-                value: diff.toString(),
+                value: similarity.toString(),
                 inline: true
             });
-        if (diff < 0.3) {
-            embed.setDescription('Rejected due to diff not meeting threshold of 0.3');
+        if (similarity < 0.3) {
+            embed.setDescription('Rejected due to similarity not meeting threshold of 0.3');
+            embed.setTitle('Attempted nick update');
+        } else {
+            embed.setTitle('Nick update');
         }
         await interaction.client.channels.cache.get(renameLogChannel).send({
             embeds: [
                 embed
             ]
         });
-        if (diff < 0.3) {
+        if (similarity < 0.3) {
             await interaction.reply({
                 content: 'Nick is not similar to your Fandom username, and has therefore not been changed. Please re-verify yourself using </verify:1126264839392735263> if your Fandom username has changed.',
                 ephemeral: true
