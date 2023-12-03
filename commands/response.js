@@ -90,7 +90,9 @@ module.exports = {
                 break;
             }
             case 'add': {
-                if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
+                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
+
+                if (excluded.some(prefix => name.startsWith(prefix))) {
                     await interaction.reply({
                         content: 'Trigger name is not allowed to be used, please select a different name.',
                         ephemeral: true
@@ -104,8 +106,6 @@ module.exports = {
                     });
                     return;
                 }
-
-                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
 
                 const modal = new ModalBuilder()
                     .setCustomId(`response-add-${name}`)
