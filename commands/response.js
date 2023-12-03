@@ -1,12 +1,10 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
-const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId) VALUES (?, ?, ?)');
-const editResponse = db.prepare('UPDATE customResponses SET response = ? WHERE trigger = ? AND guildId = ?');
 const deleteResponse = db.prepare('DELETE FROM customResponses WHERE guildId = ? AND trigger = ?');
-const excluded = ['!wiki', '!report', '!soap'];
+const excluded = ['wiki', 'report', 'soap'];
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,12 +36,6 @@ module.exports = {
                         .setDescription('The name of the trigger')
                         .setRequired(true)
                 )
-                .addStringOption(response =>
-                    response
-                        .setName('content')
-                        .setDescription('The message the bot will sent')
-                        .setRequired(true)
-                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -53,12 +45,6 @@ module.exports = {
                     trigger
                         .setName('name')
                         .setDescription('The name of the trigger')
-                        .setRequired(true)
-                )
-                .addStringOption(response =>
-                    response
-                        .setName('content')
-                        .setDescription('The message the bot will sent')
                         .setRequired(true)
                 )
         )
@@ -103,7 +89,7 @@ module.exports = {
                 await interaction.reply('```\n' + response + '\n```');
                 break;
             }
-            case 'add':
+            case 'add': {
                 if (excluded.some(prefix => interaction.options.getString('name').trim().startsWith(prefix))) {
                     await interaction.reply({
                         content: 'Trigger name is not allowed to be used, please select a different name.',
@@ -118,25 +104,70 @@ module.exports = {
                     });
                     return;
                 }
-                addResponse.run(interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.options.getString('content'), interaction.guildId);
-                await interaction.reply('Response added.');
+
+                const modal = new ModalBuilder()
+                    .setCustomId('custom-response-add-modal')
+                    .setTitle(`Adding custom reponse for "${interaction.options.getString('name').trim()}"`);
+
+                const contentField = new TextInputBuilder()
+                    .setCustomId('content')
+                    .setLabel('Reponse content')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Add some text!')
+                    .setRequired(true);
+
+                const secondRow = new ActionRowBuilder().addComponents(contentField);
+                modal.addComponents(secondRow);
+
+                await interaction.showModal(modal);
+
+                try {
+                    const modalReponse = await interaction.awaitModalSubmit({
+                        filter: interaction => interaction.customId === 'custom-response-add-modal',
+                        time: 300000 //5 min
+                    });
+
+                    await interaction.reply('text is ' + modalReponse.fields.getTextInputValue('content'));
+                } catch {
+                    await interaction.reply('No modal submitted within 5 minutes');
+                }
+
                 break;
-            case 'edit':
+            }
+            case 'edit': {
                 if (!response) {
                     await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
-                editResponse.run(interaction.options.getString('content'), interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim(), interaction.guildId);
-                await interaction.reply('Response edited.');
+
+                const modal = new ModalBuilder()
+                    .setCustomId('custom-response-edit-modal')
+                    .setTitle(`Editing custom reponse for "${interaction.options.getString('name').trim()}"`);
+
+                const contentField = new TextInputBuilder()
+                    .setCustomId('content')
+                    .setLabel('Reponse content')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setValue(response)
+                    .setRequired(true);
+
+                const secondRow = new ActionRowBuilder().addComponents(contentField);
+                modal.addComponents(secondRow);
+
+                await interaction.showModal(modal);
+
                 break;
-            case 'delete':
+            }
+            case 'delete': {
                 if (!response) {
                     await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
+
                 deleteResponse.run(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim());
                 await interaction.reply('Response deleted.');
                 break;
+            }
         }
     }
 };
