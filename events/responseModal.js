@@ -6,7 +6,7 @@ module.exports = {
     name: 'interactionCreate',
     async execute (interaction) {
         if (interaction.isModalSubmit() && interaction.customId.startsWith('response-')) {
-            const name = interaction.customId.match(/reponse-(?:add|edit)-(.*)/)[1];
+            const name = interaction.customId.match(/response-(?:add|edit)-(.*)/)[1];
             if (!name) {
                 await interaction.reply('Error: no name set!');
                 return;
