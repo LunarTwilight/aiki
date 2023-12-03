@@ -23,8 +23,8 @@ module.exports = {
                 time: 60_000,
                 filter: i => i.user.id === interaction.user.id
             })
-                .then(modalInteraction => {
-                    await interaction.reply(`thread title is ${interaction.fields.getTextInputValue('title')}`)
+                .then(async modalInteraction => {
+                    await interaction.reply(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`)
                 })
                 .catch(async () => {
                     await interaction.reply({
