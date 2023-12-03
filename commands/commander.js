@@ -33,6 +33,11 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('reports')
+                .setDescription('Set up reports channel')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('restart')
                 .setDescription('Restarts the bot')
         )
