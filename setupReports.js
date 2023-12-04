@@ -13,8 +13,8 @@ module.exports = {
 
         if (!channelWebhook) {
             await channel.createWebhook({
-                name: 'Server reports',
-                avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png'
+                name: 'Server Reports',
+                avatar: interaction.guild.iconURL()
             }).then(webhook => {
                 channelWebhook = webhook;
             });
