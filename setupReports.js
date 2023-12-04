@@ -38,9 +38,7 @@ module.exports = {
                 .setStyle(ButtonStyle.Primary)
         );
         await channelWebhook.send({
-            content: `If you need to submit a report that requires some privacy, you can create a private thread here. It will only be available to our mod team unless you @mention someone else.
-
-            If your issue or request can be publicly available, please create a post in <#1127445997614801006> instead.`,
+            content: `If you need to submit a report that requires some privacy, you can create a private thread here. It will only be available to our mod team unless you @mention someone else.\n\nIf your issue or request can be publicly available, please create a post in <#1127445997614801006> instead.`,
             components: [row]
         });
         const reply = {
