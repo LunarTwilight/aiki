@@ -12,7 +12,8 @@ module.exports = {
         let createdWebhook;
 
         if (!channelWebhook) {
-            await channel.createWebhook('Server Reports', {
+            await channel.createWebhook({
+                name: 'Server reports',
                 avatar: 'https://cdn.discordapp.com/icons/563020189604773888/e238c167354de75db9b5b5a23af93736.png'
             }).then(webhook => {
                 channelWebhook = webhook;
