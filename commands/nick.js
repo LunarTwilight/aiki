@@ -44,7 +44,7 @@ module.exports = {
             });
             return;
         }
-        const newName = interaction.options.getString('nick') || interaction.member.user.username;
+        const newName = interaction.options.getString('nick') || interaction.user.displayName;
         const similarity = stringSimilarity.compareTwoStrings(interaction.member.displayName.toLowerCase(), newName.toLowerCase());
         const embed = new EmbedBuilder()
             .addFields({

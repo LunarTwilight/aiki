@@ -44,7 +44,7 @@ module.exports = {
             });
             return;
         }
-        const reason = (interaction.member.nickname || interaction.member.user.username) + ' - ' + (interaction.options.getString('reason') || 'N/A');
+        const reason = (interaction.member.nickname || interaction.user.displayName) + ' - ' + (interaction.options.getString('reason') || 'N/A');
         await member.timeout(parseDuration(interaction.options.getString('duration'), 'ms'), reason);
         await interaction.reply({
             content: 'User has been muted.',

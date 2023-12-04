@@ -50,7 +50,7 @@ module.exports = {
                     ViewChannel: interaction.options.getBoolean('read')
                 },
                 {
-                    reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
+                    reason: `Requested by ${interaction.member.nickname || interaction.user.displayName}`
                 }
             );
             readToggled = true;
@@ -63,7 +63,7 @@ module.exports = {
                     SendMessages: interaction.options.getBoolean('write')
                 },
                 {
-                    reason: `Requested by ${interaction.member.nickname || interaction.user.username}`
+                    reason: `Requested by ${interaction.member.nickname || interaction.user.displayName}`
                 }
             );
             writeToggled = true;
