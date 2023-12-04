@@ -33,6 +33,7 @@ module.exports = {
                     reason: `Private report thread created upon request of ${(interaction.member.nickname || interaction.user.displayName)}`
                 });
                 await thread.members.add(interaction.user.id);
+                await thread.send(`Hey <@${interaction.user.id}>! Please reply in this thread and provide more information about your report, the moderators will look into it as soon as possible!`);
                 await modalInteraction.reply({
                     content: `Your report has been created at <#${thread.id}>. Please fill out the report by sending messages in the thread.`,
                     ephemeral: true
