@@ -24,7 +24,7 @@ module.exports = {
                 filter: i => i.user.id === interaction.user.id
             })
                 .then(async modalInteraction => {
-                    await modalInteraction.followUp(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`);
+                    await interaction.followUp(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`);
                 })
                 .catch(async () => {
                     await interaction.followUp({
