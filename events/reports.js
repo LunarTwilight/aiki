@@ -24,10 +24,10 @@ module.exports = {
                 filter: i => i.user.id === interaction.user.id
             })
                 .then(async modalInteraction => {
-                    await interaction.reply(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`);
+                    await interaction.followUp(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`);
                 })
                 .catch(async () => {
-                    await interaction.reply({
+                    await interaction.followUp({
                         content: 'The modal was not submitted in time, or another error occured.',
                         ephemeral: true
                     });
