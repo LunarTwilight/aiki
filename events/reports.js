@@ -24,7 +24,7 @@ module.exports = {
 
             try {
                 const modalInteraction = await interaction.awaitModalSubmit({
-                    time: 180000,
+                    time: 180000, //3 min
                     filter: i => i.user.id === interaction.user.id
                 });
                 const thread = await interaction.channel.threads.create({
