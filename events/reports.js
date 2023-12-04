@@ -34,7 +34,7 @@ module.exports = {
                 });
                 await thread.members.add(interaction.user.id);
                 await modalInteraction.reply({
-                    content: `Your report can be found at <#${thread.id}>`,
+                    content: `Your report has been created at <#${thread.id}>. Please fill out the report by sending messages in the thread.`,
                     ephemeral: true
                 });
                 const alertEmbed = new EmbedBuilder()
