@@ -3,7 +3,7 @@ const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = req
 module.exports = {
     name: 'interactionCreate',
     async execute (interaction) {
-        if (interaction.isButton() || interaction.customId === 'create-private-report-thread') {
+        if (interaction.isButton() && interaction.customId === 'create-private-report-thread') {
             const modal = new ModalBuilder()
                 .setCustomId(`create-private-report-thread`)
                 .setTitle(`Please enter the title of your report`);
@@ -24,7 +24,7 @@ module.exports = {
                 filter: i => i.user.id === interaction.user.id
             })
                 .then(async modalInteraction => {
-                    await interaction.reply(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`)
+                    await interaction.reply(`thread title is ${modalInteraction.fields.getTextInputValue('title')}`);
                 })
                 .catch(async () => {
                     await interaction.reply({
