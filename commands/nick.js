@@ -3,6 +3,16 @@ const stringSimilarity = require('string-similarity');
 const db = require('../database.js');
 const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
 
+const calcuateType = (nickOption, nickname) => {
+    if (!nickOption) {
+        return 'remove';
+    }
+    if (!nickname) {
+        return 'set';
+    }
+    return 'change';
+};
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('nick')
@@ -61,15 +71,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Type',
-                value () {
-                    if (!interaction.options.getString('nick')) {
-                        return 'remove';
-                    }
-                    if (!interaction.member.nickname) {
-                        return 'set';
-                    }
-                    return 'change';
-                },
+                value: calcuateType(interaction.options.getString('nick'), interaction.member.nickname),
                 inline: true
             }, {
                 name: 'Similarity',
