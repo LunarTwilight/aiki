@@ -51,7 +51,7 @@ module.exports = {
             const registration = new Date(req.body.query.users[0].registration);
             const willBeAutoconfirmed = registration.setDate(registration.getDate() + 4);
             const willBeAutoconfirmedTimestamp = Math.floor(new Date(willBeAutoconfirmed).getTime() / 1000);
-            await interaction.reply(`**${interaction.options.getString('user')}**:\nAutoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no; will be in <t:' + willBeAutoconfirmedTimestamp + ':R>'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
+            await interaction.reply(`**${interaction.options.getString('user')}**:\nAutoconfirmed: ${ug.includes('autoconfirmed') ? 'yes' : 'no; will be <t:' + willBeAutoconfirmedTimestamp + ':R>'}\nEmailconfirmed: ${ug.includes('emailconfirmed') ? 'yes' : 'no'}`);
         });
     }
 };
