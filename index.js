@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, Partials, ActivityType } = require('discord.js');
 const { token, dsn } = require('./config.json');
 const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
@@ -17,7 +17,7 @@ const client = new Client({
     ],
     presence: {
         activities: [{
-            type: 'PLAYING',
+            type: ActivityType.Playing,
             name: 'Love Brightness'
         }],
         status: 'idle'
