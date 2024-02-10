@@ -20,13 +20,13 @@ const matchQuotes = text => {
     return matches;
 };
 
-const tryFetchQuote = async ([_, guildId, channelId, messageId, client]) => {
+const tryFetchQuote = async ([_, guildId, channelId, messageId], message) => {
     if (guildId === '@me') {
         return null;
     }
 
     try {
-        const channel = await client.channels.fetch(channelId);
+        const channel = await message.client.channels.fetch(channelId);
         if (!channel) {
             return null;
         }
@@ -36,12 +36,12 @@ const tryFetchQuote = async ([_, guildId, channelId, messageId, client]) => {
             return null;
         }
 
-        const message = messages.first();
-        if (message.id !== messageId) {
+        const msg = messages.first();
+        if (msg.id !== messageId) {
             return null;
         }
 
-        return message;
+        return msg;
     } catch {
         return null;
     }
