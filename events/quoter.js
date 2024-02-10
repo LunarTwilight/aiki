@@ -165,7 +165,7 @@ module.exports = {
         const messages = await Promise.all(
             quotes
                 .slice(0, MAX)
-                .map(tryFetchQuote.bind(this))
+                .map(tryFetchQuote.bind(this, message))
         );
         const filtered = messages.filter(quote => quote !== null);
         if (filtered.length === 0) {
