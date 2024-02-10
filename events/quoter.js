@@ -20,7 +20,8 @@ const matchQuotes = text => {
     return matches;
 };
 
-const tryFetchQuote = async (_, [guildId, channelId, messageId], message) => {
+const tryFetchQuote = async (message, match) => {
+    const [ _, guildId, channelId, messageId ] = match;
     if (guildId === '@me') {
         return null;
     }
