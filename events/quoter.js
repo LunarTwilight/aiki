@@ -153,6 +153,8 @@ const buildQuoteEmbed = (message, quote, includeQuoter) => {
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
+        return;
+
         //Ignore bots
         if (message.author.bot) {
             return;
