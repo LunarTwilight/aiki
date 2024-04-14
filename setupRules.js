@@ -34,15 +34,17 @@ module.exports = {
 
         const content = await fs.readFileSync('./rules.md', 'utf8');
 
-        await channelWebhook.send(content);
+        const customSplitMessage = text => [
+            text.slice(0, 2000),
+            text.substring(2000, text.length)
+        ];
+
+        await channelWebhook.send(customSplitMessage(content)[0]);
+        await channelWebhook.send(customSplitMessage(content)[1]);
         const reply = {
             content: 'Rules messages created',
             ephemeral: true
         };
-        if (createdWebhook) {
-            await interaction.followUp(reply);
-        } else {
-            await interaction.editReply(reply);
-        }
+        await (createdWebhook ? interaction.followUp(reply) : interaction.editReply(reply));
     }
 };
