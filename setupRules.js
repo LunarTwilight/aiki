@@ -34,14 +34,15 @@ module.exports = {
 
         const content = await fs.readFileSync('./rules.md', 'utf8');
 
-        const customSplitMessage = text => [
-            text.slice(0, 2000),
-            text.substring(2000, text.length)
-        ];
-
         await channelWebhook.send('https://static.wikia.nocookie.net/central/images/6/6f/Fandom_Rules.png');
-        await channelWebhook.send(customSplitMessage(content)[0]);
-        await channelWebhook.send(customSplitMessage(content)[1]);
+        if (content.includes('%%SPLIT%%')) {
+            const parts = content.split('%%SPLIT%%');
+            for (const part of parts) {
+                await channelWebhook.send(part.trim());
+            }
+        } else {
+            await channelWebhook.send(content);
+        }
         const reply = {
             content: 'Rules messages created',
             ephemeral: true
