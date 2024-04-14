@@ -1,4 +1,3 @@
-https://static.wikia.nocookie.net/central/images/6/6f/Fandom_Rules.png
 1. **Be respectful**. Avoid heated arguments, name-calling, or any form of intentional negativity. Refrain from excessive pinging, especially directed towards staff. If you encounter issues with another member, reach out to a moderator for assistance.
 2. **Keep it PG-13**. Mind your language and refrain from sharing explicit or sexual content. Our server welcomes members of all ages and backgrounds, aiming to maintain a comfortable environment in all public chat channels.
 3. **Avoid political discussions** that are not directly relevant to wiki topics. This includes discussions about politics, politicians, and related topics that do not have a clear connection to the wiki's subject matter.

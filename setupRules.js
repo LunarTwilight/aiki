@@ -39,6 +39,7 @@ module.exports = {
             text.substring(2000, text.length)
         ];
 
+        await channelWebhook.send('https://static.wikia.nocookie.net/central/images/6/6f/Fandom_Rules.png');
         await channelWebhook.send(customSplitMessage(content)[0]);
         await channelWebhook.send(customSplitMessage(content)[1]);
         const reply = {
