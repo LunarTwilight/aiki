@@ -106,7 +106,6 @@ module.exports = {
                 break;
             case 'restart':
                 await interaction.editReply('it shall be done');
-                //eslint-disable-next-line no-process-exit
                 process.exit(); //should automatically restart
                 break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
             case 'deploycommands':
