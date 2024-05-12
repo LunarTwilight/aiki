@@ -27,13 +27,13 @@ module.exports = {
                     time: 180000, //3 min
                     filter: i => i.user.id === interaction.user.id
                 });
-                console.log(modalInteraction, modalInteraction.toJSON());
+                console.log('modal submit event', modalInteraction);
                 const thread = await interaction.channel.threads.create({
                     type: ChannelType.PrivateThread,
                     name: modalInteraction.fields.getTextInputValue('title').trim(),
                     reason: `Private report thread created upon request of ${(interaction.member.nickname || interaction.user.displayName)}`
                 });
-                console.log(thread, thread.toJSON());
+                console.log('thread', thread);
                 await thread.members.add(interaction.user.id);
                 await thread.send(`Hey <@${interaction.user.id}>! Please reply in this thread and provide more information about your report, the moderators will look into it as soon as possible!`);
                 await modalInteraction.reply({
@@ -49,7 +49,7 @@ module.exports = {
                     })
                     .setDescription(modalInteraction.fields.getTextInputValue('title').trim())
                     .setTimestamp();
-                console.log(alertEmbed, alertEmbed.toJSON());
+                console.log('alert embed', alertEmbed);
                 await interaction.guild.channels.fetch(modChannel).then(async channel => {
                     channel.send({
                         embeds: [alertEmbed]
