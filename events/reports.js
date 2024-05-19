@@ -56,7 +56,7 @@ module.exports = {
                     });
                 });
             } catch (error) {
-                console.error(error, error.toJSON());
+                console.error('report error', error);
                 await interaction.followUp({
                     content: 'The modal was not submitted in time, or another error occured.',
                     ephemeral: true
