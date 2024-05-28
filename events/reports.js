@@ -42,12 +42,12 @@ module.exports = {
                 });
                 const alertEmbed = new EmbedBuilder()
                     .setTitle('New private report created!')
-                    .setURL(thread.url)
+                    //.setURL(thread.url)
                     .setAuthor({
                         name: (interaction.member.nickname || interaction.user.displayName),
                         iconURL: (interaction.member.displayAvatarURL())
                     })
-                    .setDescription(modalInteraction.fields.getTextInputValue('title').trim())
+                    .setDescription(modalInteraction.fields.getTextInputValue('title').trim() + '\n\n' + thread.url)
                     .setTimestamp();
                 console.log('alert embed', alertEmbed);
                 await interaction.guild.channels.fetch(modChannel).then(async channel => {
