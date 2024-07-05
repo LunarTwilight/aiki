@@ -99,7 +99,7 @@ const generateModLogEmbed = async params => {
         name: 'Matched',
         value: '• ' + regexes.join('\n • ')
     }]);
-    if (!url) {
+    if (url) {
         logEmbed.setURL(url);
     }
     const msg = await modLogChannel.send({
