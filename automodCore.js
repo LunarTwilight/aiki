@@ -81,7 +81,7 @@ const generateModLogEmbed = async params => {
             value: '<@' + authorId + '>'
         }, {
             name: 'Location',
-            value: '<#' + channelId + '>'
+            value: (url ?? `<#${channelId}>`)
         }]);
     if (!isThread) {
         logEmbed.addFields([{
@@ -99,9 +99,6 @@ const generateModLogEmbed = async params => {
         name: 'Matched',
         value: '• ' + regexes.join('\n • ')
     }]);
-    if (url) {
-        logEmbed.setURL(url);
-    }
     const msg = await modLogChannel.send({
         embeds: [
             logEmbed
