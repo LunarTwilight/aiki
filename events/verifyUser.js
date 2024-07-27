@@ -1,5 +1,5 @@
 const db = require('../database.js');
-const config = db.prepare('SELECT modRole, verifiedRole, englishRole FROM config WHERE guildId = ?');
+const config = db.prepare('SELECT verifiedRole, englishRole FROM config WHERE guildId = ?');
 
 module.exports = {
     name: 'interactionCreate',
@@ -8,14 +8,7 @@ module.exports = {
             return;
         }
 
-        const { modRole, verifiedRole, englishRole } = config.get(interaction.guildId);
-        if (interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
-            await interaction.reply({
-                content: 'You are not a mod, I\'d suggest you become one.',
-                ephemeral: true
-            });
-            return;
-        }
+        const { verifiedRole, englishRole } = config.get(interaction.guildId);
         const target = await interaction.guild.members.fetch(interaction.targetMessage.author.id);
         if (target.roles.cache.has(verifiedRole)) {
             await interaction.reply({
