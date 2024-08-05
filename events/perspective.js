@@ -48,7 +48,8 @@ module.exports = {
             '663664101452677120', //japanese
             '823503726470758400', //italian
             '686483899827879979', //portugese
-            '610749085955260416' //polish
+            '610749085955260416', //polish
+            '563038270116855820' //mods and staff
         ];
         if (excludedCategories.includes((message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId))) {
             return;
