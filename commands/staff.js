@@ -9,6 +9,9 @@ module.exports = {
             option.setName('category')
                 .setDescription('Optional category')
                 .addChoices({
+                    name: 'None',
+                    value: 'none'
+                }, {
                     name: 'Account Help',
                     value: 'account_help'
                 }, {
@@ -38,6 +41,9 @@ module.exports = {
             return;
         }
         switch (cat) {
+            case 'none':
+                await interaction.reply('https://support.fandom.com/hc/requests/new');
+                break;
             case 'account_help':
                 await interaction.reply(baseUrl + '360000931094');
                 break;
