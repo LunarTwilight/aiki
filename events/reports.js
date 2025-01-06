@@ -25,13 +25,11 @@ module.exports = {
         if (interaction.isModalSubmit() && interaction.customId === 'create-private-report-thread') {
             const { modChannel } = config.all(interaction.guild.id)[0];
             try {
-                console.log('modal submit event', interaction);
                 const thread = await interaction.channel.threads.create({
                     type: ChannelType.PrivateThread,
                     name: interaction.fields.getTextInputValue('title').trim(),
                     reason: `Private report thread created upon request of ${(interaction.member.nickname || interaction.user.displayName)}`
                 });
-                console.log('thread', thread);
                 await thread.members.add(interaction.user.id);
                 await thread.send(`Hey <@${interaction.user.id}>! Please reply in this thread and provide more information about your report, the moderators will look into it as soon as possible!`);
                 await interaction.reply({
@@ -47,7 +45,6 @@ module.exports = {
                     })
                     .setDescription(interaction.fields.getTextInputValue('title').trim())
                     .setTimestamp();
-                console.log('alert embed', alertEmbed);
                 await interaction.guild.channels.fetch(modChannel).then(async channel => {
                     channel.send({
                         embeds: [alertEmbed]
