@@ -21,7 +21,7 @@ module.exports = {
 
         const timestamp = new Date(log.changes[0].new).getTime();
         const diff = timestamp - new Date().getTime();
-        const mDiff = parseDuration(diff, 'm');
+        const mDiff = parseDuration(diff + 'ms', 'm');
         const roundedDiff = Math.round(mDiff);
         const msDiff = parseDuration(roundedDiff + 'm', 'ms');
         const { modLogChannel } = config.get(newUser.guild.id);
