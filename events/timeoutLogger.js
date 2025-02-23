@@ -1,7 +1,6 @@
 const { EmbedBuilder, AuditLogEvent } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modLogChannel FROM config WHERE guildId = ?');
-const parseDuration = require('parse-duration');
 const humanizeDuration = require('humanize-duration');
 
 module.exports = {
@@ -21,9 +20,7 @@ module.exports = {
 
         const timestamp = new Date(log.changes[0].new).getTime();
         const diff = timestamp - new Date().getTime();
-        const mDiff = parseDuration(diff + 'ms', 'm');
-        const roundedDiff = Math.round(mDiff);
-        const msDiff = parseDuration(roundedDiff + 'm', 'ms');
+        const roundedDiff = (Math.round((diff / 60000)) * 60000);
         const { modLogChannel } = config.get(newUser.guild.id);
         const embed = new EmbedBuilder()
             .setTitle('User muted')
@@ -37,7 +34,7 @@ module.exports = {
                 inline: true
             }, {
                 name: 'Duration',
-                value: humanizeDuration(msDiff),
+                value: humanizeDuration(roundedDiff),
                 inline: true
             }, {
                 name: 'Expiry',
