@@ -9,26 +9,26 @@ module.exports = {
             return;
         }
 
-		const watchedCategories = [
-			'563020189604773890', // general
-			'575022973568811019', // technical
-		];
+        const watchedCategories = [
+            '563020189604773890', // general
+            '575022973568811019', // technical
+        ];
 
-		const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId;
-		if (!watchedCategories.includes(category)) {
+        const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId;
+        if (!watchedCategories.includes(category)) {
             return;
         }
 
-		const fandomEmbeds = message.embeds.some(embed => {
-			if (embed.data.type !== 'link') {
-				return false;
-			}
+        const fandomEmbeds = message.embeds.some(embed => {
+            if (embed.data.type !== 'link') {
+                return false;
+            }
 
-			const host = new URL(embed.data.url).host
-			return host.endsWith('.fandom.com') && host !== 'community.fandom.com'
-		})
-		if (fandomEmbeds) {
-			await message.suppressEmbeds();
-		}
+            const host = new URL(embed.data.url).host
+            return host.endsWith('.fandom.com') && host !== 'community.fandom.com'
+        })
+        if (fandomEmbeds) {
+            await message.suppressEmbeds();
+        }
     }
 };
