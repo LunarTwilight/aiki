@@ -18,6 +18,6 @@
     "prom-client": "^15.1.3",
     "string-similarity": "^4.0.4",
     "utf-8-validate": "^6.0.5",
-    "zlib-sync": "^0.1.9"
+    "zlib-sync": "^0.1.10"
   }
 }
