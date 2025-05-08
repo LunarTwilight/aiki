@@ -4,7 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "@sentry/node": "^9.10.1",
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^11.10.0",
     "bufferutil": "^4.0.9",
     "confusables": "^1.1.1",
     "discord.js": "^14.18.0",
