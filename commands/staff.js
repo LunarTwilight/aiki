@@ -31,7 +31,7 @@ module.exports = {
                     value: 'bad_ad'
                 }, {
                     name: 'Spam/Vandal',
-                    value: 'span_vandal'
+                    value: 'spam_vandal'
                 })
         ),
     async execute (interaction) {
