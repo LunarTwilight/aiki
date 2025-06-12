@@ -19,15 +19,20 @@ module.exports = {
             return;
         }
 
+console.log('watched category');
+
         const fandomEmbeds = message.embeds.some(embed => {
             if (embed.data.type !== 'link' && embed.data.type !== 'article') {
                 return false;
             }
 
+console.log('is an embed');
+
             const host = new URL(embed.data.url).host;
             return host.endsWith('.fandom.com') && host !== 'community.fandom.com';
         });
         if (fandomEmbeds) {
+console.log('is a fandom embed');
             await message.suppressEmbeds();
         }
     }
