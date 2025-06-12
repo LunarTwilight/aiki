@@ -20,13 +20,13 @@ module.exports = {
         }
 
         const fandomEmbeds = message.embeds.some(embed => {
-            if (embed.data.type !== 'link') {
+            if (embed.data.type !== 'link' && embed.data.type !== 'article') {
                 return false;
             }
 
-            const host = new URL(embed.data.url).host
-            return host.endsWith('.fandom.com') && host !== 'community.fandom.com'
-        })
+            const host = new URL(embed.data.url).host;
+            return host.endsWith('.fandom.com') && host !== 'community.fandom.com';
+        });
         if (fandomEmbeds) {
             await message.suppressEmbeds();
         }
