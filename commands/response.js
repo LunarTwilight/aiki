@@ -80,7 +80,13 @@ module.exports = {
         }
         switch (command) {
             case 'list': {
-                const list = getResponses.all(interaction.guildId).map(item => (item.trigger + item.modOnly ? '*' : ''));
+                const list = getResponses.all(interaction.guildId).map(item => {
+                    let str = item.trigger;
+                    if (item.modOnly) {
+                        str += '*';
+                    }
+                    return str;
+                });
                 await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```\n_commands with "*" are mod only_');
                 break;
             }
