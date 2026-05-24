@@ -1,12 +1,12 @@
 const db = require('../database.js');
-const config = db.prepare('SELECT verifiedRole FROM config WHERE guildId = ?');
-const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
+const config = db.prepare('SELECT verifiedRole, modRole FROM config WHERE guildId = ?');
+const getResponse = db.prepare('SELECT response, modOnly FROM customResponses WHERE guildId = ? AND trigger = ?');
 const excluded = ['!wiki', '!report', '!soap'];
 
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { verifiedRole } = config.get(message.guild.id);
+        const { verifiedRole, modRole } = config.get(message.guild.id);
         if (
             !message.content.startsWith('!') ||
             excluded.some(prefix => message.content.startsWith(prefix)) ||
@@ -16,7 +16,10 @@ module.exports = {
         }
         const msg = message.content.slice(1).replace(/(.\S+).*/, '$1').trim();
         const row = getResponse.get(message.guild.id, msg);
-        if (!row?.response) {
+        const isMod = message.member.roles.highest.comparePositionTo(modRole) < 0;
+        if (!row?.response || (
+            !isMod && row?.modOnly
+        )) {
             return;
         }
         await message.channel.send(row.response);
