@@ -11,12 +11,13 @@ module.exports = {
                 await interaction.reply('Error: no name set!');
                 return;
             }
+            const modonly = interaction.fields.getCheckbox('modonly') ? '1' : '0';
             if (interaction.customId.startsWith('response-add-')) {
-                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, interaction.fields.getCheckbox('modonly'));
+                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, modonly);
                 await interaction.reply('Response added.');
             }
             if (interaction.customId.startsWith('response-edit-')) {
-                editResponse.run(interaction.fields.getTextInputValue('content'), name, interaction.fields.getCheckbox('modonly'), interaction.guildId);
+                editResponse.run(interaction.fields.getTextInputValue('content'), name, modonly, interaction.guildId);
                 await interaction.reply('Response edited.');
             }
         }
