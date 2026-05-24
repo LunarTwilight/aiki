@@ -1,6 +1,6 @@
 const db = require('../database.js');
-const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId) VALUES (?, ?, ?)');
-const editResponse = db.prepare('UPDATE customResponses SET response = ? WHERE trigger = ? AND guildId = ?');
+const addResponse = db.prepare('INSERT INTO customResponses (trigger, response, guildId, modOnly) VALUES (?, ?, ?, ?)');
+const editResponse = db.prepare('UPDATE customResponses SET response = ?, modOnly = ? WHERE trigger = ? AND guildId = ?');
 
 module.exports = {
     name: 'interactionCreate',
@@ -12,11 +12,11 @@ module.exports = {
                 return;
             }
             if (interaction.customId.startsWith('response-add-')) {
-                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId);
+                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, null);
                 await interaction.reply('Response added.');
             }
             if (interaction.customId.startsWith('response-edit-')) {
-                editResponse.run(interaction.fields.getTextInputValue('content'), name, interaction.guildId);
+                editResponse.run(interaction.fields.getTextInputValue('content'), name, null, interaction.guildId);
                 await interaction.reply('Response edited.');
             }
         }
