@@ -64,7 +64,7 @@ module.exports = {
     async execute (interaction) {
         const { modRole } = config.all(interaction.guildId)[0];
         const command = interaction.options.getSubcommand();
-        const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
+        const name = interaction.options.getString('name')?.replace(/(.\S+).*/, '$1').trim();
         let response = null;
         let modOnly = null;
         if (command !== 'list') {
