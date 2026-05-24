@@ -11,7 +11,8 @@ module.exports = {
                 await interaction.reply('Error: no name set!');
                 return;
             }
-            const modonly = interaction.fields.getCheckbox('modonly') ? '1' : '0';
+            const modonly = interaction.fields.getCheckbox('modonly') ? 1 : 0;
+            console.log(modonly);
             if (interaction.customId.startsWith('response-add-')) {
                 addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, modonly);
                 await interaction.reply('Response added.');
