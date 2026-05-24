@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger, modOnly FROM customResponses WHERE guildId = ?');
@@ -129,7 +129,11 @@ module.exports = {
                     .setPlaceholder('Add some text!')
                     .setRequired(true);
 
-                const row = new ActionRowBuilder().addComponents(contentField);
+                const checkbox = new CheckboxBuilder()
+                    .setCustomId('modonly')
+                    .setDefault(false);
+
+                const row = new ActionRowBuilder().addComponents(contentField, checkbox);
                 modal.addComponents(row);
 
                 await interaction.showModal(modal);
@@ -153,7 +157,11 @@ module.exports = {
                     .setValue(response)
                     .setRequired(true);
 
-                const row = new ActionRowBuilder().addComponents(contentField);
+                const checkbox = new CheckboxBuilder()
+                    .setCustomId('modonly')
+                    .setDefault(false);
+
+                const row = new ActionRowBuilder().addComponents(contentField, checkbox);
                 modal.addComponents(row);
 
                 await interaction.showModal(modal);
