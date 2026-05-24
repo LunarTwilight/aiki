@@ -80,7 +80,7 @@ module.exports = {
         }
         switch (command) {
             case 'list': {
-                const list = getResponses.all(interaction.guildId).map(item => item.trigger + item.modOnly ? '*' : '');
+                const list = getResponses.all(interaction.guildId).map(item => (item.trigger + item.modOnly ? '*' : ''));
                 await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```\n_commands with "*" are mod only_');
                 break;
             }
@@ -89,7 +89,7 @@ module.exports = {
                     await interaction.reply('This reposnse doesn\'t exist!');
                     break;
                 }
-                await interaction.reply('```\n' + response + '\n```' + modOnly ? '\n_command is mod only_' : '');
+                await interaction.reply(('```\n' + response + '\n```' + modOnly ? '\n_command is mod only_' : ''));
                 break;
             }
             case 'add': {
