@@ -95,7 +95,11 @@ module.exports = {
                     await interaction.reply('This reposnse doesn\'t exist!');
                     break;
                 }
-                await interaction.reply(('```\n' + response + '\n```' + modOnly ? '\n_command is mod only_' : ''));
+                let str = '```\n' + response + '\n```';
+                if (modOnly) {
+                    str += '\n_command is mod only_';
+                }
+                await interaction.reply(str);
                 break;
             }
             case 'add': {
