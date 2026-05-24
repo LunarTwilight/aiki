@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
-const getResponses = db.prepare('SELECT trigger FROM customResponses WHERE guildId = ?');
-const getResponse = db.prepare('SELECT response FROM customResponses WHERE guildId = ? AND trigger = ?');
+const getResponses = db.prepare('SELECT trigger, modOnly FROM customResponses WHERE guildId = ?');
+const getResponse = db.prepare('SELECT response, modOnly FROM customResponses WHERE guildId = ? AND trigger = ?');
 const deleteResponse = db.prepare('DELETE FROM customResponses WHERE guildId = ? AND trigger = ?');
 const excluded = ['wiki', 'report', 'soap'];
 
@@ -64,9 +64,12 @@ module.exports = {
     async execute (interaction) {
         const { modRole } = config.all(interaction.guildId)[0];
         const command = interaction.options.getSubcommand();
+        const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
         let response = null;
+        let modOnly = null;
         if (command !== 'list') {
-            response = getResponse.get(interaction.guildId, interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim())?.response;
+            response = getResponse.get(interaction.guildId, name)?.response;
+            modOnly = getResponse.get(interaction.guildId, name)?.modOnly;
         }
         if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
@@ -77,8 +80,8 @@ module.exports = {
         }
         switch (command) {
             case 'list': {
-                const list = getResponses.all(interaction.guildId).map(item => item.trigger);
-                await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```');
+                const list = getResponses.all(interaction.guildId).map(item => item.trigger + item.modOnly ? '*' : '');
+                await interaction.reply('My registered custom responses are:\n```' + list.join(', ') + '```\n_commands with "*" are mod only_');
                 break;
             }
             case 'print': {
@@ -86,12 +89,10 @@ module.exports = {
                     await interaction.reply('This reposnse doesn\'t exist!');
                     break;
                 }
-                await interaction.reply('```\n' + response + '\n```');
+                await interaction.reply('```\n' + response + '\n```' + modOnly ? '\n_command is mod only_' : '');
                 break;
             }
             case 'add': {
-                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
-
                 if (excluded.some(prefix => name.startsWith(prefix))) {
                     await interaction.reply({
                         content: 'Trigger name is not allowed to be used, please select a different name.',
@@ -131,8 +132,6 @@ module.exports = {
                     break;
                 }
 
-                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
-
                 const modal = new ModalBuilder()
                     .setCustomId(`response-edit-${name}`)
                     .setTitle(`Editing custom response for "${name}"`);
@@ -156,8 +155,6 @@ module.exports = {
                     await interaction.reply('This response doesn\'t exist!');
                     break;
                 }
-
-                const name = interaction.options.getString('name').replace(/(.\S+).*/, '$1').trim();
 
                 const confirm = new ButtonBuilder()
                     .setCustomId('confirm')
