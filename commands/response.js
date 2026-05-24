@@ -169,7 +169,7 @@ module.exports = {
                     .setCheckboxComponent(
                         new CheckboxBuilder()
                             .setCustomId('modonly')
-                            .setDefault(false)
+                            .setDefault(modOnly)
                     );
 
                 modal.addComponents(contentLabel, checkboxLabel);
