@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger, modOnly FROM customResponses WHERE guildId = ?');
@@ -122,23 +122,26 @@ module.exports = {
                     .setCustomId(`response-add-${name}`)
                     .setTitle(`Adding custom response for "${name}"`);
 
-                const contentField = new TextInputBuilder()
-                    .setCustomId('content')
+                const contentLabel = new LabelBuilder()
                     .setLabel('Response content')
-                    .setStyle(TextInputStyle.Paragraph)
-                    .setPlaceholder('Add some text!')
-                    .setRequired(true);
+                    .setTextInputComponent(
+                        new TextInputBuilder()
+                            .setCustomId('content')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setPlaceholder('Add some text!')
+                            .setRequired(true)
+                    );
 
-                const checkbox = new CheckboxBuilder()
-                    .setCustomId('modonly')
-                    .setDefault(false);
+                const checkboxLabel = new LabelBuilder()
+                    .setLabel('Mod only?')
+                    .setCheckboxComponent(
+                        new CheckboxBuilder()
+                            .setCustomId('modonly')
+                            .setDefault(false)
+                    );
 
-                const row = new ActionRowBuilder().addComponents(contentField);
-                const row1 = new ActionRowBuilder().addComponents(checkbox);
-                modal.addComponents(row, row1);
-
+                modal.addComponents(contentLabel, checkboxLabel);
                 await interaction.showModal(modal);
-
                 break;
             }
             case 'edit': {
@@ -151,23 +154,26 @@ module.exports = {
                     .setCustomId(`response-edit-${name}`)
                     .setTitle(`Editing custom response for "${name}"`);
 
-                const contentField = new TextInputBuilder()
-                    .setCustomId('content')
+                const contentLabel = new LabelBuilder()
                     .setLabel('Response content')
-                    .setStyle(TextInputStyle.Paragraph)
-                    .setValue(response)
-                    .setRequired(true);
+                    .setTextInputComponent(
+                        new TextInputBuilder()
+                            .setCustomId('content')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setValue(response)
+                            .setRequired(true)
+                    );
 
-                const checkbox = new CheckboxBuilder()
-                    .setCustomId('modonly')
-                    .setDefault(false);
+                const checkboxLabel = new LabelBuilder()
+                    .setLabel('Mod only?')
+                    .setCheckboxComponent(
+                        new CheckboxBuilder()
+                            .setCustomId('modonly')
+                            .setDefault(false)
+                    );
 
-                const row = new ActionRowBuilder().addComponents(contentField);
-                const row1 = new ActionRowBuilder().addComponents(checkbox);
-                modal.addComponents(row, row1);
-
+                modal.addComponents(contentLabel, checkboxLabel);
                 await interaction.showModal(modal);
-
                 break;
             }
             case 'delete': {
