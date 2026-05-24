@@ -12,11 +12,11 @@ module.exports = {
                 return;
             }
             if (interaction.customId.startsWith('response-add-')) {
-                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, null);
+                addResponse.run(name, interaction.fields.getTextInputValue('content'), interaction.guildId, interaction.fields.getCheckbox('modonly'));
                 await interaction.reply('Response added.');
             }
             if (interaction.customId.startsWith('response-edit-')) {
-                editResponse.run(interaction.fields.getTextInputValue('content'), name, null, interaction.guildId);
+                editResponse.run(interaction.fields.getTextInputValue('content'), name, interaction.fields.getCheckbox('modonly'), interaction.guildId);
                 await interaction.reply('Response edited.');
             }
         }
