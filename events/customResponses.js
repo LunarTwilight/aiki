@@ -16,7 +16,7 @@ module.exports = {
         }
         const msg = message.content.slice(1).replace(/(.\S+).*/, '$1').trim();
         const row = getResponse.get(message.guild.id, msg);
-        const isMod = message.member.roles.highest.comparePositionTo(modRole) < 0;
+        const isMod = message.member.roles.highest.comparePositionTo(modRole) >= 0;
         if (!row?.response || (
             !isMod && row?.modOnly
         )) {
