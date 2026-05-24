@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, LabelBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
 const db = require('../database.js');
 const config = db.prepare('SELECT modRole FROM config WHERE guildId = ?');
 const getResponses = db.prepare('SELECT trigger, modOnly FROM customResponses WHERE guildId = ?');
