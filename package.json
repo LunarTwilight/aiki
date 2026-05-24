@@ -7,7 +7,7 @@
     "better-sqlite3": "^12.9.0",
     "bufferutil": "^4.1.0",
     "confusables": "^1.1.1",
-    "discord.js": "^14.26.2",
+    "discord.js": "^14.26.3",
     "erlpack": "github:discord/erlpack",
     "humanize-duration": "^3.33.2",
     "lodash": "^4.18.1",
