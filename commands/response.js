@@ -133,8 +133,9 @@ module.exports = {
                     .setCustomId('modonly')
                     .setDefault(false);
 
-                const row = new ActionRowBuilder().addComponents(contentField, checkbox);
-                modal.addComponents(row);
+                const row = new ActionRowBuilder().addComponents(contentField);
+                const row1 = new ActionRowBuilder().addComponents(checkbox);
+                modal.addComponents(row, row1);
 
                 await interaction.showModal(modal);
 
@@ -161,8 +162,9 @@ module.exports = {
                     .setCustomId('modonly')
                     .setDefault(false);
 
-                const row = new ActionRowBuilder().addComponents(contentField, checkbox);
-                modal.addComponents(row);
+                const row = new ActionRowBuilder().addComponents(contentField);
+                const row1 = new ActionRowBuilder().addComponents(checkbox);
+                modal.addComponents(row, row1);
 
                 await interaction.showModal(modal);
 
