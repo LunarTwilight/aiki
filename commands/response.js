@@ -69,7 +69,7 @@ module.exports = {
         let modOnly = null;
         if (command !== 'list') {
             response = getResponse.get(interaction.guildId, name)?.response;
-            modOnly = getResponse.get(interaction.guildId, name)?.modOnly;
+            modOnly = Boolean(getResponse.get(interaction.guildId, name)?.modOnly);
         }
         if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
             await interaction.reply({
