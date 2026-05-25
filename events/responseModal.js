@@ -17,7 +17,7 @@ module.exports = {
                 await interaction.reply('Response added.');
             }
             if (interaction.customId.startsWith('response-edit-')) {
-                editResponse.run(interaction.fields.getTextInputValue('content'), name, modonly, interaction.guildId);
+                editResponse.run(interaction.fields.getTextInputValue('content'), modonly, name, interaction.guildId);
                 await interaction.reply('Response edited.');
             }
         }
