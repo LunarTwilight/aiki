@@ -31,11 +31,7 @@ Sentry.init({
     tracesSampleRate: 1.0
 });
 
-collectDefaultMetrics({
-    label: {
-        name: 'aiki'
-    }
-});
+collectDefaultMetrics();
 http.createServer(async (req, res) => {
     try {
         res.setHeader('Content-Type', register.contentType);
