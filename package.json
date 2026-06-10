@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@sentry/node": "^10.56.0",
+    "@sentry/node": "^10.57.0",
     "better-sqlite3": "^12.10.0",
     "bufferutil": "^4.1.0",
     "confusables": "^1.1.1",
