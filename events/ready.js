@@ -3,7 +3,7 @@ module.exports = {
     once: true,
     execute () {
         console.log('Ready!');
-        if (process.send !== 'undefined') {
+        if (typeof process.send !== 'undefined') {
             process.send('ready');
         }
     }
