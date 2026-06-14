@@ -151,4 +151,10 @@ const doPunishment = async (highest, member) => {
     }
 };
 
-module.exports = { generateMatches, calculateHighestMatch, generateModLogEmbed, sendModChannelAlert, doPunishment };
+module.exports = {
+    generateMatches,
+    calculateHighestMatch,
+    generateModLogEmbed,
+    sendModChannelAlert,
+    doPunishment
+};

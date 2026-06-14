@@ -183,10 +183,6 @@ module.exports = {
             content: 'Roles messages created',
             ephemeral: true
         };
-        if (createdWebhook) {
-            await interaction.followUp(reply);
-        } else {
-            await interaction.editReply(reply);
-        }
+        await (createdWebhook ? interaction.followUp(reply) : interaction.editReply(reply));
     }
 };

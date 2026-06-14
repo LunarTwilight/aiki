@@ -18,7 +18,7 @@ module.exports = {
         }
 
         const timestamp = new Date(log.changes[0].new).getTime();
-        const diff = timestamp - new Date().getTime();
+        const diff = timestamp - Date.now();
         const roundedDiff = (Math.round((diff / 60000)) * 60000);
         const { modLogChannel } = getConfig(newUser.guild.id);
         const embed = new EmbedBuilder()

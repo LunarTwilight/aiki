@@ -10,7 +10,7 @@ module.exports = {
 
         const watchedCategories = [
             '563020189604773890', // general
-            '575022973568811019', // technical
+            '575022973568811019' // technical
         ];
 
         const category = message.channel.isThread() ? message.channel.parent?.parentId : message.channel.parentId;
@@ -23,7 +23,7 @@ module.exports = {
                 return false;
             }
 
-            const host = new URL(embed.data.url).host;
+            const { host } = new URL(embed.data.url);
             return host.endsWith('.fandom.com') && host !== 'community.fandom.com';
         });
         if (fandomEmbeds) {

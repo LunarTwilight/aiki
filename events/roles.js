@@ -11,7 +11,7 @@ module.exports = {
             ephemeral: true
         });
 
-        if (interaction.customId.match(/roles-addllanguages/)) {
+        if (interaction.customId === 'roles-addllanguages') {
             const rowLanguageA = new ActionRowBuilder().addComponents(
                 new ButtonBuilder().setCustomId('roles-826043787364139021').setLabel('Arabic').setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder().setCustomId('roles-826043961297731584').setLabel('Bulgarian').setStyle(ButtonStyle.Secondary),
@@ -64,11 +64,7 @@ module.exports = {
         const roleId = interaction.customId.replace(/^roles-/, '');
         const { roles } = interaction.member;
         const hasRole = roles.cache.has(roleId);
-        if (hasRole) {
-            await roles.remove(roleId).catch(console.error);
-        } else {
-            await roles.add(roleId).catch(console.error);
-        }
+        await (hasRole ? roles.remove(roleId) : roles.add(roleId));
         await interaction.editReply({
             content: `You have successfully ${hasRole ? 'removed' : 'added'} the <@&${roleId}> role.`
         });

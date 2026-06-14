@@ -17,12 +17,7 @@ module.exports = {
         })
             .setToken(token);
 
-        let type;
-        if (interaction.options.getString('location') === 'global') {
-            type = Routes.applicationCommands(clientId);
-        } else {
-            type = Routes.applicationGuildCommands(clientId, interaction.options.getString('location'));
-        }
+        const type = interaction.options.getString('location') === 'global' ? Routes.applicationCommands(clientId) : Routes.applicationGuildCommands(clientId, interaction.options.getString('location'));
 
         rest.put(type, {
             body: commands

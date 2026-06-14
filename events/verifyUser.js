@@ -16,7 +16,7 @@ module.exports = {
             });
             return;
         }
-        if (!/^verify-/.test(interaction.channel.name)) {
+        if (!interaction.channel.name.startsWith('verify-')) {
             await interaction.reply({
                 content: 'This can only be used in a verification thread.',
                 ephemeral: true
