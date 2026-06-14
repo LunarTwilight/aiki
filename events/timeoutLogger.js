@@ -1,6 +1,5 @@
 const { EmbedBuilder, AuditLogEvent } = require('discord.js');
-const db = require('../database.js');
-const config = db.prepare('SELECT modLogChannel FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 const humanizeDuration = require('humanize-duration');
 
 module.exports = {
@@ -21,7 +20,7 @@ module.exports = {
         const timestamp = new Date(log.changes[0].new).getTime();
         const diff = timestamp - new Date().getTime();
         const roundedDiff = (Math.round((diff / 60000)) * 60000);
-        const { modLogChannel } = config.get(newUser.guild.id);
+        const { modLogChannel } = getConfig(newUser.guild.id);
         const embed = new EmbedBuilder()
             .setTitle('User muted')
             .addFields([{

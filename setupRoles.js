@@ -1,11 +1,10 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const db = require('./database.js');
-const config = db.prepare('SELECT rolesChannel FROM config WHERE guildId = ?');
+const getConfig = require('./config.js');
 const { clientId } = require('./config.json');
 
 module.exports = {
     async execute (interaction) {
-        const { rolesChannel } = config.get(interaction.guildId);
+        const { rolesChannel } = getConfig(interaction.guildId);
         const channelroles = interaction.client.channels.cache.get(rolesChannel);
         const webhooks = await channelroles.fetchWebhooks();
         let channelWebhook = webhooks.first();

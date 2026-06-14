@@ -1,5 +1,4 @@
-const db = require('../database.js');
-const config = db.prepare('SELECT verifiedRole, englishRole FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 module.exports = {
     name: 'interactionCreate',
@@ -8,7 +7,7 @@ module.exports = {
             return;
         }
 
-        const { verifiedRole, englishRole } = config.get(interaction.guildId);
+        const { verifiedRole, englishRole } = getConfig(interaction.guildId);
         const target = await interaction.guild.members.fetch(interaction.targetMessage.author.id);
         if (target.roles.cache.has(verifiedRole)) {
             await interaction.reply({

@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const db = require('../database.js');
-const config = db.prepare('SELECT randomChannel FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,7 +8,7 @@ module.exports = {
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
     async execute (interaction) {
-        const { randomChannel } = config.all(interaction.guildId)[0];
+        const { randomChannel } = getConfig(interaction.guildId);
         await interaction.reply(`The mods request that you move this convo to <#${randomChannel}>.`);
     }
 };

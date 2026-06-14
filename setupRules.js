@@ -1,12 +1,11 @@
 const { EmbedBuilder } = require('discord.js');
-const db = require('./database.js');
-const config = db.prepare('SELECT rulesChannel FROM config WHERE guildId = ?');
 const { clientId } = require('./config.json');
+const getConfig = require('./config.js');
 const fs = require('fs');
 
 module.exports = {
     async execute (interaction) {
-        const { rulesChannel } = config.get(interaction.guildId);
+        const { rulesChannel } = getConfig(interaction.guildId);
         const channelrules = interaction.client.channels.cache.get(rulesChannel);
         const webhooks = await channelrules.fetchWebhooks();
         let channelWebhook = webhooks.first();

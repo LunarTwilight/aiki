@@ -1,12 +1,12 @@
 const db = require('../database.js');
-const config = db.prepare('SELECT verifiedRole, modRole FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 const getResponse = db.prepare('SELECT response, modOnly FROM customResponses WHERE guildId = ? AND trigger = ?');
 const excluded = ['!wiki', '!report', '!soap'];
 
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { verifiedRole, modRole } = config.get(message.guild.id);
+        const { verifiedRole, modRole } = getConfig(message.guild.id);
         if (
             !message.content.startsWith('!') ||
             excluded.some(prefix => message.content.startsWith(prefix)) ||

@@ -1,10 +1,9 @@
-const db = require('../database.js');
-const config = db.prepare('SELECT modLogChannel, modChannel, messageLogChannel, modRole FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { modRole } = config.all(message.guild.id)[0];
+        const { modRole } = getConfig(message.guild.id);
         if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
             return;
         }

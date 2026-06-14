@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const stringSimilarity = require('string-similarity');
-const db = require('../database.js');
-const config = db.prepare('SELECT renameLogChannel FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 const calcuateType = (nickOption, nickname) => {
     if (!nickOption) {
@@ -25,7 +24,7 @@ module.exports = {
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.CreatePublicThreads),
     async execute (interaction) {
-        const { renameLogChannel } = config.get(interaction.guildId);
+        const { renameLogChannel } = getConfig(interaction.guildId);
         if (!interaction.member.manageable) {
             await interaction.reply({
                 content: 'Bot is unable to change your nick because you\'re higher than it, please use Discord\'s native nick change feature.',

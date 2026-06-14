@@ -1,6 +1,5 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ChannelType, EmbedBuilder } = require('discord.js');
-const db = require('../database.js');
-const config = db.prepare('SELECT modChannel FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 module.exports = {
     name: 'interactionCreate',
@@ -23,7 +22,7 @@ module.exports = {
         }
 
         if (interaction.isModalSubmit() && interaction.customId === 'create-private-report-thread') {
-            const { modChannel } = config.all(interaction.guild.id)[0];
+            const { modChannel } = getConfig(interaction.guild.id);
             try {
                 const thread = await interaction.channel.threads.create({
                     type: ChannelType.PrivateThread,

@@ -6,8 +6,7 @@ const _ = require('lodash');
 const perspective = new Perspective({
     apiKey: perspectiveAPIkey
 });
-const db = require('../database.js');
-const config = db.prepare('SELECT modChannel, modRole FROM config WHERE guildId = ?');
+const getConfig = require('../config.js');
 
 const formatScores = async scores => {
     const list = [];
@@ -30,7 +29,7 @@ const calculateScores = async result => {
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { modChannel, modRole } = config.all(message.guild.id)[0];
+        const { modChannel, modRole } = getConfig(message.guild.id);
         if (
             message.author.bot ||
             message.member.roles.highest.comparePositionTo(modRole) >= 0 ||
