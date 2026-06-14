@@ -9,7 +9,7 @@ module.exports = {
     async execute (interaction) {
         const sent = await interaction.reply({
             content: 'Pinging...',
-            fetchReply: true
+            withResponse: true
         });
         await interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
     }
