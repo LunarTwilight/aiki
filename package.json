@@ -17,5 +17,10 @@
     "prom-client": "^15.1.3",
     "string-similarity": "^4.0.4",
     "zlib-sync": "^0.1.10"
+  },
+  "allowScripts": {
+    "better-sqlite3": true,
+    "bufferutil": true,
+    "zlib-sync": true
   }
 }
