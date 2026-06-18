@@ -4,6 +4,7 @@ const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
 const Sentry = require('@sentry/node');
+const initExtensions = require('extensions.js');
 
 const client = new Client({
     intents: [
@@ -29,7 +30,7 @@ require('merida').init();
 
 Sentry.init({
     dsn,
-    tracesSampleRate: 1.0
+    tracesSampleRate: 1
 });
 
 collectDefaultMetrics();
@@ -59,5 +60,7 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
+
+initExtensions();
 
 client.login(token);
