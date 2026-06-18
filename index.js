@@ -4,7 +4,7 @@ const fs = require('fs');
 const { collectDefaultMetrics, register } = require('prom-client');
 const http = require('http');
 const Sentry = require('@sentry/node');
-const initExtensions = require('extensions.js');
+const initExtensions = require('./extensions.js');
 
 const client = new Client({
     intents: [
