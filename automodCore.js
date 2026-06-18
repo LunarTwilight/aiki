@@ -64,7 +64,7 @@ const calculateHighestMatch = matches => {
     if (highest.level === 2 && !highest.duration) {
         highest.duration = '28d';
     }
-    if (parseDuration(highest.duration, 'ms') > parseDuration('28d', 'ms')) {
+    if (parseDuration(highest.duration, 'd') > 28) {
         highest.duration = '28d';
         console.warn('Setting duration for filter `' + regexes.join('\n • ') + '` to 28d due to being ' + highest.duration);
     }
