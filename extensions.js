@@ -11,7 +11,7 @@ function initExtensions () {
                 return true;
             }
             const { modRole } = getConfig(this.guild.id);
-            return (modRole ? this.roles.cache.has(modRole) : false);
+            return (this.roles.cache.has(modRole));
         },
         configurable: true,
         enumerable: true
