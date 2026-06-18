@@ -10,8 +10,7 @@ function initExtensions () {
                 PermissionFlagsBits.ModerateMembers
             ], false) || this.roles.cache.has(modRole));
         },
-        configurable: true,
-        enumerable: true
+        configurable: true
     });
 }
 
