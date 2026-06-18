@@ -37,7 +37,7 @@ module.exports = {
             });
             return;
         }
-        if (parseDuration(interaction.options.getString('duration'), 'ms') > parseDuration('28d', 'ms')) {
+        if (parseDuration(interaction.options.getString('duration'), 'd') > 28) {
             await interaction.reply({
                 content: 'This mute is too long, please shorten it. (Discord limits mutes to 28 days)',
                 ephemeral: true
