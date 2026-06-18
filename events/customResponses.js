@@ -6,7 +6,7 @@ const excluded = ['!wiki', '!report', '!soap'];
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { verifiedRole, modRole } = getConfig(message.guild.id);
+        const { verifiedRole } = getConfig(message.guild.id);
         if (
             !message.content.startsWith('!') ||
             excluded.some(prefix => message.content.startsWith(prefix)) ||
@@ -16,9 +16,8 @@ module.exports = {
         }
         const msg = message.content.slice(1).replace(/(.\S+).*/, '$1').trim();
         const row = getResponse.get(message.guild.id, msg);
-        const isMod = message.member.roles.highest.comparePositionTo(modRole) >= 0;
         if (!row?.response || (
-            !isMod && row?.modOnly
+            !message.member.isMod && row?.modOnly
         )) {
             return;
         }

@@ -7,9 +7,9 @@ module.exports = {
         if (!newlyCreated) {
             return;
         }
-        const { modLogChannel, modChannel, modRole } = getConfig(thread.guild.id);
+        const { modLogChannel, modChannel } = getConfig(thread.guild.id);
         const owner = await thread.guild.members.fetch(thread.ownerId);
-        if (owner.user.bot || owner.roles.highest.comparePositionTo(modRole) >= 0) {
+        if (owner.user.bot || owner.isMod) {
             return;
         }
 

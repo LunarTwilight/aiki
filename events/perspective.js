@@ -29,10 +29,10 @@ const calculateScores = async result => {
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { modChannel, modRole } = getConfig(message.guild.id);
+        const { modChannel } = getConfig(message.guild.id);
         if (
             message.author.bot ||
-            message.member.roles.highest.comparePositionTo(modRole) >= 0 ||
+            message.member.isMod ||
             !message.content.trim() ||
             !confusables.remove(message.content).trim()
         ) {

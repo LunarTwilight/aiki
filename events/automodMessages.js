@@ -4,8 +4,8 @@ const getConfig = require('../config.js');
 module.exports = {
     name: 'messageCreate',
     async execute (message) {
-        const { modLogChannel, modChannel, messageLogChannel, modRole } = getConfig(message.guild.id);
-        if (message.author.bot || message.member.roles.highest.comparePositionTo(modRole) >= 0) {
+        const { modLogChannel, modChannel, messageLogChannel } = getConfig(message.guild.id);
+        if (message.author.bot || message.member.isMod) {
             return;
         }
 

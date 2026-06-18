@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, LabelBuilder, ButtonBuilder, ButtonStyle, CheckboxBuilder } = require('discord.js');
 const db = require('../database.js');
-const getConfig = require('../config.js');
 const getResponses = db.prepare('SELECT trigger, modOnly FROM customResponses WHERE guildId = ?');
 const getResponse = db.prepare('SELECT response, modOnly FROM customResponses WHERE guildId = ? AND trigger = ?');
 const deleteResponse = db.prepare('DELETE FROM customResponses WHERE guildId = ? AND trigger = ?');
@@ -62,7 +61,6 @@ module.exports = {
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.CreatePublicThreads),
     async execute (interaction) {
-        const { modRole } = getConfig(interaction.guildId);
         const command = interaction.options.getSubcommand();
         const name = interaction.options.getString('name')?.replace(/(.\S+).*/, '$1').trim();
         let response = null;
@@ -71,7 +69,7 @@ module.exports = {
             response = getResponse.get(interaction.guildId, name)?.response;
             modOnly = Boolean(getResponse.get(interaction.guildId, name)?.modOnly);
         }
-        if (!/list|print/.test(command) && interaction.member.roles.highest.comparePositionTo(modRole) < 0) {
+        if (!/list|print/.test(command) && interaction.member.isMod) {
             await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
