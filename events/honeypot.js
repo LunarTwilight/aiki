@@ -30,7 +30,7 @@ module.exports = {
                 value: (url ?? `<#${message.channel.id}>`)
             }]);
 
-        const msg = await modLogChannel.send({
+        const msg = await message.guild.channels.cache.get(modLogChannel).send({
             embeds: [
                 embed
             ]
@@ -43,7 +43,7 @@ module.exports = {
                     .setStyle(ButtonStyle.Link)
                     .setURL(msg.url)
             );
-        await modChannel.send({
+        await message.guild.channels.cache.get(modChannel).send({
             content: `<@${message.author.id}> has triggered the honeypot.`,
             components: [
                 row
