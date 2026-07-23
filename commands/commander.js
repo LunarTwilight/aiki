@@ -38,6 +38,11 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('honeypot')
+                .setDescription('Set up honeypot channel')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('restart')
                 .setDescription('Restarts the bot')
         )
@@ -103,6 +108,9 @@ module.exports = {
                 break;
             case 'reports':
                 require('../setupReports.js').execute(interaction);
+                break;
+            case 'honeypot':
+                require('../setupHoneypot.js').execute(interaction);
                 break;
             case 'restart':
                 await interaction.editReply('it shall be done');
