@@ -3,8 +3,8 @@ const { clientId } = require('./config.json');
 
 module.exports = {
     async execute (interaction) {
-        const { reportsChannel } = getConfig(interaction.guildId);
-        const channel = interaction.client.channels.cache.get(reportsChannel);
+        const { honeypotChannel } = getConfig(interaction.guildId);
+        const channel = interaction.client.channels.cache.get(honeypotChannel);
         const webhooks = await channel.fetchWebhooks();
         let channelWebhook = webhooks.first();
         let createdWebhook;
@@ -24,7 +24,7 @@ module.exports = {
         }
         if (channelWebhook.owner.id !== clientId) {
             await interaction.editReply({
-                content: 'Reports webhook was not created by the bot.',
+                content: 'Honeypot webhook was not created by the bot.',
                 ephemeral: true
             });
             return;
