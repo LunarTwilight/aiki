@@ -9,6 +9,7 @@ module.exports = {
             return;
         }
 
+        message.delete();
         const filter = m => m.embeds.some(embed => embed.fields.some(field => field.value.includes(message.id)));
         const collected = await message.guild.channels.cache.get(messageLogChannel).awaitMessages({
             filter,
@@ -16,7 +17,6 @@ module.exports = {
             time: 10_000,
             error: ['time']
         });
-        message.delete();
         const url = collected.size ? `https://discord.com/channels/${message.guildId}/${messageLogChannel}/${collected.firstKey()}` : null;
 
         const embed = new EmbedBuilder()
