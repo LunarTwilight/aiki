@@ -5,7 +5,7 @@ module.exports = {
     name: 'messageCreate',
     async execute (message) {
         const { honeypotChannel, modChannel, modLogChannel, messageLogChannel } = getConfig(message.guild.id);
-        if (message.author.bot /*|| !message.member.bannable */|| message.channel.id !== honeypotChannel) {
+        if (message.author.bot || !message.member.bannable || message.channel.id !== honeypotChannel) {
             return;
         }
 
@@ -50,8 +50,8 @@ module.exports = {
             ]
         });
 
-        /*await message.member.ban({
+        await message.member.ban({
             reason: 'Triggered honeypot'
-        });*/
+        });
     }
 };
