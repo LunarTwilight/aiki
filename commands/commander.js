@@ -115,7 +115,7 @@ module.exports = {
             case 'restart':
                 await interaction.editReply('it shall be done');
                 process.exit(); //should automatically restart
-                break; //this is technically unreachable and VSC complains about it, but eslint complains about not having it sooo
+                break;
             case 'deploycommands':
                 require('../deployCommands.js').execute(interaction);
                 break;
