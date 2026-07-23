@@ -39,15 +39,7 @@ const calculateHighestMatch = matches => {
     for (var match of matches) {
         const level = levels[match.action];
         if (highest.level) {
-            if (level > highest.level) {
-                highest.level = level;
-                highest.duration = match.duration;
-                highest.shouldDelete = match.shouldDelete;
-            } else if (match.shouldDelete > highest.shouldDelete) {
-                highest.level = level;
-                highest.duration = match.duration;
-                highest.shouldDelete = match.shouldDelete;
-            } else if (parseDuration(match.duration, 'ms') > parseDuration(highest.duration, 'ms')) {
+            if (level > highest.level || match.shouldDelete > highest.shouldDelete || parseDuration(match.duration, 'ms') > parseDuration(highest.duration, 'ms')) {
                 highest.level = level;
                 highest.duration = match.duration;
                 highest.shouldDelete = match.shouldDelete;
@@ -74,11 +66,11 @@ const calculateHighestMatch = matches => {
 const generateModLogEmbed = async params => {
     const { highest, content, authorId, channelId, isThread, regexes, url, modLogChannel } = params;
     const logEmbed = new EmbedBuilder()
-        .setTitle('Automatic ' + levels[highest.level])
+        .setTitle(`Automatic ${levels[highest.level]}`)
         .setDescription(content)
         .addFields([{
             name: 'User',
-            value: '<@' + authorId + '>'
+            value: `<@${authorId}>`
         }, {
             name: 'Location',
             value: (url ?? `<#${channelId}>`)
@@ -97,7 +89,7 @@ const generateModLogEmbed = async params => {
     }
     logEmbed.addFields([{
         name: 'Matched',
-        value: '• ' + regexes.join('\n • ')
+        value: `• ${regexes.join('\n • ')}`
     }]);
     const msg = await modLogChannel.send({
         embeds: [
@@ -115,14 +107,14 @@ const sendModChannelAlert = async (msg, userId, modChannel, highest) => {
                 .setStyle(ButtonStyle.Link)
                 .setURL(msg.url)
         );
-    const generateModAlertWording = function () {
+    const generateModAlertWording = () => {
         if (highest.level === 1) {
             return 'triggered an alert';
         }
         if (highest.level === 2) {
-            return 'been muted for ' + highest.duration;
+            return `been muted for ${highest.duration}`;
         }
-        return levels[highest.level] + 'ed';
+        return `${levels[highest.level]}ed`;
     };
     await modChannel.send({
         content: `<@${userId}> has ${generateModAlertWording()}.`,
