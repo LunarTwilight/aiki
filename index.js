@@ -30,7 +30,8 @@ require('merida').init();
 
 Sentry.init({
     dsn,
-    tracesSampleRate: 1
+    tracesSampleRate: 1,
+    includeLocalVariables: true
 });
 
 collectDefaultMetrics();
