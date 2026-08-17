@@ -11,6 +11,6 @@ module.exports = {
             content: 'Pinging...',
             withResponse: true
         });
-        await interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
+        await interaction.editReply(`:heartbeat: ${interaction.client.ws.ping}ms\n:repeat: ${sent.resource.message.createdTimestamp - interaction.createdTimestamp}ms`);
     }
 };
