@@ -69,7 +69,7 @@ module.exports = {
             response = getResponse.get(interaction.guildId, name)?.response;
             modOnly = Boolean(getResponse.get(interaction.guildId, name)?.modOnly);
         }
-        if (!/list|print/.test(command) && interaction.member.isMod) {
+        if (!/list|print/.test(command) && !interaction.member.isMod) {
             await interaction.reply({
                 content: 'You are not a mod, I\'d suggest you become one.',
                 ephemeral: true
